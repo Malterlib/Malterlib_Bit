@@ -714,13 +714,13 @@ namespace NMib
 		template <typename t_CType, t_CType _Number, mint _Power>
 		struct TCPowerHelper
 		{
-			static const t_CType mc_Value = _Number * TCPowerHelper<t_CType, _Number, _Power-1>::mc_Value;
+			static constexpr t_CType mc_Value = _Number * TCPowerHelper<t_CType, _Number, _Power-1>::mc_Value;
 		};
 
 		template <typename t_CType, t_CType _Number>
 		struct TCPowerHelper<t_CType, _Number, 0>
 		{
-			static const t_CType mc_Value = 1;
+			static constexpr t_CType mc_Value = 1;
 		};
 	}
 
