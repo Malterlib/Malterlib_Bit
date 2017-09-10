@@ -816,7 +816,7 @@ namespace
 				{
 					DMibTestSuite("Aligned")
 					{
-						const aint nBits = nBitsAligned;
+						[[maybe_unused]] const aint nBits = nBitsAligned;
 						CBitArrayAligned TestBits;
 
 						mint Bit = TestBits.f_FindFreeBitAndSet(3);
@@ -825,7 +825,7 @@ namespace
 					DMibTestSuite("Unaligned")
 					{
 						NMib::NTime::CCyclesMin MalterlibTime;
-						const aint nBits = nBitsUnaligned;
+						[[maybe_unused]] const aint nBits = nBitsUnaligned;
 						CBitArrayUnaligned TestBits;
 						mint Bit = TestBits.f_FindFreeBitAndSet(3);
 						DMibTest(DMibExpr(TestBits.f_GetBit(3, Bit)) == DMibExpr(true)) (ETestFlag_Aggregated);
