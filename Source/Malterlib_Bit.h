@@ -1,4 +1,4 @@
-﻿// Copyright © 2015 Hansoft AB 
+// Copyright © 2015 Hansoft AB
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
  
 #pragma once
@@ -12,10 +12,6 @@ namespace NMib
 		 
 		Contains helpers for bit 
 	 */
-	namespace NBit
-	{
-	}
-	
 	template <typename t_CInt>
 	typename NTraits::TCSmallerType<t_CInt>::CType const &fg_GetLower(t_CInt const &_Integer);
 	
@@ -1352,4 +1348,3 @@ namespace NMib
 	}
 
 }
-
