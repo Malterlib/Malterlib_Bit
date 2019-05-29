@@ -1,4 +1,4 @@
-// Copyright © 2015 Hansoft AB 
+// Copyright © 2015 Hansoft AB
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
 #include <Mib/Container/BitArray>
@@ -41,7 +41,7 @@ namespace
 {
 
 	template <typename t_CFunctor>
-	static inline_never void fs_CallFunctor(t_CFunctor _Functor) 
+	static inline_never void fs_CallFunctor(t_CFunctor _Functor)
 	{
 		_Functor();
 	}
@@ -56,7 +56,7 @@ namespace
 			t_CInteger Number = NMib::NStr::CStr(NMib::NStr::CStr::CFormat("{}") << 0x50).f_ToInt();
 			uint32 Result = 0;
 			auto Lambda = [&] ()
-			{	
+			{
 				uint32 Temp = Result;
 				MalterlibTime.f_Start();
 				for (mint i = 0; i < nLoops; ++i)
@@ -87,7 +87,7 @@ namespace
 			t_CInteger Number = NMib::NStr::CStr(NMib::NStr::CStr::CFormat("{}") << 0x50).f_ToInt();
 			uint32 Result = 0;
 			auto Lambda = [&] ()
-			{	
+			{
 				uint32 Temp = Result;
 				MalterlibTime.f_Start();
 				for (mint i = 0; i < nLoops; ++i)
@@ -122,7 +122,7 @@ namespace
 			t_CInteger Number = t_CInteger(NMib::NStr::CStr(NMib::NStr::CStr::CFormat("{}") << 0x55).f_ToInt()) << (ENumBits - 8);
 			uint32 Result = 0;
 			auto Lambda = [&] ()
-			{	
+			{
 				uint32 Temp = Result;
 				MalterlibTime.f_Start();
 				for (mint i = 0; i < nLoops; ++i)
@@ -159,7 +159,7 @@ namespace
 			t_CInteger Number = t_CInteger(NMib::NStr::CStr(NMib::NStr::CStr::CFormat("{}") << 0x55).f_ToInt()) << (ENumBits - 8);
 			uint32 Result = 0;
 			auto Lambda = [&] ()
-			{	
+			{
 				uint32 Temp = Result;
 				MalterlibTime.f_Start();
 				for (mint i = 0; i < nLoops; ++i)
@@ -198,7 +198,7 @@ namespace
 			}
 			uint32 Result = 0;
 			auto Lambda = [&] ()
-			{	
+			{
 				uint32 Temp = Result;
 				MalterlibTime.f_Start();
 				for (mint i = 0; i < nLoops; ++i)
@@ -225,7 +225,7 @@ namespace
 
 		static void fs_DoTests()
 		{
-			
+
 			const aint nBitsAligned = sizeof(mint) * sizeof(mint) * 8 * 8;
 			const aint nBitsUnaligned = sizeof(mint) * sizeof(mint) * 8 * 8 - 1;
 			typedef typename t_TCBitArray<nBitsAligned>::CType CBitArrayAligned;
@@ -447,7 +447,7 @@ namespace
 							aint nFound = 0;
 							TestBits.f_EnumFreeBits
 								(
-									[&](aint _Bit) -> bint
+									[&](aint _Bit) -> bool
 									{
 										++nFound;
 										return true;
@@ -464,7 +464,7 @@ namespace
 							aint nFound = 0;
 							TestBits.f_EnumFreeBits
 								(
-									[&](aint _Bit) -> bint
+									[&](aint _Bit) -> bool
 									{
 										++nFound;
 										return true;
@@ -488,7 +488,7 @@ namespace
 							aint nFound = 0;
 							TestBits.f_EnumFreeBits
 								(
-									[&](aint _Bit) -> bint
+									[&](aint _Bit) -> bool
 									{
 										++nFound;
 										return true;
@@ -504,7 +504,7 @@ namespace
 							aint nFound = 0;
 							TestBits.f_EnumFreeBits
 								(
-									[&](aint _Bit) -> bint
+									[&](aint _Bit) -> bool
 									{
 										++nFound;
 										return true;
@@ -534,7 +534,7 @@ namespace
 							aint nFound = 0;
 							TestBits.f_EnumFreeBits
 								(
-									[&](aint _Bit) -> bint
+									[&](aint _Bit) -> bool
 									{
 										++nFound;
 										return true;
@@ -551,7 +551,7 @@ namespace
 							aint nFound = 0;
 							TestBits.f_EnumFreeBits
 								(
-									[&](aint _Bit) -> bint
+									[&](aint _Bit) -> bool
 									{
 										++nFound;
 										return true;
@@ -575,7 +575,7 @@ namespace
 							aint nFound = 0;
 							TestBits.f_EnumFreeBits
 								(
-									[&](aint _Bit) -> bint
+									[&](aint _Bit) -> bool
 									{
 										++nFound;
 										return true;
@@ -591,7 +591,7 @@ namespace
 							aint nFound = 0;
 							TestBits.f_EnumFreeBits
 								(
-									[&](aint _Bit) -> bint
+									[&](aint _Bit) -> bool
 									{
 										++nFound;
 										return true;
@@ -621,7 +621,7 @@ namespace
 							aint nFound = 0;
 							TestBits.f_EnumFreeBits
 								(
-									[&](aint _Bit) -> bint
+									[&](aint _Bit) -> bool
 									{
 										++nFound;
 										return true;
@@ -639,7 +639,7 @@ namespace
 							aint nFound = 0;
 							TestBits.f_EnumFreeBits
 								(
-									[&](aint _Bit) -> bint
+									[&](aint _Bit) -> bool
 									{
 										++nFound;
 										return true;
@@ -664,7 +664,7 @@ namespace
 							aint nFound = 0;
 							TestBits.f_EnumFreeBits
 								(
-									[&](aint _Bit) -> bint
+									[&](aint _Bit) -> bool
 									{
 										++nFound;
 										return true;
@@ -681,7 +681,7 @@ namespace
 							aint nFound = 0;
 							TestBits.f_EnumFreeBits
 								(
-									[&](aint _Bit) -> bint
+									[&](aint _Bit) -> bool
 									{
 										++nFound;
 										return true;
@@ -805,7 +805,7 @@ namespace
 
 		static void fs_DoTests()
 		{
-			
+
 			const aint nBitsAligned = sizeof(mint) * sizeof(mint) * 8 * 8;
 			const aint nBitsUnaligned = sizeof(mint) * sizeof(mint) * 8 * 8 - 1;
 			typedef typename t_TCBitArray<nBitsAligned>::CType CBitArrayAligned;
@@ -856,7 +856,7 @@ namespace
 			typedef NMib::NContainer::TCBitArrayPowerTwo<t_nBits> CType;
 		};
 
-		
+
 		void f_DoTests()
 		{
 			DMibTestCategory("Bit vector power of two")
