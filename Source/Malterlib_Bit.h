@@ -330,7 +330,7 @@ namespace NMib
 				EToShift = sizeof(_Number)*4
 			};
 			// Static branch
-			if (NMib::NTraits::TCIsFundamental<tf_CInt>::mc_Value)
+			if constexpr (NMib::NTraits::TCIsFundamental<tf_CInt>::mc_Value)
 			{
 				decltype(fg_GetLower(_Number)) Lower = fg_GetLower(_Number);
 				if (Lower)
@@ -378,7 +378,7 @@ namespace NMib
 				EToShift = sizeof(_Number)*4
 			};
 			// Static branch
-			if (NMib::NTraits::TCIsFundamental<tf_CInt>::mc_Value)
+			if constexpr (NMib::NTraits::TCIsFundamental<tf_CInt>::mc_Value)
 			{
 				decltype(fg_GetLower(_Number)) Lower = fg_GetLower(_Number);
 				if (Lower)
@@ -390,7 +390,7 @@ namespace NMib
 			{
 				decltype(fg_GetLower(_Number)) Lower = fg_GetLower(_Number);
 
-				if (NMib::NTraits::TCIsFundamental<typename NMib::NTraits::TCRemoveReference<decltype(Lower)>::CType>::mc_Value)
+				if constexpr (NMib::NTraits::TCIsFundamental<typename NMib::NTraits::TCRemoveReference<decltype(Lower)>::CType>::mc_Value)
 				{
 					if (Lower)
 						return fg_GetLowestBitSetNoZero(Lower);
@@ -1008,7 +1008,7 @@ namespace NMib
 				EToShift = sizeof(_Number)*4
 			};
 			// Static branch
-			if (NMib::NTraits::TCIsFundamental<tf_CInt>::mc_Value)
+			if constexpr (NMib::NTraits::TCIsFundamental<tf_CInt>::mc_Value)
 			{
 				decltype(fg_GetUpper(_Number)) Upper = fg_GetUpper(_Number);
 				if (Upper)
@@ -1051,7 +1051,7 @@ namespace NMib
 				EToShift = sizeof(_Number)*4
 			};
 			// Static branch
-			if (NMib::NTraits::TCIsFundamental<tf_CInt>::mc_Value)
+			if constexpr (NMib::NTraits::TCIsFundamental<tf_CInt>::mc_Value)
 			{
 				decltype(fg_GetUpper(_Number)) Upper = fg_GetUpper(_Number);
 				if (Upper)
@@ -1063,7 +1063,7 @@ namespace NMib
 			{
 				decltype(fg_GetUpper(_Number)) Upper = fg_GetUpper(_Number);
 
-				if (NMib::NTraits::TCIsFundamental<typename NMib::NTraits::TCRemoveReference<decltype(Upper)>::CType>::mc_Value)
+				if constexpr (NMib::NTraits::TCIsFundamental<typename NMib::NTraits::TCRemoveReference<decltype(Upper)>::CType>::mc_Value)
 				{
 					if (Upper)
 						return EToShift + fg_GetHighestBitSetNoZero(Upper);
