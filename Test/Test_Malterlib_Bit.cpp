@@ -49,98 +49,93 @@ namespace
 	template <typename t_CInteger>
 	static void fs_TestHighestBitSet(const ch8 *_pName)
 	{
-		DMibTestSuite(_pName)
+		DMibTestPath(_pName);
+
+		NMib::NTime::CCyclesMin MalterlibTime;
+		const mint nLoops = 10000;
+		t_CInteger Number = NMib::NStr::CStr(NMib::NStr::CStr::CFormat("{}") << 0x50).f_ToInt();
+		uint32 Result = 0;
+		auto Lambda = [&] ()
 		{
-			NMib::NTime::CCyclesMin MalterlibTime;
-			const mint nLoops = 10000;
-			t_CInteger Number = NMib::NStr::CStr(NMib::NStr::CStr::CFormat("{}") << 0x50).f_ToInt();
-			uint32 Result = 0;
-			auto Lambda = [&] ()
+			uint32 Temp = Result;
+			MalterlibTime.f_Start();
+			for (mint i = 0; i < nLoops; ++i)
 			{
-				uint32 Temp = Result;
-				MalterlibTime.f_Start();
-				for (mint i = 0; i < nLoops; ++i)
-				{
-					NMib::NAtomic::fg_MemoryFence(NMib::NAtomic::EMemoryOrder_Acquire);
-					Temp += NMib::fg_GetHighestBitSet(Number);
-				}
-				MalterlibTime.f_Stop();
-				Result = Temp;
-			};
-			for (mint i = 0; i < 100; ++i)
-				fs_CallFunctor(Lambda);
-			MalterlibTime /= nLoops;
-			mint ExpectedCycles = 10*sizeof(t_CInteger);
-			DMibTest(DMibExpr(Result) == DMibExpr(6*100*nLoops)) (ETestFlag_NoValues);
-			if (NMib::NTest::fg_GroupActive("Performance"))
-				DMibTest(DMibExpr(MalterlibTime.f_GetCycles()) < DMibExpr(ExpectedCycles));
+				NMib::NAtomic::fg_MemoryFence(NMib::NAtomic::EMemoryOrder_Acquire);
+				Temp += NMib::fg_GetHighestBitSet(Number);
+			}
+			MalterlibTime.f_Stop();
+			Result = Temp;
 		};
+		for (mint i = 0; i < 100; ++i)
+			fs_CallFunctor(Lambda);
+		MalterlibTime /= nLoops;
+		mint ExpectedCycles = 10*sizeof(t_CInteger);
+		DMibTest(DMibExpr(Result) == DMibExpr(6*100*nLoops)) (ETestFlag_NoValues);
+		if (NMib::NTest::fg_GroupActive("Performance"))
+			DMibTest(DMibExpr(MalterlibTime.f_GetCycles()) < DMibExpr(ExpectedCycles));
 	}
 
 	template <typename t_CInteger>
 	static void fs_TestHighestBitSetNoZero(const ch8 *_pName)
 	{
-		DMibTestSuite(_pName)
+		DMibTestPath(_pName);
+		NMib::NTime::CCyclesMin MalterlibTime;
+		const mint nLoops = 10000;
+		t_CInteger Number = NMib::NStr::CStr(NMib::NStr::CStr::CFormat("{}") << 0x50).f_ToInt();
+		uint32 Result = 0;
+		auto Lambda = [&] ()
 		{
-			NMib::NTime::CCyclesMin MalterlibTime;
-			const mint nLoops = 10000;
-			t_CInteger Number = NMib::NStr::CStr(NMib::NStr::CStr::CFormat("{}") << 0x50).f_ToInt();
-			uint32 Result = 0;
-			auto Lambda = [&] ()
+			uint32 Temp = Result;
+			MalterlibTime.f_Start();
+			for (mint i = 0; i < nLoops; ++i)
 			{
-				uint32 Temp = Result;
-				MalterlibTime.f_Start();
-				for (mint i = 0; i < nLoops; ++i)
-				{
-					NMib::NAtomic::fg_MemoryFence(NMib::NAtomic::EMemoryOrder_Acquire);
-					Temp += NMib::fg_GetHighestBitSetNoZero(Number);
-				}
-				MalterlibTime.f_Stop();
-				Result = Temp;
-			};
-			for (mint i = 0; i < 100; ++i)
-				fs_CallFunctor(Lambda);
-			MalterlibTime /= nLoops;
-			mint ExpectedCycles = 10*sizeof(t_CInteger);
-			DMibTest(DMibExpr(Result) == DMibExpr(6*100*nLoops)) (ETestFlag_NoValues);
-			if (NMib::NTest::fg_GroupActive("Performance"))
-				DMibTest(DMibExpr(MalterlibTime.f_GetCycles()) < DMibExpr(ExpectedCycles));
+				NMib::NAtomic::fg_MemoryFence(NMib::NAtomic::EMemoryOrder_Acquire);
+				Temp += NMib::fg_GetHighestBitSetNoZero(Number);
+			}
+			MalterlibTime.f_Stop();
+			Result = Temp;
 		};
+		for (mint i = 0; i < 100; ++i)
+			fs_CallFunctor(Lambda);
+		MalterlibTime /= nLoops;
+		mint ExpectedCycles = 10*sizeof(t_CInteger);
+		DMibTest(DMibExpr(Result) == DMibExpr(6*100*nLoops)) (ETestFlag_NoValues);
+		if (NMib::NTest::fg_GroupActive("Performance"))
+			DMibTest(DMibExpr(MalterlibTime.f_GetCycles()) < DMibExpr(ExpectedCycles));
 	}
 
 	template <typename t_CInteger>
 	static void fs_TestLowestBitSet(const ch8 *_pName)
 	{
-		DMibTestSuite(_pName)
+		DMibTestPath(_pName);
+		NMib::NTime::CCyclesMin MalterlibTime;
+		const mint nLoops = 10000;
+		enum
 		{
-			NMib::NTime::CCyclesMin MalterlibTime;
-			const mint nLoops = 10000;
-			enum
-			{
-				ENumBits = sizeof(t_CInteger) * 8
-			};
-			t_CInteger Number = t_CInteger(NMib::NStr::CStr(NMib::NStr::CStr::CFormat("{}") << 0x55).f_ToInt()) << (ENumBits - 8);
-			uint32 Result = 0;
-			auto Lambda = [&] ()
-			{
-				uint32 Temp = Result;
-				MalterlibTime.f_Start();
-				for (mint i = 0; i < nLoops; ++i)
-				{
-					NMib::NAtomic::fg_MemoryFence(NMib::NAtomic::EMemoryOrder_Acquire);
-					Temp += NMib::fg_GetLowestBitSet(Number);
-				}
-				MalterlibTime.f_Stop();
-				Result = Temp;
-			};
-			for (mint i = 0; i < 100; ++i)
-				fs_CallFunctor(Lambda);
-			MalterlibTime /= nLoops;
-			mint ExpectedCycles = 10*sizeof(t_CInteger);
-			DMibTest(DMibExpr(Result) == DMibExpr((ENumBits-8)*100*nLoops)) (ETestFlag_NoValues);
-			if (NMib::NTest::fg_GroupActive("Performance"))
-				DMibTest(DMibExpr(MalterlibTime.f_GetCycles()) < DMibExpr(ExpectedCycles));
+			ENumBits = sizeof(t_CInteger) * 8
 		};
+		t_CInteger Number = t_CInteger(NMib::NStr::CStr(NMib::NStr::CStr::CFormat("{}") << 0x55).f_ToInt()) << (ENumBits - 8);
+		uint32 Result = 0;
+		auto Lambda = [&] ()
+		{
+			uint32 Temp = Result;
+			MalterlibTime.f_Start();
+			for (mint i = 0; i < nLoops; ++i)
+			{
+				NMib::NAtomic::fg_MemoryFence(NMib::NAtomic::EMemoryOrder_Acquire);
+				Temp += NMib::fg_GetLowestBitSet(Number);
+			}
+			MalterlibTime.f_Stop();
+			Result = Temp;
+		};
+		for (mint i = 0; i < 100; ++i)
+			fs_CallFunctor(Lambda);
+		MalterlibTime /= nLoops;
+		mint ExpectedCycles = 10*sizeof(t_CInteger);
+		DMibTest(DMibExpr(Result) == DMibExpr((ENumBits-8)*100*nLoops)) (ETestFlag_NoValues);
+		if (NMib::NTest::fg_GroupActive("Performance"))
+			DMibTest(DMibExpr(MalterlibTime.f_GetCycles()) < DMibExpr(ExpectedCycles));
 	}
 
 
@@ -148,36 +143,34 @@ namespace
 	template <typename t_CInteger>
 	static void fs_TestLowestBitSetNoZero(const ch8 *_pName)
 	{
-		DMibTestSuite(_pName)
+		DMibTestPath(_pName);
+		NMib::NTime::CCyclesMin MalterlibTime;
+		const mint nLoops = 10000;
+		enum
 		{
-			NMib::NTime::CCyclesMin MalterlibTime;
-			const mint nLoops = 10000;
-			enum
-			{
-				ENumBits = sizeof(t_CInteger) * 8
-			};
-			t_CInteger Number = t_CInteger(NMib::NStr::CStr(NMib::NStr::CStr::CFormat("{}") << 0x55).f_ToInt()) << (ENumBits - 8);
-			uint32 Result = 0;
-			auto Lambda = [&] ()
-			{
-				uint32 Temp = Result;
-				MalterlibTime.f_Start();
-				for (mint i = 0; i < nLoops; ++i)
-				{
-					NMib::NAtomic::fg_MemoryFence(NMib::NAtomic::EMemoryOrder_Acquire);
-					Temp += NMib::fg_GetLowestBitSetNoZero(Number);
-				}
-				MalterlibTime.f_Stop();
-				Result = Temp;
-			};
-			for (mint i = 0; i < 100; ++i)
-				fs_CallFunctor(Lambda);
-			MalterlibTime /= nLoops;
-			mint ExpectedCycles = 10*sizeof(t_CInteger);
-			DMibTest(DMibExpr(Result) == DMibExpr((ENumBits-8)*100*nLoops)) (ETestFlag_NoValues);
-			if (NMib::NTest::fg_GroupActive("Performance"))
-				DMibTest(DMibExpr(MalterlibTime.f_GetCycles()) < DMibExpr(ExpectedCycles));
+			ENumBits = sizeof(t_CInteger) * 8
 		};
+		t_CInteger Number = t_CInteger(NMib::NStr::CStr(NMib::NStr::CStr::CFormat("{}") << 0x55).f_ToInt()) << (ENumBits - 8);
+		uint32 Result = 0;
+		auto Lambda = [&] ()
+		{
+			uint32 Temp = Result;
+			MalterlibTime.f_Start();
+			for (mint i = 0; i < nLoops; ++i)
+			{
+				NMib::NAtomic::fg_MemoryFence(NMib::NAtomic::EMemoryOrder_Acquire);
+				Temp += NMib::fg_GetLowestBitSetNoZero(Number);
+			}
+			MalterlibTime.f_Stop();
+			Result = Temp;
+		};
+		for (mint i = 0; i < 100; ++i)
+			fs_CallFunctor(Lambda);
+		MalterlibTime /= nLoops;
+		mint ExpectedCycles = 10*sizeof(t_CInteger);
+		DMibTest(DMibExpr(Result) == DMibExpr((ENumBits-8)*100*nLoops)) (ETestFlag_NoValues);
+		if (NMib::NTest::fg_GroupActive("Performance"))
+			DMibTest(DMibExpr(MalterlibTime.f_GetCycles()) < DMibExpr(ExpectedCycles));
 	}
 
 
@@ -186,56 +179,52 @@ namespace
 	template <typename t_CInteger>
 	static void fs_TestNumBitsSet(const ch8 *_pName)
 	{
-		DMibTestSuite(_pName)
+		DMibTestPath(_pName);
+		NMib::NTime::CCyclesMin MalterlibTime;
+		const mint nLoops = 10000;
+		t_CInteger Number = 0;
+		mint nBytes = sizeof(Number);
+		for (mint i = 0; i < nBytes; ++i)
 		{
-			NMib::NTime::CCyclesMin MalterlibTime;
-			const mint nLoops = 10000;
-			t_CInteger Number = 0;
-			mint nBytes = sizeof(Number);
-			for (mint i = 0; i < nBytes; ++i)
+			Number |= t_CInteger(NMib::NStr::CStr(NMib::NStr::CStr::CFormat("{}") << 0x55).f_ToInt()) << (i * 8);
+		}
+		uint32 Result = 0;
+		auto Lambda = [&] ()
+		{
+			uint32 Temp = Result;
+			MalterlibTime.f_Start();
+			for (mint i = 0; i < nLoops; ++i)
 			{
-				Number |= t_CInteger(NMib::NStr::CStr(NMib::NStr::CStr::CFormat("{}") << 0x55).f_ToInt()) << (i * 8);
+				NMib::NAtomic::fg_MemoryFence(NMib::NAtomic::EMemoryOrder_Acquire);
+				Temp += NMib::fg_NumBitsSet(Number);
 			}
-			uint32 Result = 0;
-			auto Lambda = [&] ()
-			{
-				uint32 Temp = Result;
-				MalterlibTime.f_Start();
-				for (mint i = 0; i < nLoops; ++i)
-				{
-					NMib::NAtomic::fg_MemoryFence(NMib::NAtomic::EMemoryOrder_Acquire);
-					Temp += NMib::fg_NumBitsSet(Number);
-				}
-				MalterlibTime.f_Stop();
-				Result = Temp;
-			};
-			for (mint i = 0; i < 100; ++i)
-				fs_CallFunctor(Lambda);
-			MalterlibTime /= nLoops;
-			mint ExpectedCycles = 10*sizeof(t_CInteger);
-			DMibTest(DMibExpr(Result) == DMibExpr(4*nBytes*100*nLoops)) (ETestFlag_NoValues);
-			if (NMib::NTest::fg_GroupActive("Performance"))
-				DMibTest(DMibExpr(MalterlibTime.f_GetCycles()) < DMibExpr(ExpectedCycles));
+			MalterlibTime.f_Stop();
+			Result = Temp;
 		};
+		for (mint i = 0; i < 100; ++i)
+			fs_CallFunctor(Lambda);
+		MalterlibTime /= nLoops;
+		mint ExpectedCycles = 10*sizeof(t_CInteger);
+		DMibTest(DMibExpr(Result) == DMibExpr(4*nBytes*100*nLoops)) (ETestFlag_NoValues);
+		if (NMib::NTest::fg_GroupActive("Performance"))
+			DMibTest(DMibExpr(MalterlibTime.f_GetCycles()) < DMibExpr(ExpectedCycles));
 	}
 
 	template <template <mint t_nBits> class t_TCBitArray>
 	struct TCTestBitArray
 	{
-
 		static void fs_DoTests()
 		{
-
 			const aint nBitsAligned = sizeof(mint) * sizeof(mint) * 8 * 8;
 			const aint nBitsUnaligned = sizeof(mint) * sizeof(mint) * 8 * 8 - 1;
 			typedef typename t_TCBitArray<nBitsAligned>::CType CBitArrayAligned;
 			typedef typename t_TCBitArray<nBitsUnaligned>::CType CBitArrayUnaligned;
-			DMibTestCategory("FindFreeBitAndSet")
 			{
+				DMibTestPath("FindFreeBitAndSet");
 				typedef CBitArrayAligned CBitArrayAligned;
 				typedef CBitArrayUnaligned CBitArrayUnaligned;
-				DMibTestSuite("Aligned")
 				{
+					DMibTestPath("Aligned");
 					NMib::NTest::CTestPerformance Pref(1.0);
 
 					{
@@ -265,9 +254,9 @@ namespace
 					}
 
 					DMibTest(DMibExpr(Pref));
-				};
-				DMibTestSuite("Unaligned")
+				}
 				{
+					DMibTestPath("Unaligned");
 					NMib::NTime::CCyclesMin MalterlibTime;
 					const mint nBits = nBitsUnaligned;
 					CBitArrayUnaligned TestBits;
@@ -293,13 +282,13 @@ namespace
 					if (NMib::NTest::fg_GroupActive("Performance"))
 						DMibTest(DMibExpr(MalterlibTime.f_GetCycles()) < DMibExpr(ExpectedCycles));
 				};
-			};
-			DMibTestCategory("FindFreeBitReverseAndSet")
+			}
 			{
+				DMibTestPath("FindFreeBitReverseAndSet");
 				typedef CBitArrayAligned CBitArrayAligned;
 				typedef CBitArrayUnaligned CBitArrayUnaligned;
-				DMibTestSuite("Aligned")
 				{
+					DMibTestPath("Aligned");
 					NMib::NTest::CTestPerformance Pref(1.0);
 
 					{
@@ -329,9 +318,9 @@ namespace
 					}
 
 					DMibTest(DMibExpr(Pref));
-				};
-				DMibTestSuite("Unaligned")
+				}
 				{
+					DMibTestPath("Unaligned");
 					NMib::NTime::CCyclesMin MalterlibTime;
 					const mint nBits = nBitsUnaligned;
 					CBitArrayUnaligned TestBits;
@@ -356,14 +345,14 @@ namespace
 					mint ExpectedCycles = (nBits*10)/(sizeof(void *)*2);
 					if (NMib::NTest::fg_GroupActive("Performance"))
 						DMibTest(DMibExpr(MalterlibTime.f_GetCycles()) < DMibExpr(ExpectedCycles));
-				};
-			};
-			DMibTestCategory("FindUpperBound")
+				}
+			}
 			{
+				DMibTestPath("FindUpperBound");
 				typedef CBitArrayAligned CBitArrayAligned;
 				typedef CBitArrayUnaligned CBitArrayUnaligned;
-				DMibTestSuite("Aligned")
 				{
+					DMibTestPath("Aligned");
 					const aint nBits = nBitsAligned;
 					CBitArrayAligned TestBits;
 					for (aint i = 0; i < nBits; ++i)
@@ -376,9 +365,9 @@ namespace
 						DMibTest(DMibExpr(TestBits.f_FindUpperBound(0)) == DMibExpr(i) && DMibExpr("Static set")) (ETestFlag_Aggregated);
 						TestBits.template f_SetBit<false>(i);
 					}
-				};
-				DMibTestSuite("Unaligned")
+				}
 				{
+					DMibTestPath("Unaligned");
 					const aint nBits = nBitsUnaligned;
 					CBitArrayUnaligned TestBits;
 					for (aint i = 0; i < nBits; ++i)
@@ -391,14 +380,14 @@ namespace
 						DMibTest(DMibExpr(TestBits.f_FindUpperBound(0)) == DMibExpr(i) && DMibExpr("Static set")) (ETestFlag_Aggregated);
 						TestBits.template f_SetBit<false>(i);
 					}
-				};
-			};
-			DMibTestCategory("FindUpperBoundStart")
+				}
+			}
 			{
+				DMibTestPath("FindUpperBoundStart");
 				typedef CBitArrayAligned CBitArrayAligned;
 				typedef CBitArrayUnaligned CBitArrayUnaligned;
-				DMibTestSuite("Aligned")
 				{
+					DMibTestPath("Aligned");
 					const aint nBits = nBitsAligned;
 					CBitArrayAligned TestBits;
 					for (aint i = 0; i < nBits; ++i)
@@ -413,9 +402,9 @@ namespace
 						DMibTest(DMibExpr(TestBits.f_FindUpperBound(Start)) == DMibExpr(i) && DMibExpr("Static set")) (ETestFlag_Aggregated);
 						TestBits.template f_SetBit<false>(i);
 					}
-				};
-				DMibTestSuite("Unaligned")
+				}
 				{
+					DMibTestPath("Unaligned");
 					const aint nBits = nBitsUnaligned;
 					CBitArrayUnaligned TestBits;
 					for (aint i = 0; i < nBits; ++i)
@@ -429,14 +418,14 @@ namespace
 						DMibTest(DMibExpr(TestBits.f_FindUpperBound(Start)) == DMibExpr(i) && DMibExpr("Static set")) (ETestFlag_Aggregated);
 						TestBits.template f_SetBit<false>(i);
 					}
-				};
-			};
-			DMibTestCategory("EnumFreeBits")
+				}
+			}
 			{
+				DMibTestPath("EnumFreeBits");
 				typedef CBitArrayAligned CBitArrayAligned;
 				typedef CBitArrayUnaligned CBitArrayUnaligned;
-				DMibTestSuite("Aligned")
 				{
+					DMibTestPath("Aligned");
 					const aint nBits = nBitsAligned;
 					CBitArrayAligned TestBits;
 					for (aint i = 0; i < nBits; ++i)
@@ -476,9 +465,9 @@ namespace
 							TestBits.template f_SetBit<false>(i);
 						}
 					}
-				};
-				DMibTestSuite("Unaligned")
+				}
 				{
+					DMibTestPath("Unaligned");
 					const aint nBits = nBitsUnaligned;
 					CBitArrayUnaligned TestBits;
 					for (aint i = 0; i < nBits; ++i)
@@ -516,14 +505,14 @@ namespace
 							TestBits.template f_SetBit<false>(i);
 						}
 					}
-				};
-			};
-			DMibTestCategory("EnumFreeBitsMiddle")
+				}
+			}
 			{
+				DMibTestPath("EnumFreeBitsMiddle");
 				typedef CBitArrayAligned CBitArrayAligned;
 				typedef CBitArrayUnaligned CBitArrayUnaligned;
-				DMibTestSuite("Aligned")
 				{
+					DMibTestPath("Aligned");
 					const aint nBits = nBitsAligned;
 					CBitArrayAligned TestBits;
 					for (aint i = nBits/2; i < nBits; ++i)
@@ -563,9 +552,9 @@ namespace
 							TestBits.template f_SetBit<false>(i);
 						}
 					}
-				};
-				DMibTestSuite("Unaligned")
+				}
 				{
+					DMibTestPath("Unaligned");
 					const aint nBits = nBitsUnaligned;
 					CBitArrayUnaligned TestBits;
 					for (aint i = nBits/2; i < nBits; ++i)
@@ -603,14 +592,14 @@ namespace
 							TestBits.template f_SetBit<false>(i);
 						}
 					}
-				};
-			};
-			DMibTestCategory("EnumFreeBitsMiddleEnd")
+				}
+			}
 			{
+				DMibTestPath("EnumFreeBitsMiddleEnd");
 				typedef CBitArrayAligned CBitArrayAligned;
 				typedef CBitArrayUnaligned CBitArrayUnaligned;
-				DMibTestSuite("Aligned")
 				{
+					DMibTestPath("Aligned");
 					const aint nBits = nBitsAligned;
 					CBitArrayAligned TestBits;
 					for (aint i = nBits/3; i < nBits/2; ++i)
@@ -652,9 +641,9 @@ namespace
 							TestBits.template f_SetBit<false>(i);
 						}
 					}
-				};
-				DMibTestSuite("Unaligned")
+				}
 				{
+					DMibTestPath("Unaligned");
 					const aint nBits = nBitsUnaligned;
 					CBitArrayUnaligned TestBits;
 					for (aint i = nBits/3; i < nBits/2; ++i)
@@ -694,14 +683,14 @@ namespace
 							TestBits.template f_SetBit<false>(i);
 						}
 					}
-				};
-			};
-			DMibTestCategory("EnumFreeBitRanges")
+				}
+			}
 			{
+				DMibTestPath("EnumFreeBitRanges");
 				typedef CBitArrayAligned CBitArrayAligned;
 				typedef CBitArrayUnaligned CBitArrayUnaligned;
-				DMibTestSuite("Aligned")
 				{
+					DMibTestPath("Aligned");
 					const aint nBits = nBitsAligned;
 					CBitArrayAligned TestBits;
 					for (aint i = 0; i < nBits; ++i)
@@ -753,9 +742,9 @@ namespace
 							TestBits.template f_SetBit<false>(i);
 						}
 					}
-				};
-				DMibTestSuite("Unaligned")
+				}
 				{
+					DMibTestPath("Unaligned");
 					const aint nBits = nBitsUnaligned;
 					CBitArrayUnaligned TestBits;
 					for (aint i = 0; i < nBits; ++i)
@@ -793,10 +782,9 @@ namespace
 							TestBits.template f_SetBit<false>(i);
 						}
 					}
-				};
-			};
+				}
+			}
 		}
-
 	};
 
 	template <template <mint t_nBits> class t_TCBitArray>
@@ -810,27 +798,27 @@ namespace
 			const aint nBitsUnaligned = sizeof(mint) * sizeof(mint) * 8 * 8 - 1;
 			typedef typename t_TCBitArray<nBitsAligned>::CType CBitArrayAligned;
 			typedef typename t_TCBitArray<nBitsUnaligned>::CType CBitArrayUnaligned;
-			DMibTestCategory("PowerTwo")
 			{
-				DMibTestCategory("FindAndSetFreeBit")
+				DMibTestPath("PowerTwo");
 				{
-					DMibTestSuite("Aligned")
+					DMibTestPath("FindAndSetFreeBit");
 					{
+						DMibTestPath("Aligned");
 						[[maybe_unused]] const aint nBits = nBitsAligned;
 						CBitArrayAligned TestBits;
 
 						mint Bit = TestBits.f_FindFreeBitAndSet(3);
 						DMibTest(DMibExpr(TestBits.f_GetBit(3, Bit)) == DMibExpr(true)) (ETestFlag_Aggregated);
-					};
-					DMibTestSuite("Unaligned")
+					}
 					{
+						DMibTestPath("Unaligned");
 						NMib::NTime::CCyclesMin MalterlibTime;
 						[[maybe_unused]] const aint nBits = nBitsUnaligned;
 						CBitArrayUnaligned TestBits;
 						mint Bit = TestBits.f_FindFreeBitAndSet(3);
 						DMibTest(DMibExpr(TestBits.f_GetBit(3, Bit)) == DMibExpr(true)) (ETestFlag_Aggregated);
-					};
-				};
+					}
+				}
 			};
 		}
 
@@ -859,24 +847,21 @@ namespace
 
 		void f_DoTests()
 		{
-			DMibTestCategory("Bit vector power of two")
+			DMibTestSuite("Bit vector power of two")
 			{
 				TCTestBitArrayPowerOfTwo<TCPowerOfTwoBitArray>::fs_DoTests();
 				TCTestBitArray<TCPowerOfTwoBitArray>::fs_DoTests();
 			};
-
-			DMibTestCategory("Bit vector")
+			DMibTestSuite("Bit vector")
 			{
 				TCTestBitArray<TCNormalBitArray>::fs_DoTests();
 			};
-
-			DMibTestCategory("Bit vector hierarchical")
+			DMibTestSuite("Bit vector hierarchical")
 			{
 				TCTestBitArray<TCHierarchicalBitArray>::fs_DoTests();
 			};
 
-
-			DMibTestCategory("HighestBitSet")
+			DMibTestSuite("HighestBitSet")
 			{
 				fs_TestHighestBitSet<int8>("int8");
 				fs_TestHighestBitSet<uint8>("uint8");
@@ -893,7 +878,7 @@ namespace
 				fs_TestHighestBitSet<int512>("int512");
 				fs_TestHighestBitSet<uint512>("uint512");
 			};
-			DMibTestCategory("HighestBitSetNoZero")
+			DMibTestSuite("HighestBitSetNoZero")
 			{
 				fs_TestHighestBitSetNoZero<int8>("int8");
 				fs_TestHighestBitSetNoZero<uint8>("uint8");
@@ -910,7 +895,7 @@ namespace
 				fs_TestHighestBitSetNoZero<int512>("int512");
 				fs_TestHighestBitSetNoZero<uint512>("uint512");
 			};
-			DMibTestCategory("LowestBitSet")
+			DMibTestSuite("LowestBitSet")
 			{
 				fs_TestLowestBitSet<int8>("int8");
 				fs_TestLowestBitSet<uint8>("uint8");
@@ -927,7 +912,7 @@ namespace
 				fs_TestLowestBitSet<int512>("int512");
 				fs_TestLowestBitSet<uint512>("uint512");
 			};
-			DMibTestCategory("LowestBitSetNoZero")
+			DMibTestSuite("LowestBitSetNoZero")
 			{
 				fs_TestLowestBitSetNoZero<int8>("int8");
 				fs_TestLowestBitSetNoZero<uint8>("uint8");
@@ -944,7 +929,7 @@ namespace
 				fs_TestLowestBitSetNoZero<int512>("int512");
 				fs_TestLowestBitSetNoZero<uint512>("uint512");
 			};
-			DMibTestCategory("NumBitsSet")
+			DMibTestSuite("NumBitsSet")
 			{
 				fs_TestNumBitsSet<int8>("int8");
 				fs_TestNumBitsSet<uint8>("uint8");
