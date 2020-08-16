@@ -4,6 +4,9 @@
 #pragma once
 
 #include <Mib/Core/Core>
+#ifdef DCompiler_MSVCWorkaround
+#include <type_traits>
+#endif
 
 namespace NMib
 {
@@ -19,16 +22,16 @@ namespace NMib
 	typename NTraits::TCSmallerType<t_CInt>::CType const &fg_GetUpper(t_CInt const &_Integer);
 
 	template <typename tf_CInt>
-	int32 fg_GetLowestBitSet(tf_CInt const &_Number);
+	constexpr int32 fg_GetLowestBitSet(tf_CInt const &_Number);
 
 	template <typename tf_CInt>
-	int32 fg_GetLowestBitSetNoZero(tf_CInt const &_Number);
+	constexpr int32 fg_GetLowestBitSetNoZero(tf_CInt const &_Number);
 
 	template <typename tf_CInt>
-	int32 fg_GetHighestBitSet(tf_CInt const &_Number);
+	constexpr int32 fg_GetHighestBitSet(tf_CInt const &_Number);
 	
 	template <typename tf_CInt>
-	int32 fg_GetHighestBitSetNoZero(tf_CInt const &_Number);
+	constexpr int32 fg_GetHighestBitSetNoZero(tf_CInt const &_Number);
 	
 	namespace NPrivate
 	{
@@ -65,32 +68,29 @@ namespace NMib
 		class TCGetLowestBitSet_Helpers
 		{
 		public:
-			static const int8 ms_LogTable256[];
+			constexpr static const int8 ms_LogTable256[] 
+			{
+				-1, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 
+				4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 
+				5, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 
+				4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 
+				6, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 
+				4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 
+				5, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 
+				4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 
+				7, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 
+				4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 
+				5, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 
+				4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 
+				6, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 
+				4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 
+				5, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 
+				4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 
+			};
 		};
 
-		template <mint t_Dummy>
-		const int8 TCGetLowestBitSet_Helpers<t_Dummy>::ms_LogTable256[] = 
-		{
-			-1, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 
-			4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 
-			5, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 
-			4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 
-			6, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 
-			4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 
-			5, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 
-			4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 
-			7, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 
-			4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 
-			5, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 
-			4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 
-			6, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 
-			4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 
-			5, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 
-			4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 
-		};
-
-		template <typename t_CInt, bool t_SupportZero>
-		class TCGetLowestBitSet
+		template <typename t_CInt>
+		class TCGetLowestBitSetGeneric
 		{
 		public:
 			typedef t_CInt CType;
@@ -98,7 +98,7 @@ namespace NMib
 			{
 				EDefaultImplementation = 1
 			};
-			static inline_small int32 fs_GetLowestBitSet(t_CInt const &_Number)
+			constexpr static inline_small int32 fs_GetLowestBitSet(t_CInt const &_Number)
 			{
 				typedef typename NMib::NTraits::TCUnsigned<t_CInt>::CType CUnsigned;
 				mint nBytes = sizeof(CUnsigned);
@@ -114,6 +114,11 @@ namespace NMib
 				}
 				return -1;
 			}
+		};
+
+		template <typename t_CInt, bool t_SupportZero>
+		struct TCGetLowestBitSet : public TCGetLowestBitSetGeneric<t_CInt>
+		{
 		};
 
 		template <typename t_CInt>
@@ -136,7 +141,7 @@ namespace NMib
 			typedef TCGetLowestBitSet<t_CType, 1> CGetter;
 		};
 
-	#ifdef DMibPGetLowestBitSet32
+#ifdef DMibPGetLowestBitSet32
 		template <>
 		class TCGetLowestBitSet<uint32, true>
 		{
@@ -146,9 +151,14 @@ namespace NMib
 			{
 				EDefaultImplementation = 0
 			};
-			static inline_small int32 fs_GetLowestBitSet(uint32 const &_Number)
+			constexpr static inline_small int32 fs_GetLowestBitSet(uint32 const &_Number)
 			{
-				return DMibPGetLowestBitSet32(_Number);
+#ifdef DCompiler_MSVC_Workaround
+				if (std::is_constant_evaluated())
+					return TCGetLowestBitSetGeneric<uint32>::fs_GetLowestBitSet(_Number);
+				else
+#endif
+					return DMibPGetLowestBitSet32(_Number);
 			}
 		};
 
@@ -187,7 +197,7 @@ namespace NMib
 			{
 				EDefaultImplementation = 1
 			};
-			static inline_small int32 fs_GetLowestBitSet(CType const &_Number)
+			constexpr static inline_small int32 fs_GetLowestBitSet(CType const &_Number)
 			{
 				return TCGetLowestBitSet_Helpers<>::ms_LogTable256[_Number];
 			}
@@ -213,9 +223,14 @@ namespace NMib
 			{
 				EDefaultImplementation = 0
 			};
-			static inline_small int32 fs_GetLowestBitSet(uint32 const &_Number)
+			constexpr static inline_small int32 fs_GetLowestBitSet(uint32 const &_Number)
 			{
-				return DMibPGetLowestBitSet32NoZero(_Number);
+#ifdef DCompiler_MSVC_Workaround
+				if (std::is_constant_evaluated())
+					return TCGetLowestBitSetGeneric<uint32>::fs_GetLowestBitSet(_Number);
+				else
+#endif
+					return DMibPGetLowestBitSet32NoZero(_Number);
 			}
 		};
 
@@ -258,8 +273,13 @@ namespace NMib
 			{
 				EDefaultImplementation = 0
 			};
-			static inline_small int32 fs_GetLowestBitSet(uint64 const &_Number)
+			constexpr static inline_small int32 fs_GetLowestBitSet(uint64 const &_Number)
 			{
+#ifdef DCompiler_MSVC_Workaround
+				if (std::is_constant_evaluated())
+					return TCGetLowestBitSetGeneric<uint64>::fs_GetLowestBitSet(_Number);
+				else
+#endif
 				return DMibPGetLowestBitSet64(_Number);
 			}
 		};
@@ -288,9 +308,14 @@ namespace NMib
 			{
 				EDefaultImplementation = 0
 			};
-			static inline_small int32 fs_GetLowestBitSet(uint64 const &_Number)
+			constexpr static inline_small int32 fs_GetLowestBitSet(uint64 const &_Number)
 			{
-				return DMibPGetLowestBitSet64NoZero(_Number);
+#ifdef DCompiler_MSVC_Workaround
+				if (std::is_constant_evaluated())
+					return TCGetLowestBitSetGeneric<uint64>::fs_GetLowestBitSet(_Number);
+				else
+#endif
+					return DMibPGetLowestBitSet64NoZero(_Number);
 			}
 		};
 
@@ -309,13 +334,13 @@ namespace NMib
 	#endif
 
 		template <typename tf_CInt>
-		inline_small typename TCEnableIf<!TCGetLowestBitSet<tf_CInt, true>::EDefaultImplementation, int32>::CType fg_GetLowestBitSetHelper(tf_CInt const &_Number)
+		constexpr inline_small typename TCEnableIf<!TCGetLowestBitSet<tf_CInt, true>::EDefaultImplementation, int32>::CType fg_GetLowestBitSetHelper(tf_CInt const &_Number)
 		{
 			return NPrivate::TCGetLowestBitSet<tf_CInt, true>::fs_GetLowestBitSet(_Number);
 		}
 
 		template <typename tf_CInt>
-		inline_small typename TCEnableIf<TCGetLowestBitSet<tf_CInt, true>::EDefaultImplementation && NMib::NTraits::TCIsSame<typename NMib::NTraits::TCSmallerType<tf_CInt>::CType, tf_CInt>::mc_Value, int32>::CType fg_GetLowestBitSetHelper(tf_CInt const &_Number)
+		constexpr inline_small typename TCEnableIf<TCGetLowestBitSet<tf_CInt, true>::EDefaultImplementation && NMib::NTraits::TCIsSame<typename NMib::NTraits::TCSmallerType<tf_CInt>::CType, tf_CInt>::mc_Value, int32>::CType fg_GetLowestBitSetHelper(tf_CInt const &_Number)
 		{
 			// Static branch
 			typedef typename NPrivate::TCHelper_GetLowestBitSetChooseBySize<sizeof(tf_CInt), tf_CInt, true>::CGetter CGetter;
@@ -323,7 +348,7 @@ namespace NMib
 		}
 
 		template <typename tf_CInt>
-		inline_small typename TCEnableIf<TCGetLowestBitSet<tf_CInt, true>::EDefaultImplementation && !NMib::NTraits::TCIsSame<typename NMib::NTraits::TCSmallerType<tf_CInt>::CType, tf_CInt>::mc_Value, int32>::CType fg_GetLowestBitSetHelper(tf_CInt const &_Number)
+		constexpr inline_small typename TCEnableIf<TCGetLowestBitSet<tf_CInt, true>::EDefaultImplementation && !NMib::NTraits::TCIsSame<typename NMib::NTraits::TCSmallerType<tf_CInt>::CType, tf_CInt>::mc_Value, int32>::CType fg_GetLowestBitSetHelper(tf_CInt const &_Number)
 		{
 			enum
 			{
@@ -357,13 +382,13 @@ namespace NMib
 		}
 
 		template <typename tf_CInt>
-		inline_small typename TCEnableIf<!TCGetLowestBitSet<tf_CInt, true>::EDefaultImplementation, int32>::CType fg_GetLowestBitSetHelperNoZero(tf_CInt const &_Number)
+		constexpr inline_small typename TCEnableIf<!TCGetLowestBitSet<tf_CInt, true>::EDefaultImplementation, int32>::CType fg_GetLowestBitSetHelperNoZero(tf_CInt const &_Number)
 		{
 			return NPrivate::TCGetLowestBitSet<tf_CInt, false>::fs_GetLowestBitSet(_Number);
 		}
 
 		template <typename tf_CInt>
-		inline_small typename TCEnableIf<TCGetLowestBitSet<tf_CInt, true>::EDefaultImplementation && NMib::NTraits::TCIsSame<typename NMib::NTraits::TCSmallerType<tf_CInt>::CType, tf_CInt>::mc_Value, int32>::CType fg_GetLowestBitSetHelperNoZero(tf_CInt const &_Number)
+		constexpr inline_small typename TCEnableIf<TCGetLowestBitSet<tf_CInt, true>::EDefaultImplementation && NMib::NTraits::TCIsSame<typename NMib::NTraits::TCSmallerType<tf_CInt>::CType, tf_CInt>::mc_Value, int32>::CType fg_GetLowestBitSetHelperNoZero(tf_CInt const &_Number)
 		{
 			// Static branch
 			typedef typename NPrivate::TCHelper_GetLowestBitSetChooseBySize<sizeof(tf_CInt), tf_CInt, false>::CGetter CGetter;
@@ -371,7 +396,7 @@ namespace NMib
 		}
 
 		template <typename tf_CInt>
-		inline_small typename TCEnableIf<TCGetLowestBitSet<tf_CInt, true>::EDefaultImplementation && !NMib::NTraits::TCIsSame<typename NMib::NTraits::TCSmallerType<tf_CInt>::CType, tf_CInt>::mc_Value, int32>::CType fg_GetLowestBitSetHelperNoZero(tf_CInt const &_Number)
+		constexpr inline_small typename TCEnableIf<TCGetLowestBitSet<tf_CInt, true>::EDefaultImplementation && !NMib::NTraits::TCIsSame<typename NMib::NTraits::TCSmallerType<tf_CInt>::CType, tf_CInt>::mc_Value, int32>::CType fg_GetLowestBitSetHelperNoZero(tf_CInt const &_Number)
 		{
 			enum
 			{
@@ -411,13 +436,13 @@ namespace NMib
 	}
 
 	template <typename tf_CInt>
-	int32 fg_GetLowestBitSet(tf_CInt const &_Number)
+	constexpr int32 fg_GetLowestBitSet(tf_CInt const &_Number)
 	{
 		return NPrivate::fg_GetLowestBitSetHelper(_Number);
 	}
 
 	template <typename tf_CInt>
-	int32 fg_GetLowestBitSetNoZero(tf_CInt const &_Number)
+	constexpr int32 fg_GetLowestBitSetNoZero(tf_CInt const &_Number)
 	{
 		return NPrivate::fg_GetLowestBitSetHelperNoZero(_Number);
 	}
@@ -744,40 +769,37 @@ namespace NMib
 		class TCGetHighestBitSet_Helpers
 		{
 		public:
-			static const int8 ms_LogTable256[];
+			static constexpr int8 ms_LogTable256[]= 
+				{
+					-1, 0, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3,
+					4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+					5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+					5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+					6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+					6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+					6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+					6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+					7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
+					7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
+					7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
+					7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
+					7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
+					7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
+					7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
+					7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7
+				}
+			;
 		};
 
-		template <mint t_Dummy>
-		const int8 TCGetHighestBitSet_Helpers<t_Dummy>::ms_LogTable256[] = 
+		template <typename t_CInt>
+		struct TCGetHighestBitSetGeneric
 		{
-		  -1, 0, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3,
-		  4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
-		  5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
-		  5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
-		  6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
-		  6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
-		  6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
-		  6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
-		  7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
-		  7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
-		  7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
-		  7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
-		  7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
-		  7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
-		  7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
-		  7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7
-		};
-
-		template <typename t_CInt, bool t_SupportZero>
-		class TCGetHighestBitSet
-		{
-		public:
 			typedef t_CInt CType;
 			enum
 			{
 				EDefaultImplementation = 1
 			};
-			static inline_small int32 fs_GetHighestBitSet(t_CInt _Number)
+			constexpr static inline_small int32 fs_GetHighestBitSet(t_CInt _Number)
 			{
 				typedef typename NMib::NTraits::TCUnsigned<t_CInt>::CType CUnsigned;
 				mint nBytes = sizeof(CUnsigned);
@@ -794,6 +816,12 @@ namespace NMib
 
 			}
 		};
+
+		template <typename t_CInt, bool t_SupportZero>
+		struct TCGetHighestBitSet : public TCGetHighestBitSetGeneric<t_CInt>
+		{
+		};
+
 		template <typename t_CInt>
 		class TCGetHighestBitSet<t_CInt, 0> : public TCGetHighestBitSet<t_CInt, 1>
 		{
@@ -824,9 +852,14 @@ namespace NMib
 			{
 				EDefaultImplementation = 0
 			};
-			static inline_small int32 fs_GetHighestBitSet(uint32 _Number)
+			constexpr static inline_small int32 fs_GetHighestBitSet(uint32 _Number)
 			{
-				return DMibPGetHighestBitSet32(_Number);
+#ifdef DCompiler_MSVC_Workaround
+				if (std::is_constant_evaluated())
+					return TCGetHighestBitSetGeneric<uint32>::fs_GetHighestBitSet(_Number);
+				else
+#endif
+					return DMibPGetHighestBitSet32(_Number);
 			}
 		};
 
@@ -866,7 +899,7 @@ namespace NMib
 			{
 				EDefaultImplementation = 1
 			};
-			static inline_small int32 fs_GetHighestBitSet(CType const &_Number)
+			constexpr static inline_small int32 fs_GetHighestBitSet(CType const &_Number)
 			{
 				return TCGetHighestBitSet_Helpers<>::ms_LogTable256[_Number];
 			}
@@ -891,8 +924,13 @@ namespace NMib
 			{
 				EDefaultImplementation = 0
 			};
-			static inline_small int32 fs_GetHighestBitSet(uint32 _Number)
+			constexpr static inline_small int32 fs_GetHighestBitSet(uint32 _Number)
 			{
+#ifdef DCompiler_MSVC_Workaround
+				if (std::is_constant_evaluated())
+					return TCGetHighestBitSetGeneric<uint32>::fs_GetHighestBitSet(_Number);
+				else
+#endif
 				return DMibPGetHighestBitSet32NoZero(_Number);
 			}
 		};
@@ -936,9 +974,14 @@ namespace NMib
 			{
 				EDefaultImplementation = 0
 			};
-			static inline_small int32 fs_GetHighestBitSet(uint64 _Number)
+			constexpr static inline_small int32 fs_GetHighestBitSet(uint64 _Number)
 			{
-				return DMibPGetHighestBitSet64(_Number);
+#ifdef DCompiler_MSVC_Workaround
+				if (std::is_constant_evaluated())
+					return TCGetHighestBitSetGeneric<uint64>::fs_GetHighestBitSet(_Number);
+				else
+#endif
+					return DMibPGetHighestBitSet64(_Number);
 			}
 		};
 
@@ -966,9 +1009,14 @@ namespace NMib
 			{
 				EDefaultImplementation = 0
 			};
-			static inline_small int32 fs_GetHighestBitSet(uint64 _Number)
+			constexpr static inline_small int32 fs_GetHighestBitSet(uint64 _Number)
 			{
-				return DMibPGetHighestBitSet64NoZero(_Number);
+#ifdef DCompiler_MSVC_Workaround
+				if (std::is_constant_evaluated())
+					return TCGetHighestBitSetGeneric<uint64>::fs_GetHighestBitSet(_Number);
+				else
+#endif
+					return DMibPGetHighestBitSet64NoZero(_Number);
 			}
 		};
 
@@ -987,13 +1035,13 @@ namespace NMib
 	#endif
 
 		template <typename tf_CInt>
-		inline_small typename TCEnableIf<!TCGetHighestBitSet<tf_CInt, true>::EDefaultImplementation, int32>::CType fg_GetHighestBitSetHelper(tf_CInt const &_Number)
+		constexpr inline_small typename TCEnableIf<!TCGetHighestBitSet<tf_CInt, true>::EDefaultImplementation, int32>::CType fg_GetHighestBitSetHelper(tf_CInt const &_Number)
 		{
 			return NPrivate::TCGetHighestBitSet<tf_CInt, true>::fs_GetHighestBitSet(_Number);
 		}
 
 		template <typename tf_CInt>
-		inline_small typename TCEnableIf<TCGetHighestBitSet<tf_CInt, true>::EDefaultImplementation && NMib::NTraits::TCIsSame<typename NMib::NTraits::TCSmallerType<tf_CInt>::CType, tf_CInt>::mc_Value, int32>::CType fg_GetHighestBitSetHelper(tf_CInt const &_Number)
+		constexpr inline_small typename TCEnableIf<TCGetHighestBitSet<tf_CInt, true>::EDefaultImplementation && NMib::NTraits::TCIsSame<typename NMib::NTraits::TCSmallerType<tf_CInt>::CType, tf_CInt>::mc_Value, int32>::CType fg_GetHighestBitSetHelper(tf_CInt const &_Number)
 		{
 			// Static branch
 			typedef typename NPrivate::TCHelper_GetHighestBitSetChooseBySize<sizeof(tf_CInt), tf_CInt, true>::CGetter CGetter;
@@ -1001,7 +1049,7 @@ namespace NMib
 		}
 
 		template <typename tf_CInt>
-		inline_small typename TCEnableIf<TCGetHighestBitSet<tf_CInt, true>::EDefaultImplementation && !NMib::NTraits::TCIsSame<typename NMib::NTraits::TCSmallerType<tf_CInt>::CType, tf_CInt>::mc_Value, int32>::CType fg_GetHighestBitSetHelper(tf_CInt const &_Number)
+		constexpr inline_small typename TCEnableIf<TCGetHighestBitSet<tf_CInt, true>::EDefaultImplementation && !NMib::NTraits::TCIsSame<typename NMib::NTraits::TCSmallerType<tf_CInt>::CType, tf_CInt>::mc_Value, int32>::CType fg_GetHighestBitSetHelper(tf_CInt const &_Number)
 		{
 			enum
 			{
@@ -1030,13 +1078,13 @@ namespace NMib
 		}
 
 		template <typename tf_CInt>
-		inline_small typename TCEnableIf<!TCGetHighestBitSet<tf_CInt, true>::EDefaultImplementation, int32>::CType fg_GetHighestBitSetHelperNoZero(tf_CInt const &_Number)
+		constexpr inline_small typename TCEnableIf<!TCGetHighestBitSet<tf_CInt, true>::EDefaultImplementation, int32>::CType fg_GetHighestBitSetHelperNoZero(tf_CInt const &_Number)
 		{
 			return NPrivate::TCGetHighestBitSet<tf_CInt, false>::fs_GetHighestBitSet(_Number);
 		}
 
 		template <typename tf_CInt>
-		inline_small typename TCEnableIf<TCGetHighestBitSet<tf_CInt, true>::EDefaultImplementation && NMib::NTraits::TCIsSame<typename NMib::NTraits::TCSmallerType<tf_CInt>::CType, tf_CInt>::mc_Value, int32>::CType fg_GetHighestBitSetHelperNoZero(tf_CInt const &_Number)
+		constexpr inline_small typename TCEnableIf<TCGetHighestBitSet<tf_CInt, true>::EDefaultImplementation && NMib::NTraits::TCIsSame<typename NMib::NTraits::TCSmallerType<tf_CInt>::CType, tf_CInt>::mc_Value, int32>::CType fg_GetHighestBitSetHelperNoZero(tf_CInt const &_Number)
 		{
 			// Static branch
 			typedef typename NPrivate::TCHelper_GetHighestBitSetChooseBySize<sizeof(tf_CInt), tf_CInt, false>::CGetter CGetter;
@@ -1044,7 +1092,7 @@ namespace NMib
 		}
 
 		template <typename tf_CInt>
-		inline_small typename TCEnableIf<TCGetHighestBitSet<tf_CInt, true>::EDefaultImplementation && !NMib::NTraits::TCIsSame<typename NMib::NTraits::TCSmallerType<tf_CInt>::CType, tf_CInt>::mc_Value, int32>::CType fg_GetHighestBitSetHelperNoZero(tf_CInt const &_Number)
+		constexpr inline_small typename TCEnableIf<TCGetHighestBitSet<tf_CInt, true>::EDefaultImplementation && !NMib::NTraits::TCIsSame<typename NMib::NTraits::TCSmallerType<tf_CInt>::CType, tf_CInt>::mc_Value, int32>::CType fg_GetHighestBitSetHelperNoZero(tf_CInt const &_Number)
 		{
 			enum
 			{
@@ -1082,13 +1130,13 @@ namespace NMib
 	}
 
 	template <typename tf_CInt>
-	int32 fg_GetHighestBitSet(tf_CInt const &_Number)
+	constexpr int32 fg_GetHighestBitSet(tf_CInt const &_Number)
 	{
 		return NPrivate::fg_GetHighestBitSetHelper(_Number);
 	}
 
 	template <typename tf_CInt>
-	int32 fg_GetHighestBitSetNoZero(tf_CInt const &_Number)
+	constexpr int32 fg_GetHighestBitSetNoZero(tf_CInt const &_Number)
 	{
 		return NPrivate::fg_GetHighestBitSetHelperNoZero(_Number);
 	}
@@ -1101,7 +1149,7 @@ namespace NMib
 		{
 		public:
 			typedef t_CInt CType;
-			static inline_small t_CInt fs_Do(t_CInt _Number)
+			constexpr static inline_small t_CInt fs_Do(t_CInt _Number)
 			{
 				_Number = _Number | (_Number >> t_Number);
 				_Number = TCGetNextPowerOfTwoHelper<t_CInt, t_Number * 2, t_End>::fs_Do(_Number);
@@ -1114,7 +1162,7 @@ namespace NMib
 		{
 		public:
 			typedef t_CInt CType;
-			static inline_small t_CInt fs_Do(t_CInt _Number)
+			constexpr static inline_small t_CInt fs_Do(t_CInt _Number)
 			{
 				return _Number;
 			}
@@ -1123,7 +1171,7 @@ namespace NMib
 	}
 
 	template <typename tf_CInt>
-	inline_small aint fg_RoundPowerOfTwoUp(tf_CInt _Number)
+	constexpr inline_small aint fg_RoundPowerOfTwoUp(tf_CInt _Number)
 	{
 		typedef typename NTraits::TCUnsigned<tf_CInt>::CType CUnsigned;
 		CUnsigned Number = CUnsigned(_Number);
@@ -1134,7 +1182,7 @@ namespace NMib
 	}
 
 	template <typename tf_CInt>
-	inline_small aint fg_RoundPowerOfTwoDown(tf_CInt _Number)
+	constexpr inline_small aint fg_RoundPowerOfTwoDown(tf_CInt _Number)
 	{
 		typedef typename NTraits::TCUnsigned<tf_CInt>::CType CUnsigned;
 		CUnsigned Number = CUnsigned(_Number);
