@@ -15,6 +15,28 @@ namespace NMib
 		 
 		Contains helpers for bit 
 	 */
+
+	template <typename tf_CType>
+	constexpr tf_CType fg_BitRange(uaint _BitStart, uaint _BitEnd)
+	{
+		using CUnsigned = typename NTraits::TCUnsigned<tf_CType>::CType;
+
+		return
+			(
+				(
+					(CUnsigned(1) << _BitEnd)
+					- CUnsigned(1)
+				)
+				| (CUnsigned(1) << _BitEnd)
+			)
+			^
+			(
+				(CUnsigned(1) << _BitStart)
+				- CUnsigned(1)
+			)
+		;
+	}
+
 	template <typename t_CInt>
 	typename NTraits::TCSmallerType<t_CInt>::CType const &fg_GetLower(t_CInt const &_Integer);
 	
