@@ -1193,7 +1193,7 @@ namespace NMib
 	}
 
 	template <typename tf_CInt>
-	constexpr inline_small aint fg_RoundPowerOfTwoUp(tf_CInt _Number)
+	constexpr inline_small tf_CInt fg_RoundPowerOfTwoUp(tf_CInt _Number)
 	{
 		typedef typename NTraits::TCUnsigned<tf_CInt>::CType CUnsigned;
 		CUnsigned Number = CUnsigned(_Number);
@@ -1204,7 +1204,7 @@ namespace NMib
 	}
 
 	template <typename tf_CInt>
-	constexpr inline_small aint fg_RoundPowerOfTwoDown(tf_CInt _Number)
+	constexpr inline_small tf_CInt fg_RoundPowerOfTwoDown(tf_CInt _Number)
 	{
 		typedef typename NTraits::TCUnsigned<tf_CInt>::CType CUnsigned;
 		CUnsigned Number = CUnsigned(_Number);
