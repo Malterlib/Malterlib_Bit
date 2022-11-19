@@ -26,12 +26,12 @@ Import "../Core/Lib_Malterlib.MTarget"
 
 Property
 {
-	MalterlibLibrary_Bit define bool = MalterlibLibrary_All
+	MalterlibLibrary_Bit: bool = MalterlibLibrary_All
 	MalterlibSubLibraries =+ "Bit"
 	{
 		!!MalterlibLibrary_Bit true
 	}
-//	MalterlibSubLibrarySeparate_Lib_Malterlib_Bit define bool = true
+//	MalterlibSubLibrarySeparate_Lib_Malterlib_Bit: bool = true
 	MalterlibIncludeRoots =+ "Include"->MakeAbsolute()
 	{
 		!!MalterlibLibrary_Bit true
@@ -43,6 +43,6 @@ Property
 	!!MalterlibEnableInternalTests true
 	
 	MalterlibTests =+ "Malterlib_Bit"
-	MalterlibTestFiles_Malterlib_Bit define [type(CEntity)] = ["Test/*"->MakeAbsolute()]
+	MalterlibTestFiles_Malterlib_Bit: [type(CEntity)] = ["Test/*"->MakeAbsolute()]
 }
 
