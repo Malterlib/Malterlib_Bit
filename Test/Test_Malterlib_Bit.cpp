@@ -53,7 +53,12 @@ namespace
 
 		NMib::NTime::CCyclesMin MalterlibTime;
 		const mint nLoops = 10000;
+
+#ifndef DMibClangAnalyzerWorkaround
 		t_CInteger Number = NMib::NStr::CStr(NMib::NStr::CStr::CFormat("{}") << 0x50).f_ToInt();
+#else
+		t_CInteger Number = 0x50;
+#endif
 		uint32 Result = 0;
 		auto Lambda = [&] ()
 		{
@@ -860,7 +865,6 @@ namespace
 			{
 				TCTestBitArray<TCHierarchicalBitArray>::fs_DoTests();
 			};
-
 			DMibTestSuite("HighestBitSet")
 			{
 				fs_TestHighestBitSet<int8>("int8");

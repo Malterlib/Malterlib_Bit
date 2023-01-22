@@ -8,6 +8,12 @@
 #include <type_traits>
 #endif
 
+namespace NMib::NNumeric
+{
+	template <typename t_CUpper, typename t_CLower>
+	class TCInt;
+}
+
 namespace NMib
 {
 	/**	\namespace NMib::NBit
@@ -38,10 +44,17 @@ namespace NMib
 	}
 
 	template <typename t_CInt>
-	typename NTraits::TCSmallerType<t_CInt>::CType const &fg_GetLower(t_CInt const &_Integer);
-	
+	typename NTraits::TCSmallerType<t_CInt>::CType fg_GetLower(t_CInt const &_Integer);
+
 	template <typename t_CInt>
-	typename NTraits::TCSmallerType<t_CInt>::CType const &fg_GetUpper(t_CInt const &_Integer);
+	typename NTraits::TCSmallerType<t_CInt>::CType fg_GetUpper(t_CInt const &_Integer);
+
+	template <typename t_CUpper, typename t_CLower>
+	typename NNumeric::TCInt<t_CUpper, t_CLower>::CLower const &fg_GetLower(NNumeric::TCInt<t_CUpper, t_CLower> const &_Integer);
+
+	template <typename t_CUpper, typename t_CLower>
+	typename NNumeric::TCInt<t_CUpper, t_CLower>::CUpper const &fg_GetUpper(NNumeric::TCInt<t_CUpper, t_CLower> const &_Integer);
+
 
 	template <typename tf_CInt>
 	constexpr int32 fg_GetLowestBitSet(tf_CInt const &_Number);
@@ -379,10 +392,10 @@ namespace NMib
 			// Static branch
 			if constexpr (NMib::NTraits::TCIsFundamental<tf_CInt>::mc_Value)
 			{
-				decltype(fg_GetLower(_Number)) Lower = fg_GetLower(_Number);
+				decltype(auto) Lower = fg_GetLower(_Number);
 				if (Lower)
 					return fg_GetLowestBitSet(Lower);
-				decltype(fg_GetUpper(_Number)) Upper = fg_GetUpper(_Number);
+				decltype(auto) Upper = fg_GetUpper(_Number);
 				int32 Ret = fg_GetLowestBitSet(Upper);
 				if (Ret < 0)
 					return -1;
@@ -390,12 +403,12 @@ namespace NMib
 			}
 			else
 			{
-				decltype(fg_GetLower(_Number)) Lower = fg_GetLower(_Number);
+				decltype(auto) Lower = fg_GetLower(_Number);
 				int32 Ret = fg_GetLowestBitSet(Lower);
 				if (Ret >= 0)
 					return Ret;
 
-				decltype(fg_GetUpper(_Number)) Upper = fg_GetUpper(_Number);
+				decltype(auto) Upper = fg_GetUpper(_Number);
 				Ret = fg_GetLowestBitSet(Upper);
 				if (Ret < 0)
 					return -1;
@@ -427,15 +440,15 @@ namespace NMib
 			// Static branch
 			if constexpr (NMib::NTraits::TCIsFundamental<tf_CInt>::mc_Value)
 			{
-				decltype(fg_GetLower(_Number)) Lower = fg_GetLower(_Number);
+				decltype(auto) Lower = fg_GetLower(_Number);
 				if (Lower)
 					return fg_GetLowestBitSetNoZero(Lower);
-				decltype(fg_GetUpper(_Number)) Upper = fg_GetUpper(_Number);
+				decltype(auto) Upper = fg_GetUpper(_Number);
 				return fg_GetLowestBitSetNoZero(Upper) + EToShift;
 			}
 			else
 			{
-				decltype(fg_GetLower(_Number)) Lower = fg_GetLower(_Number);
+				decltype(auto) Lower = fg_GetLower(_Number);
 
 				if constexpr (NMib::NTraits::TCIsFundamental<typename NMib::NTraits::TCRemoveReference<decltype(Lower)>::CType>::mc_Value)
 				{
@@ -450,7 +463,7 @@ namespace NMib
 				}
 
 
-				decltype(fg_GetUpper(_Number)) Upper = fg_GetUpper(_Number);
+				decltype(auto) Upper = fg_GetUpper(_Number);
 				return fg_GetLowestBitSetNoZero(Upper) + EToShift;
 			}
 		}
@@ -1080,20 +1093,20 @@ namespace NMib
 			// Static branch
 			if constexpr (NMib::NTraits::TCIsFundamental<tf_CInt>::mc_Value)
 			{
-				decltype(fg_GetUpper(_Number)) Upper = fg_GetUpper(_Number);
+				decltype(auto) Upper = fg_GetUpper(_Number);
 				if (Upper)
 					return EToShift + fg_GetHighestBitSet(Upper);
-				decltype(fg_GetLower(_Number)) Lower = fg_GetLower(_Number);
+				decltype(auto) Lower = fg_GetLower(_Number);
 				int32 Ret = fg_GetHighestBitSet(Lower);
 				return Ret;
 			}
 			else
 			{
-				decltype(fg_GetUpper(_Number)) Upper = fg_GetUpper(_Number);
+				decltype(auto) Upper = fg_GetUpper(_Number);
 				int32 Ret = fg_GetHighestBitSet(Upper);
 				if (Ret >= 0)
 					return EToShift + Ret;
-				decltype(fg_GetLower(_Number)) Lower = fg_GetLower(_Number);
+				decltype(auto) Lower = fg_GetLower(_Number);
 				Ret = fg_GetHighestBitSet(Lower);
 				return Ret;
 			}
@@ -1123,15 +1136,15 @@ namespace NMib
 			// Static branch
 			if constexpr (NMib::NTraits::TCIsFundamental<tf_CInt>::mc_Value)
 			{
-				decltype(fg_GetUpper(_Number)) Upper = fg_GetUpper(_Number);
+				decltype(auto) Upper = fg_GetUpper(_Number);
 				if (Upper)
 					return EToShift + fg_GetHighestBitSetNoZero(Upper);
-				decltype(fg_GetLower(_Number)) Lower = fg_GetLower(_Number);
+				decltype(auto) Lower = fg_GetLower(_Number);
 				return fg_GetHighestBitSetNoZero(Lower);
 			}
 			else
 			{
-				decltype(fg_GetUpper(_Number)) Upper = fg_GetUpper(_Number);
+				decltype(auto) Upper = fg_GetUpper(_Number);
 
 				if constexpr (NMib::NTraits::TCIsFundamental<typename NMib::NTraits::TCRemoveReference<decltype(Upper)>::CType>::mc_Value)
 				{
@@ -1145,7 +1158,7 @@ namespace NMib
 						return EToShift + Ret;
 				}
 
-				decltype(fg_GetLower(_Number)) Lower = fg_GetLower(_Number);
+				decltype(auto) Lower = fg_GetLower(_Number);
 				return fg_GetHighestBitSetNoZero(Lower);
 			}
 		}
