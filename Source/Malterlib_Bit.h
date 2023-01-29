@@ -189,11 +189,15 @@ namespace NMib
 			constexpr static inline_small int32 fs_GetLowestBitSet(uint32 const &_Number)
 			{
 #ifdef DCompiler_MSVC_Workaround
-				if (std::is_constant_evaluated())
+				if_consteval
+				{
 					return TCGetLowestBitSetGeneric<uint32>::fs_GetLowestBitSet(_Number);
+				}
 				else
 #endif
+				{
 					return DMibPGetLowestBitSet32(_Number);
+				}
 			}
 		};
 
@@ -261,11 +265,15 @@ namespace NMib
 			constexpr static inline_small int32 fs_GetLowestBitSet(uint32 const &_Number)
 			{
 #ifdef DCompiler_MSVC_Workaround
-				if (std::is_constant_evaluated())
+				if_consteval
+				{
 					return TCGetLowestBitSetGeneric<uint32>::fs_GetLowestBitSet(_Number);
+				}
 				else
 #endif
+				{
 					return DMibPGetLowestBitSet32NoZero(_Number);
+				}
 			}
 		};
 
@@ -311,11 +319,15 @@ namespace NMib
 			constexpr static inline_small int32 fs_GetLowestBitSet(uint64 const &_Number)
 			{
 #ifdef DCompiler_MSVC_Workaround
-				if (std::is_constant_evaluated())
+				if_consteval
+				{
 					return TCGetLowestBitSetGeneric<uint64>::fs_GetLowestBitSet(_Number);
+				}
 				else
 #endif
-				return DMibPGetLowestBitSet64(_Number);
+				{
+					return DMibPGetLowestBitSet64(_Number);
+				}
 			}
 		};
 
@@ -346,11 +358,15 @@ namespace NMib
 			constexpr static inline_small int32 fs_GetLowestBitSet(uint64 const &_Number)
 			{
 #ifdef DCompiler_MSVC_Workaround
-				if (std::is_constant_evaluated())
+				if_consteval
+				{
 					return TCGetLowestBitSetGeneric<uint64>::fs_GetLowestBitSet(_Number);
+				}
 				else
 #endif
+				{
 					return DMibPGetLowestBitSet64NoZero(_Number);
+				}
 			}
 		};
 
@@ -890,11 +906,15 @@ namespace NMib
 			constexpr static inline_small int32 fs_GetHighestBitSet(uint32 _Number)
 			{
 #ifdef DCompiler_MSVC_Workaround
-				if (std::is_constant_evaluated())
+				if_consteval
+				{
 					return TCGetHighestBitSetGeneric<uint32>::fs_GetHighestBitSet(_Number);
+				}
 				else
 #endif
+				{
 					return DMibPGetHighestBitSet32(_Number);
+				}
 			}
 		};
 
@@ -962,11 +982,15 @@ namespace NMib
 			constexpr static inline_small int32 fs_GetHighestBitSet(uint32 _Number)
 			{
 #ifdef DCompiler_MSVC_Workaround
-				if (std::is_constant_evaluated())
+				if_consteval
+				{
 					return TCGetHighestBitSetGeneric<uint32>::fs_GetHighestBitSet(_Number);
+				}
 				else
 #endif
-				return DMibPGetHighestBitSet32NoZero(_Number);
+				{
+					return DMibPGetHighestBitSet32NoZero(_Number);
+				}
 			}
 		};
 
@@ -1012,11 +1036,15 @@ namespace NMib
 			constexpr static inline_small int32 fs_GetHighestBitSet(uint64 _Number)
 			{
 #ifdef DCompiler_MSVC_Workaround
-				if (std::is_constant_evaluated())
+				if_consteval
+				{
 					return TCGetHighestBitSetGeneric<uint64>::fs_GetHighestBitSet(_Number);
+				}
 				else
 #endif
+				{
 					return DMibPGetHighestBitSet64(_Number);
+				}
 			}
 		};
 
@@ -1047,11 +1075,15 @@ namespace NMib
 			constexpr static inline_small int32 fs_GetHighestBitSet(uint64 _Number)
 			{
 #ifdef DCompiler_MSVC_Workaround
-				if (std::is_constant_evaluated())
+				if_consteval
+				{
 					return TCGetHighestBitSetGeneric<uint64>::fs_GetHighestBitSet(_Number);
+				}
 				else
 #endif
+				{
 					return DMibPGetHighestBitSet64NoZero(_Number);
+				}
 			}
 		};
 
