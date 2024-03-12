@@ -22,6 +22,64 @@ namespace NMib
 		Contains helpers for bit 
 	 */
 
+	struct CBitAutoConvert
+	{
+		template <typename tf_CType>
+		constexpr operator tf_CType() const
+		{
+			using CIntType = typename NTraits::TCUnsigned<typename NTraits::TCIntFromSize<sizeof(tf_CType)>::CType>::CType;
+
+			return tf_CType(CIntType(1) << m_Bit);
+		}
+
+		mint m_Bit;
+	};
+
+	constexpr CBitAutoConvert fg_Bit(mint _Bit)
+	{
+		return CBitAutoConvert{.m_Bit = _Bit};
+	}
+
+	template <typename tf_CType>
+	constexpr tf_CType fg_Bit(mint _Bit, tf_CType _One)
+	{
+		return _One << _Bit;
+	}
+
+	struct CBitRangeAutoConvert
+	{
+		template <typename tf_CType>
+		constexpr operator tf_CType() const
+		{
+			using CIntType = typename NTraits::TCUnsigned<typename NTraits::TCIntFromSize<sizeof(tf_CType)>::CType>::CType;
+
+			return tf_CType
+				(
+					(
+						(
+							(CIntType(1) << m_BitEnd)
+							- CIntType(1)
+						)
+						| (CIntType(1) << m_BitEnd)
+					)
+					^
+					(
+						(CIntType(1) << m_BitStart)
+						- CIntType(1)
+					)
+				)
+			;
+		}
+
+		mint m_BitStart;
+		mint m_BitEnd;
+	};
+
+	constexpr CBitRangeAutoConvert fg_BitRange(mint _BitStart, mint _BitEnd)
+	{
+		return CBitRangeAutoConvert{.m_BitStart = _BitStart, .m_BitEnd = _BitEnd};
+	}
+
 	template <typename tf_CType>
 	constexpr tf_CType fg_BitRange(uaint _BitStart, uaint _BitEnd)
 	{
