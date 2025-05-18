@@ -6,29 +6,29 @@
 #include <Mib/Container/BitArrayPowerTwo>
 #include <Mib/Test/Performance>
 
-DMibStaticCheck((NMib::TCHighestBitSetCorrect<int, 3>::mc_Value == 1));
-DMibStaticCheck((NMib::TCHighestBitSet<int, 3>::mc_Value == 2));
-DMibStaticCheck((NMib::TCHighestBitSet<int, 0x08000000>::mc_Value == 28));
-DMibStaticCheck((NMib::TCHighestBitSetCorrect<int, 0x08000000>::mc_Value == 27));
+static_assert(NMib::gc_HighestBitSetCorrect<int, 3> == 1);
+static_assert(NMib::gc_HighestBitSet<int, 3> == 2);
+static_assert(NMib::gc_HighestBitSet<int, 0x08000000> == 28);
+static_assert(NMib::gc_HighestBitSetCorrect<int, 0x08000000> == 27);
 
-DMibStaticCheck(NMib::TCLowestBitSet<3>::mc_Value == 0);
-DMibStaticCheck(NMib::TCLowestBitSet<2>::mc_Value == 1);
-DMibStaticCheck(NMib::TCLowestBitSet<1 << 5>::mc_Value == 5);
-DMibStaticCheck(NMib::TCLowestBitSet<1 << 10>::mc_Value == 10);
-DMibStaticCheck(NMib::TCLowestBitSet<1 << 15>::mc_Value == 15);
-DMibStaticCheck(NMib::TCLowestBitSet<1 << 20>::mc_Value == 20);
-DMibStaticCheck(NMib::TCLowestBitSet<1 << 25>::mc_Value == 25);
-DMibStaticCheck(NMib::TCLowestBitSet<1 << 30>::mc_Value == 30);
-DMibStaticCheck(NMib::TCLowestBitSet<1u << 31>::mc_Value == 31);
+static_assert(NMib::gc_LowestBitSet<3> == 0);
+static_assert(NMib::gc_LowestBitSet<2> == 1);
+static_assert(NMib::gc_LowestBitSet<1 << 5> == 5);
+static_assert(NMib::gc_LowestBitSet<1 << 10> == 10);
+static_assert(NMib::gc_LowestBitSet<1 << 15> == 15);
+static_assert(NMib::gc_LowestBitSet<1 << 20> == 20);
+static_assert(NMib::gc_LowestBitSet<1 << 25> == 25);
+static_assert(NMib::gc_LowestBitSet<1 << 30> == 30);
+static_assert(NMib::gc_LowestBitSet<1u << 31> == 31);
 
 #if DMibPBits_mint > 32
-DMibStaticCheck(NMib::TCLowestBitSet<mint(1) << 35>::mc_Value == 35);
-DMibStaticCheck(NMib::TCLowestBitSet<mint(1) << 40>::mc_Value == 40);
-DMibStaticCheck(NMib::TCLowestBitSet<mint(1) << 45>::mc_Value == 45);
-DMibStaticCheck(NMib::TCLowestBitSet<mint(1) << 50>::mc_Value == 50);
-DMibStaticCheck(NMib::TCLowestBitSet<mint(1) << 55>::mc_Value == 55);
-DMibStaticCheck(NMib::TCLowestBitSet<mint(1) << 60>::mc_Value == 60);
-DMibStaticCheck(NMib::TCLowestBitSet<mint(1) << 63>::mc_Value == 63);
+static_assert(NMib::gc_LowestBitSet<mint(1) << 35> == 35);
+static_assert(NMib::gc_LowestBitSet<mint(1) << 40> == 40);
+static_assert(NMib::gc_LowestBitSet<mint(1) << 45> == 45);
+static_assert(NMib::gc_LowestBitSet<mint(1) << 50> == 50);
+static_assert(NMib::gc_LowestBitSet<mint(1) << 55> == 55);
+static_assert(NMib::gc_LowestBitSet<mint(1) << 60> == 60);
+static_assert(NMib::gc_LowestBitSet<mint(1) << 63> == 63);
 #endif
 
 namespace NMib

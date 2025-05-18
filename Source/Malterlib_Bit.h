@@ -11,7 +11,7 @@
 namespace NMib::NNumeric
 {
 	template <typename t_CUpper, typename t_CLower>
-	class TCInt;
+	struct TCInt;
 }
 
 namespace NMib
@@ -27,7 +27,7 @@ namespace NMib
 		template <typename tf_CType>
 		constexpr operator tf_CType() const
 		{
-			using CIntType = typename NTraits::TCUnsigned<typename NTraits::TCIntFromSize<sizeof(tf_CType)>::CType>::CType;
+			using CIntType = NTraits::TCUnsigned<NTraits::TCIntFromSize<sizeof(tf_CType)>>;
 
 			return tf_CType(CIntType(1) << m_Bit);
 		}
@@ -51,7 +51,7 @@ namespace NMib
 		template <typename tf_CType>
 		constexpr operator tf_CType() const
 		{
-			using CIntType = typename NTraits::TCUnsigned<typename NTraits::TCIntFromSize<sizeof(tf_CType)>::CType>::CType;
+			using CIntType = NTraits::TCUnsigned<NTraits::TCIntFromSize<sizeof(tf_CType)>>;
 
 			return tf_CType
 				(
@@ -83,7 +83,7 @@ namespace NMib
 	template <typename tf_CType>
 	constexpr tf_CType fg_BitRange(uaint _BitStart, uaint _BitEnd)
 	{
-		using CUnsigned = typename NTraits::TCUnsigned<tf_CType>::CType;
+		using CUnsigned = NTraits::TCUnsigned<tf_CType>;
 
 		return
 			(
@@ -102,10 +102,10 @@ namespace NMib
 	}
 
 	template <typename t_CInt>
-	typename NTraits::TCSmallerType<t_CInt>::CType fg_GetLower(t_CInt const &_Integer);
+	NTraits::TCSmallerType<t_CInt> fg_GetLower(t_CInt const &_Integer);
 
 	template <typename t_CInt>
-	typename NTraits::TCSmallerType<t_CInt>::CType fg_GetUpper(t_CInt const &_Integer);
+	NTraits::TCSmallerType<t_CInt> fg_GetUpper(t_CInt const &_Integer);
 
 	template <typename t_CUpper, typename t_CLower>
 	typename NNumeric::TCInt<t_CUpper, t_CLower>::CLower const &fg_GetLower(NNumeric::TCInt<t_CUpper, t_CLower> const &_Integer);
@@ -150,9 +150,7 @@ namespace NMib
 	}
 
 	template <mint t_CurrentNumber>
-	class TCLowestBitSet : public NTraits::TCCompileTimeConstant<aint, NPrivate::TCGetLowestBitSetStaticHelper<t_CurrentNumber>::ENumBits>
-	{ 
-	};
+	constexpr inline mint gc_LowestBitSet = NPrivate::TCGetLowestBitSetStaticHelper<t_CurrentNumber>::ENumBits;
 
 	namespace NPrivate
 	{
@@ -193,7 +191,7 @@ namespace NMib
 			};
 			constexpr static inline_small int32 fs_GetLowestBitSet(t_CInt const &_Number)
 			{
-				typedef typename NMib::NTraits::TCUnsigned<t_CInt>::CType CUnsigned;
+				using CUnsigned = NMib::NTraits::TCUnsigned<t_CInt>;
 				mint nBytes = sizeof(CUnsigned);
 				CUnsigned Number = _Number;
 				int const Shift = sizeof(t_CInt) == 1 ? 0 : 8;
@@ -443,13 +441,13 @@ namespace NMib
 	#endif
 
 		template <typename tf_CInt>
-		constexpr inline_small typename TCEnableIf<!TCGetLowestBitSet<tf_CInt, true>::EDefaultImplementation, int32>::CType fg_GetLowestBitSetHelper(tf_CInt const &_Number)
+		constexpr inline_small TCEnableIf<!TCGetLowestBitSet<tf_CInt, true>::EDefaultImplementation, int32> fg_GetLowestBitSetHelper(tf_CInt const &_Number)
 		{
 			return NPrivate::TCGetLowestBitSet<tf_CInt, true>::fs_GetLowestBitSet(_Number);
 		}
 
 		template <typename tf_CInt>
-		constexpr inline_small typename TCEnableIf<TCGetLowestBitSet<tf_CInt, true>::EDefaultImplementation && NMib::NTraits::TCIsSame<typename NMib::NTraits::TCSmallerType<tf_CInt>::CType, tf_CInt>::mc_Value, int32>::CType fg_GetLowestBitSetHelper(tf_CInt const &_Number)
+		constexpr inline_small TCEnableIf<TCGetLowestBitSet<tf_CInt, true>::EDefaultImplementation && NMib::NTraits::cIsSame<NMib::NTraits::TCSmallerType<tf_CInt>, tf_CInt>, int32> fg_GetLowestBitSetHelper(tf_CInt const &_Number)
 		{
 			// Static branch
 			typedef typename NPrivate::TCHelper_GetLowestBitSetChooseBySize<sizeof(tf_CInt), tf_CInt, true>::CGetter CGetter;
@@ -457,14 +455,14 @@ namespace NMib
 		}
 
 		template <typename tf_CInt>
-		constexpr inline_small typename TCEnableIf<TCGetLowestBitSet<tf_CInt, true>::EDefaultImplementation && !NMib::NTraits::TCIsSame<typename NMib::NTraits::TCSmallerType<tf_CInt>::CType, tf_CInt>::mc_Value, int32>::CType fg_GetLowestBitSetHelper(tf_CInt const &_Number)
+		constexpr inline_small TCEnableIf<TCGetLowestBitSet<tf_CInt, true>::EDefaultImplementation && !NMib::NTraits::cIsSame<NMib::NTraits::TCSmallerType<tf_CInt>, tf_CInt>, int32> fg_GetLowestBitSetHelper(tf_CInt const &_Number)
 		{
 			enum
 			{
 				EToShift = sizeof(_Number)*4
 			};
 			// Static branch
-			if constexpr (NMib::NTraits::TCIsFundamental<tf_CInt>::mc_Value)
+			if constexpr (NMib::NTraits::cIsFundamental<tf_CInt>)
 			{
 				decltype(auto) Lower = fg_GetLower(_Number);
 				if (Lower)
@@ -491,13 +489,14 @@ namespace NMib
 		}
 
 		template <typename tf_CInt>
-		constexpr inline_small typename TCEnableIf<!TCGetLowestBitSet<tf_CInt, true>::EDefaultImplementation, int32>::CType fg_GetLowestBitSetHelperNoZero(tf_CInt const &_Number)
+		constexpr inline_small TCEnableIf<!TCGetLowestBitSet<tf_CInt, true>::EDefaultImplementation, int32> fg_GetLowestBitSetHelperNoZero(tf_CInt const &_Number)
 		{
 			return NPrivate::TCGetLowestBitSet<tf_CInt, false>::fs_GetLowestBitSet(_Number);
 		}
 
 		template <typename tf_CInt>
-		constexpr inline_small typename TCEnableIf<TCGetLowestBitSet<tf_CInt, true>::EDefaultImplementation && NMib::NTraits::TCIsSame<typename NMib::NTraits::TCSmallerType<tf_CInt>::CType, tf_CInt>::mc_Value, int32>::CType fg_GetLowestBitSetHelperNoZero(tf_CInt const &_Number)
+		constexpr inline_small auto fg_GetLowestBitSetHelperNoZero(tf_CInt const &_Number)
+			-> TCEnableIf<TCGetLowestBitSet<tf_CInt, true>::EDefaultImplementation && NMib::NTraits::cIsSame<NMib::NTraits::TCSmallerType<tf_CInt>, tf_CInt>, int32>
 		{
 			// Static branch
 			typedef typename NPrivate::TCHelper_GetLowestBitSetChooseBySize<sizeof(tf_CInt), tf_CInt, false>::CGetter CGetter;
@@ -505,14 +504,15 @@ namespace NMib
 		}
 
 		template <typename tf_CInt>
-		constexpr inline_small typename TCEnableIf<TCGetLowestBitSet<tf_CInt, true>::EDefaultImplementation && !NMib::NTraits::TCIsSame<typename NMib::NTraits::TCSmallerType<tf_CInt>::CType, tf_CInt>::mc_Value, int32>::CType fg_GetLowestBitSetHelperNoZero(tf_CInt const &_Number)
+		constexpr inline_small auto fg_GetLowestBitSetHelperNoZero(tf_CInt const &_Number)
+			-> TCEnableIf<TCGetLowestBitSet<tf_CInt, true>::EDefaultImplementation && !NMib::NTraits::cIsSame<NMib::NTraits::TCSmallerType<tf_CInt>, tf_CInt>, int32>
 		{
 			enum
 			{
 				EToShift = sizeof(_Number)*4
 			};
 			// Static branch
-			if constexpr (NMib::NTraits::TCIsFundamental<tf_CInt>::mc_Value)
+			if constexpr (NMib::NTraits::cIsFundamental<tf_CInt>)
 			{
 				decltype(auto) Lower = fg_GetLower(_Number);
 				if (Lower)
@@ -524,7 +524,7 @@ namespace NMib
 			{
 				decltype(auto) Lower = fg_GetLower(_Number);
 
-				if constexpr (NMib::NTraits::TCIsFundamental<typename NMib::NTraits::TCRemoveReference<decltype(Lower)>::CType>::mc_Value)
+				if constexpr (NMib::NTraits::cIsFundamental<NMib::NTraits::TCRemoveReference<decltype(Lower)>>)
 				{
 					if (Lower)
 						return fg_GetLowestBitSetNoZero(Lower);
@@ -601,7 +601,7 @@ namespace NMib
 			};
 			static inline_small uint32 fs_NumBitsSet(t_CInt const &_Number)
 			{
-				typedef typename NMib::NTraits::TCUnsigned<t_CInt>::CType CUnsigned;
+				using CUnsigned = NMib::NTraits::TCUnsigned<t_CInt>;
 				uint32 nBytes = sizeof(CUnsigned);
 				CUnsigned Number = _Number;
 				uint32 Ret = 0;
@@ -712,14 +712,15 @@ namespace NMib
 	#endif
 
 		template <typename tf_CInt>
-		inline_small typename TCEnableIf<!NPrivate::TCNumBitsSet<tf_CInt>::EDefaultImplementation, uint32>::CType fg_NumBitsSetHelper(tf_CInt const &_Number)
+		inline_small TCEnableIf<!NPrivate::TCNumBitsSet<tf_CInt>::EDefaultImplementation, uint32> fg_NumBitsSetHelper(tf_CInt const &_Number)
 		{
 			return NPrivate::TCNumBitsSet<tf_CInt>::fs_NumBitsSet(_Number);
 		}
 
 
 		template <typename tf_CInt>
-		inline_small typename TCEnableIf<NPrivate::TCNumBitsSet<tf_CInt>::EDefaultImplementation && NMib::NTraits::TCIsSame<typename NMib::NTraits::TCSmallerType<tf_CInt>::CType, tf_CInt>::mc_Value, uint32>::CType fg_NumBitsSetHelper(tf_CInt const &_Number)
+		inline_small auto fg_NumBitsSetHelper(tf_CInt const &_Number)
+			-> TCEnableIf<NPrivate::TCNumBitsSet<tf_CInt>::EDefaultImplementation && NMib::NTraits::cIsSame<NMib::NTraits::TCSmallerType<tf_CInt>, tf_CInt>, uint32>
 		{
 			// Static branch
 			typedef typename NPrivate::TCHelper_NumBitsSetChooseBySize<sizeof(tf_CInt), tf_CInt>::CGetter CGetter;
@@ -727,7 +728,8 @@ namespace NMib
 		}
 
 		template <typename tf_CInt>
-		inline_small typename TCEnableIf<NPrivate::TCNumBitsSet<tf_CInt>::EDefaultImplementation && !NMib::NTraits::TCIsSame<typename NMib::NTraits::TCSmallerType<tf_CInt>::CType, tf_CInt>::mc_Value, uint32>::CType fg_NumBitsSetHelper(tf_CInt const &_Number)
+		inline_small auto fg_NumBitsSetHelper(tf_CInt const &_Number)
+			-> TCEnableIf<NPrivate::TCNumBitsSet<tf_CInt>::EDefaultImplementation && !NMib::NTraits::cIsSame<NMib::NTraits::TCSmallerType<tf_CInt>, tf_CInt>, uint32>
 		{
 			return fg_NumBitsSet(fg_GetUpper(_Number)) + fg_NumBitsSet(fg_GetLower(_Number));
 		}
@@ -746,7 +748,7 @@ namespace NMib
 		template <typename t_CInteger>
 		struct TCGetHighestBitSetStaticHelper
 		{
-			template <t_CInteger t_CurrentNumber, bool t_bIsZero = t_CurrentNumber == t_CInteger(0), bool t_bIsEnum = NMib::NTraits::TCIsEnum<t_CInteger>::mc_Value>
+			template <t_CInteger t_CurrentNumber, bool t_bIsZero = t_CurrentNumber == t_CInteger(0), bool t_bIsEnum = NMib::NTraits::cIsEnum<t_CInteger>>
 			struct TCInternal
 			{
 				enum
@@ -786,7 +788,7 @@ namespace NMib
 		template <typename t_CInteger>
 		struct TCGetHighestBitSetStaticCorrectHelper
 		{
-			template <t_CInteger t_CurrentNumber, bool t_bIsZero = t_CurrentNumber == t_CInteger(0), bool t_bIsEnum = NMib::NTraits::TCIsEnum<t_CInteger>::mc_Value>
+			template <t_CInteger t_CurrentNumber, bool t_bIsZero = t_CurrentNumber == t_CInteger(0), bool t_bIsEnum = NMib::NTraits::cIsEnum<t_CInteger>>
 			struct TCInternal
 			{
 				enum
@@ -825,39 +827,31 @@ namespace NMib
 	}
 
 	template <typename t_CInteger, t_CInteger t_CurrentNumber>
-	class TCHighestBitSet : public NTraits::TCCompileTimeConstant<mint, NMib::NPrivate::TCGetHighestBitSetStaticHelper<t_CInteger>::template TCInternal<t_CurrentNumber>::mc_Value>
-	{ 
-	};
+	constexpr inline mint gc_HighestBitSet = NMib::NPrivate::TCGetHighestBitSetStaticHelper<t_CInteger>::template TCInternal<t_CurrentNumber>::mc_Value;
 
 	template <typename t_CInteger, t_CInteger t_CurrentNumber>
-	class TCHighestBitSetCorrect : public NTraits::TCCompileTimeConstant<smint, NMib::NPrivate::TCGetHighestBitSetStaticCorrectHelper<t_CInteger>::template TCInternal<t_CurrentNumber>::mc_Value>
-	{ 
-	};
+	constexpr inline smint gc_HighestBitSetCorrect = NMib::NPrivate::TCGetHighestBitSetStaticCorrectHelper<t_CInteger>::template TCInternal<t_CurrentNumber>::mc_Value;
 
 	template <mint t_CurrentNumber>
-	class TCIsPowerOfTwo : public NTraits::TCCompileTimeConstant<bool, (mint(1) << (TCHighestBitSet<mint, t_CurrentNumber>::mc_Value - 1)) == t_CurrentNumber>
-	{
-	};
+	concept cIsPowerOfTwo = (mint(1) << (gc_HighestBitSet<mint, t_CurrentNumber> - 1)) == t_CurrentNumber;
 
 	namespace NPrivate
 	{
-		template <typename t_CType, t_CType _Number, mint _Power>
+		template <typename t_CType, t_CType t_Number, mint t_Power>
 		struct TCPowerHelper
 		{
-			static constexpr t_CType mc_Value = _Number * TCPowerHelper<t_CType, _Number, _Power-1>::mc_Value;
+			static constexpr t_CType mc_Value = t_Number * TCPowerHelper<t_CType, t_Number, t_Power - 1>::mc_Value;
 		};
 
-		template <typename t_CType, t_CType _Number>
-		struct TCPowerHelper<t_CType, _Number, 0>
+		template <typename t_CType, t_CType t_Number>
+		struct TCPowerHelper<t_CType, t_Number, 0>
 		{
 			static constexpr t_CType mc_Value = 1;
 		};
 	}
 
-	template <typename t_CType, t_CType _Number, mint _Power>
-	class TCPower : public NTraits::TCCompileTimeConstant<t_CType, NPrivate::TCPowerHelper<t_CType, _Number, _Power>::mc_Value>
-	{
-	};
+	template <typename t_CType, t_CType t_Number, mint t_Power>
+	constexpr inline t_CType gc_Power = NPrivate::TCPowerHelper<t_CType, t_Number, t_Power>::mc_Value;
 
 	// returns true iff _x is a non-zero power of two
 	template <typename tf_CValue>
@@ -867,9 +861,7 @@ namespace NMib
 	}
 
 	template <typename t_CType>
-	struct TCBitSize : NTraits::TCCompileTimeConstant<mint, sizeof(t_CType) * 8>
-	{
-	};
+	constexpr inline mint gc_BitSize = sizeof(t_CType) * 8;
 
 	namespace NPrivate
 	{
@@ -910,7 +902,7 @@ namespace NMib
 			};
 			constexpr static inline_small int32 fs_GetHighestBitSet(t_CInt _Number)
 			{
-				typedef typename NMib::NTraits::TCUnsigned<t_CInt>::CType CUnsigned;
+				using CUnsigned = NMib::NTraits::TCUnsigned<t_CInt>;
 				mint nBytes = sizeof(CUnsigned);
 				CUnsigned Number = _Number;
 				CUnsigned CurrentCheck = CUnsigned(0xff) << ((sizeof(CUnsigned) - 1)) * 8;
@@ -1160,13 +1152,14 @@ namespace NMib
 	#endif
 
 		template <typename tf_CInt>
-		constexpr inline_small typename TCEnableIf<!TCGetHighestBitSet<tf_CInt, true>::EDefaultImplementation, int32>::CType fg_GetHighestBitSetHelper(tf_CInt const &_Number)
+		constexpr inline_small TCEnableIf<!TCGetHighestBitSet<tf_CInt, true>::EDefaultImplementation, int32> fg_GetHighestBitSetHelper(tf_CInt const &_Number)
 		{
 			return NPrivate::TCGetHighestBitSet<tf_CInt, true>::fs_GetHighestBitSet(_Number);
 		}
 
 		template <typename tf_CInt>
-		constexpr inline_small typename TCEnableIf<TCGetHighestBitSet<tf_CInt, true>::EDefaultImplementation && NMib::NTraits::TCIsSame<typename NMib::NTraits::TCSmallerType<tf_CInt>::CType, tf_CInt>::mc_Value, int32>::CType fg_GetHighestBitSetHelper(tf_CInt const &_Number)
+		constexpr inline_small auto fg_GetHighestBitSetHelper(tf_CInt const &_Number)
+			-> TCEnableIf<TCGetHighestBitSet<tf_CInt, true>::EDefaultImplementation && NMib::NTraits::cIsSame<NMib::NTraits::TCSmallerType<tf_CInt>, tf_CInt>, int32>
 		{
 			// Static branch
 			typedef typename NPrivate::TCHelper_GetHighestBitSetChooseBySize<sizeof(tf_CInt), tf_CInt, true>::CGetter CGetter;
@@ -1174,14 +1167,15 @@ namespace NMib
 		}
 
 		template <typename tf_CInt>
-		constexpr inline_small typename TCEnableIf<TCGetHighestBitSet<tf_CInt, true>::EDefaultImplementation && !NMib::NTraits::TCIsSame<typename NMib::NTraits::TCSmallerType<tf_CInt>::CType, tf_CInt>::mc_Value, int32>::CType fg_GetHighestBitSetHelper(tf_CInt const &_Number)
+		constexpr inline_small auto fg_GetHighestBitSetHelper(tf_CInt const &_Number)
+			-> TCEnableIf<TCGetHighestBitSet<tf_CInt, true>::EDefaultImplementation && !NMib::NTraits::cIsSame<NMib::NTraits::TCSmallerType<tf_CInt>, tf_CInt>, int32>
 		{
 			enum
 			{
 				EToShift = sizeof(_Number)*4
 			};
 			// Static branch
-			if constexpr (NMib::NTraits::TCIsFundamental<tf_CInt>::mc_Value)
+			if constexpr (NMib::NTraits::cIsFundamental<tf_CInt>)
 			{
 				decltype(auto) Upper = fg_GetUpper(_Number);
 				if (Upper)
@@ -1203,13 +1197,14 @@ namespace NMib
 		}
 
 		template <typename tf_CInt>
-		constexpr inline_small typename TCEnableIf<!TCGetHighestBitSet<tf_CInt, true>::EDefaultImplementation, int32>::CType fg_GetHighestBitSetHelperNoZero(tf_CInt const &_Number)
+		constexpr inline_small TCEnableIf<!TCGetHighestBitSet<tf_CInt, true>::EDefaultImplementation, int32> fg_GetHighestBitSetHelperNoZero(tf_CInt const &_Number)
 		{
 			return NPrivate::TCGetHighestBitSet<tf_CInt, false>::fs_GetHighestBitSet(_Number);
 		}
 
 		template <typename tf_CInt>
-		constexpr inline_small typename TCEnableIf<TCGetHighestBitSet<tf_CInt, true>::EDefaultImplementation && NMib::NTraits::TCIsSame<typename NMib::NTraits::TCSmallerType<tf_CInt>::CType, tf_CInt>::mc_Value, int32>::CType fg_GetHighestBitSetHelperNoZero(tf_CInt const &_Number)
+		constexpr inline_small auto fg_GetHighestBitSetHelperNoZero(tf_CInt const &_Number)
+			-> TCEnableIf<TCGetHighestBitSet<tf_CInt, true>::EDefaultImplementation && NMib::NTraits::cIsSame<NMib::NTraits::TCSmallerType<tf_CInt>, tf_CInt>, int32>
 		{
 			// Static branch
 			typedef typename NPrivate::TCHelper_GetHighestBitSetChooseBySize<sizeof(tf_CInt), tf_CInt, false>::CGetter CGetter;
@@ -1217,14 +1212,15 @@ namespace NMib
 		}
 
 		template <typename tf_CInt>
-		constexpr inline_small typename TCEnableIf<TCGetHighestBitSet<tf_CInt, true>::EDefaultImplementation && !NMib::NTraits::TCIsSame<typename NMib::NTraits::TCSmallerType<tf_CInt>::CType, tf_CInt>::mc_Value, int32>::CType fg_GetHighestBitSetHelperNoZero(tf_CInt const &_Number)
+		constexpr inline_small auto fg_GetHighestBitSetHelperNoZero(tf_CInt const &_Number)
+			-> TCEnableIf<TCGetHighestBitSet<tf_CInt, true>::EDefaultImplementation && !NMib::NTraits::cIsSame<NMib::NTraits::TCSmallerType<tf_CInt>, tf_CInt>, int32>
 		{
 			enum
 			{
 				EToShift = sizeof(_Number)*4
 			};
 			// Static branch
-			if constexpr (NMib::NTraits::TCIsFundamental<tf_CInt>::mc_Value)
+			if constexpr (NMib::NTraits::cIsFundamental<tf_CInt>)
 			{
 				decltype(auto) Upper = fg_GetUpper(_Number);
 				if (Upper)
@@ -1236,7 +1232,7 @@ namespace NMib
 			{
 				decltype(auto) Upper = fg_GetUpper(_Number);
 
-				if constexpr (NMib::NTraits::TCIsFundamental<typename NMib::NTraits::TCRemoveReference<decltype(Upper)>::CType>::mc_Value)
+				if constexpr (NMib::NTraits::cIsFundamental<NMib::NTraits::TCRemoveReference<decltype(Upper)>>)
 				{
 					if (Upper)
 						return EToShift + fg_GetHighestBitSetNoZero(Upper);
@@ -1298,7 +1294,7 @@ namespace NMib
 	template <typename tf_CInt>
 	constexpr inline_small tf_CInt fg_RoundPowerOfTwoUp(tf_CInt _Number)
 	{
-		typedef typename NTraits::TCUnsigned<tf_CInt>::CType CUnsigned;
+		using CUnsigned = NTraits::TCUnsigned<tf_CInt>;
 		CUnsigned Number = CUnsigned(_Number);
 		--Number;
 		Number = NPrivate::TCGetNextPowerOfTwoHelper<tf_CInt, 1, sizeof(tf_CInt)*8>::fs_Do(Number);
@@ -1309,7 +1305,7 @@ namespace NMib
 	template <typename tf_CInt>
 	constexpr inline_small tf_CInt fg_RoundPowerOfTwoDown(tf_CInt _Number)
 	{
-		typedef typename NTraits::TCUnsigned<tf_CInt>::CType CUnsigned;
+		using CUnsigned = NTraits::TCUnsigned<tf_CInt>;
 		CUnsigned Number = CUnsigned(_Number);
 		Number = NPrivate::TCGetNextPowerOfTwoHelper<tf_CInt, 1, sizeof(tf_CInt)*8>::fs_Do(Number);
 		Number = Number - (Number >> 1);
