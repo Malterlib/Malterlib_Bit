@@ -222,12 +222,12 @@ namespace
 		{
 			const aint nBitsAligned = sizeof(mint) * sizeof(mint) * 8 * 8;
 			const aint nBitsUnaligned = sizeof(mint) * sizeof(mint) * 8 * 8 - 1;
-			typedef typename t_TCBitArray<nBitsAligned>::CType CBitArrayAligned;
-			typedef typename t_TCBitArray<nBitsUnaligned>::CType CBitArrayUnaligned;
+			using CBitArrayAligned = typename t_TCBitArray<nBitsAligned>::CType;
+			using CBitArrayUnaligned = typename t_TCBitArray<nBitsUnaligned>::CType;
 			{
 				DMibTestPath("FindFreeBitAndSet");
-				typedef CBitArrayAligned CBitArrayAligned;
-				typedef CBitArrayUnaligned CBitArrayUnaligned;
+				using CBitArrayAligned = CBitArrayAligned;
+				using CBitArrayUnaligned = CBitArrayUnaligned;
 				{
 					DMibTestPath("Aligned");
 					NMib::NTest::CTestPerformance Pref(1.0);
@@ -290,8 +290,8 @@ namespace
 			}
 			{
 				DMibTestPath("FindFreeBitReverseAndSet");
-				typedef CBitArrayAligned CBitArrayAligned;
-				typedef CBitArrayUnaligned CBitArrayUnaligned;
+				using CBitArrayAligned = CBitArrayAligned;
+				using CBitArrayUnaligned = CBitArrayUnaligned;
 				{
 					DMibTestPath("Aligned");
 					NMib::NTest::CTestPerformance Pref(1.0);
@@ -354,8 +354,8 @@ namespace
 			}
 			{
 				DMibTestPath("FindUpperBound");
-				typedef CBitArrayAligned CBitArrayAligned;
-				typedef CBitArrayUnaligned CBitArrayUnaligned;
+				using CBitArrayAligned = CBitArrayAligned;
+				using CBitArrayUnaligned = CBitArrayUnaligned;
 				{
 					DMibTestPath("Aligned");
 					const aint nBits = nBitsAligned;
@@ -389,8 +389,8 @@ namespace
 			}
 			{
 				DMibTestPath("FindUpperBoundStart");
-				typedef CBitArrayAligned CBitArrayAligned;
-				typedef CBitArrayUnaligned CBitArrayUnaligned;
+				using CBitArrayAligned = CBitArrayAligned;
+				using CBitArrayUnaligned = CBitArrayUnaligned;
 				{
 					DMibTestPath("Aligned");
 					const aint nBits = nBitsAligned;
@@ -427,8 +427,8 @@ namespace
 			}
 			{
 				DMibTestPath("EnumFreeBits");
-				typedef CBitArrayAligned CBitArrayAligned;
-				typedef CBitArrayUnaligned CBitArrayUnaligned;
+				using CBitArrayAligned = CBitArrayAligned;
+				using CBitArrayUnaligned = CBitArrayUnaligned;
 				{
 					DMibTestPath("Aligned");
 					const aint nBits = nBitsAligned;
@@ -514,8 +514,8 @@ namespace
 			}
 			{
 				DMibTestPath("EnumFreeBitsMiddle");
-				typedef CBitArrayAligned CBitArrayAligned;
-				typedef CBitArrayUnaligned CBitArrayUnaligned;
+				using CBitArrayAligned = CBitArrayAligned;
+				using CBitArrayUnaligned = CBitArrayUnaligned;
 				{
 					DMibTestPath("Aligned");
 					const aint nBits = nBitsAligned;
@@ -601,8 +601,8 @@ namespace
 			}
 			{
 				DMibTestPath("EnumFreeBitsMiddleEnd");
-				typedef CBitArrayAligned CBitArrayAligned;
-				typedef CBitArrayUnaligned CBitArrayUnaligned;
+				using CBitArrayAligned = CBitArrayAligned;
+				using CBitArrayUnaligned = CBitArrayUnaligned;
 				{
 					DMibTestPath("Aligned");
 					const aint nBits = nBitsAligned;
@@ -692,8 +692,8 @@ namespace
 			}
 			{
 				DMibTestPath("EnumFreeBitRanges");
-				typedef CBitArrayAligned CBitArrayAligned;
-				typedef CBitArrayUnaligned CBitArrayUnaligned;
+				using CBitArrayAligned = CBitArrayAligned;
+				using CBitArrayUnaligned = CBitArrayUnaligned;
 				{
 					DMibTestPath("Aligned");
 					const aint nBits = nBitsAligned;
@@ -801,8 +801,8 @@ namespace
 
 			const aint nBitsAligned = sizeof(mint) * sizeof(mint) * 8 * 8;
 			const aint nBitsUnaligned = sizeof(mint) * sizeof(mint) * 8 * 8 - 1;
-			typedef typename t_TCBitArray<nBitsAligned>::CType CBitArrayAligned;
-			typedef typename t_TCBitArray<nBitsUnaligned>::CType CBitArrayUnaligned;
+			using CBitArrayAligned = typename t_TCBitArray<nBitsAligned>::CType;
+			using CBitArrayUnaligned = typename t_TCBitArray<nBitsUnaligned>::CType;
 			{
 				DMibTestPath("PowerTwo");
 				{
@@ -836,19 +836,20 @@ namespace
 		template <mint t_nBits>
 		struct TCNormalBitArray
 		{
-			typedef NMib::NContainer::TCBitArray<t_nBits> CType;
+			using CType = NMib::NContainer::TCBitArray<t_nBits>;
 		};
+
 		template <mint t_nBits>
 		struct TCHierarchicalBitArray
 		{
-			typedef NMib::NContainer::TCBitArrayHierarchical<t_nBits> CType;
+			using CType = NMib::NContainer::TCBitArrayHierarchical<t_nBits>;
 		};
+
 		template <mint t_nBits>
 		struct TCPowerOfTwoBitArray
 		{
-			typedef NMib::NContainer::TCBitArrayPowerTwo<t_nBits> CType;
+			using CType = NMib::NContainer::TCBitArrayPowerTwo<t_nBits>;
 		};
-
 
 		void f_DoTests()
 		{

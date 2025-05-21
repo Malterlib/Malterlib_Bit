@@ -184,7 +184,7 @@ namespace NMib
 		class TCGetLowestBitSetGeneric
 		{
 		public:
-			typedef t_CInt CType;
+			using CType = t_CInt;
 			enum
 			{
 				EDefaultImplementation = 1
@@ -222,14 +222,14 @@ namespace NMib
 		class TCHelper_GetLowestBitSetChooseBySize
 		{
 		public:
-			typedef TCGetLowestBitSet<t_CType, t_bSupportZero> CGetter;
+			using CGetter = TCGetLowestBitSet<t_CType, t_bSupportZero>;
 		};
 
 		template <mint t_nBytes, typename t_CType>
 		class TCHelper_GetLowestBitSetChooseBySize<t_nBytes, t_CType, 0>
 		{
 		public:
-			typedef TCGetLowestBitSet<t_CType, 1> CGetter;
+			using CGetter = TCGetLowestBitSet<t_CType, 1>;
 		};
 
 #ifdef DMibPGetLowestBitSet32
@@ -237,7 +237,7 @@ namespace NMib
 		class TCGetLowestBitSet<uint32, true>
 		{
 		public:
-			typedef uint32 CType;
+			using CType = uint32;
 			enum
 			{
 				EDefaultImplementation = 0
@@ -266,28 +266,28 @@ namespace NMib
 		class TCHelper_GetLowestBitSetChooseBySize<sizeof(uint8), t_CType, true>
 		{
 		public:
-			typedef TCGetLowestBitSet<uint32, true> CGetter;
+			using CGetter = TCGetLowestBitSet<uint32, true>;
 		};
 
 		template <typename t_CType>
 		class TCHelper_GetLowestBitSetChooseBySize<sizeof(uint16), t_CType, true>
 		{
 		public:
-			typedef TCGetLowestBitSet<uint32, true> CGetter;
+			using CGetter = TCGetLowestBitSet<uint32, true>;
 		};
 
 		template <typename t_CType>
 		class TCHelper_GetLowestBitSetChooseBySize<sizeof(uint32), t_CType, true>
 		{
 		public:
-			typedef TCGetLowestBitSet<uint32, true> CGetter;
+			using CGetter = TCGetLowestBitSet<uint32, true>;
 		};
 #else
 		template <>
 		class TCGetLowestBitSet<uint8, 1>
 		{
 		public:
-			typedef uint8 CType;
+			using CType = uint8;
 			enum
 			{
 				EDefaultImplementation = 1
@@ -302,7 +302,7 @@ namespace NMib
 		class TCHelper_GetLowestBitSetChooseBySize<sizeof(uint8), t_CType, true>
 		{
 		public:
-			typedef TCGetLowestBitSet<uint8, true> CGetter;
+			using CGetter = TCGetLowestBitSet<uint8, true>;
 		};
 
 
@@ -313,7 +313,7 @@ namespace NMib
 		class TCGetLowestBitSet<uint32, false>
 		{
 		public:
-			typedef uint32 CType;
+			using CType = uint32;
 			enum
 			{
 				EDefaultImplementation = 0
@@ -342,21 +342,21 @@ namespace NMib
 		class TCHelper_GetLowestBitSetChooseBySize<sizeof(uint8), t_CType, false>
 		{
 		public:
-			typedef TCGetLowestBitSet<uint32, false> CGetter;
+			using CGetter = TCGetLowestBitSet<uint32, false>;
 		};
 
 		template <typename t_CType>
 		class TCHelper_GetLowestBitSetChooseBySize<sizeof(uint16), t_CType, false>
 		{
 		public:
-			typedef TCGetLowestBitSet<uint32, false> CGetter;
+			using CGetter = TCGetLowestBitSet<uint32, false>;
 		};
 
 		template <typename t_CType>
 		class TCHelper_GetLowestBitSetChooseBySize<sizeof(uint32), t_CType, false>
 		{
 		public:
-			typedef TCGetLowestBitSet<uint32, false> CGetter;
+			using CGetter = TCGetLowestBitSet<uint32, false>;
 		};
 
 	#endif
@@ -367,7 +367,7 @@ namespace NMib
 		class TCGetLowestBitSet<uint64, true>
 		{
 		public:
-			typedef uint64 CType;
+			using CType = uint64;
 			enum
 			{
 				EDefaultImplementation = 0
@@ -396,7 +396,7 @@ namespace NMib
 		class TCHelper_GetLowestBitSetChooseBySize<sizeof(uint64), t_CType, true>
 		{
 		public:
-			typedef TCGetLowestBitSet<uint64, true> CGetter;
+			using CGetter = TCGetLowestBitSet<uint64, true>;
 		};
 
 	#endif
@@ -406,7 +406,7 @@ namespace NMib
 		class TCGetLowestBitSet<uint64, false>
 		{
 		public:
-			typedef uint64 CType;
+			using CType = uint64;
 			enum
 			{
 				EDefaultImplementation = 0
@@ -435,7 +435,7 @@ namespace NMib
 		class TCHelper_GetLowestBitSetChooseBySize<sizeof(uint64), t_CType, false>
 		{
 		public:
-			typedef TCGetLowestBitSet<uint64, false> CGetter;
+			using CGetter = TCGetLowestBitSet<uint64, false>;
 		};
 
 	#endif
@@ -450,7 +450,7 @@ namespace NMib
 		constexpr inline_small TCEnableIf<TCGetLowestBitSet<tf_CInt, true>::EDefaultImplementation && NMib::NTraits::cIsSame<NMib::NTraits::TCSmallerType<tf_CInt>, tf_CInt>, int32> fg_GetLowestBitSetHelper(tf_CInt const &_Number)
 		{
 			// Static branch
-			typedef typename NPrivate::TCHelper_GetLowestBitSetChooseBySize<sizeof(tf_CInt), tf_CInt, true>::CGetter CGetter;
+			using CGetter = typename NPrivate::TCHelper_GetLowestBitSetChooseBySize<sizeof(tf_CInt), tf_CInt, true>::CGetter;
 			return CGetter::fs_GetLowestBitSet(_Number);
 		}
 
@@ -499,7 +499,7 @@ namespace NMib
 			-> TCEnableIf<TCGetLowestBitSet<tf_CInt, true>::EDefaultImplementation && NMib::NTraits::cIsSame<NMib::NTraits::TCSmallerType<tf_CInt>, tf_CInt>, int32>
 		{
 			// Static branch
-			typedef typename NPrivate::TCHelper_GetLowestBitSetChooseBySize<sizeof(tf_CInt), tf_CInt, false>::CGetter CGetter;
+			using CGetter = typename NPrivate::TCHelper_GetLowestBitSetChooseBySize<sizeof(tf_CInt), tf_CInt, false>::CGetter;
 			return CGetter::fs_GetLowestBitSet(_Number);
 		}
 
@@ -594,7 +594,7 @@ namespace NMib
 		class TCNumBitsSet
 		{
 		public:
-			typedef t_CInt CType;
+			using CType = t_CInt;
 			enum
 			{
 				EDefaultImplementation = 1
@@ -619,7 +619,7 @@ namespace NMib
 		class TCNumBitsSet<uint8>
 		{
 		public:
-			typedef uint8 CType;
+			using CType = uint8;
 			enum
 			{
 				EDefaultImplementation = 1
@@ -634,7 +634,7 @@ namespace NMib
 		class TCHelper_NumBitsSetChooseBySize
 		{
 		public:
-			typedef TCNumBitsSet<t_CType> CGetter;
+			using CGetter = TCNumBitsSet<t_CType>;
 		};
 
 	#ifdef DMibPNumBitsSet32
@@ -642,7 +642,7 @@ namespace NMib
 		class TCNumBitsSet<uint32>
 		{
 		public:
-			typedef uint32 CType;
+			using CType = uint32;
 			enum
 			{
 				EDefaultImplementation = 0
@@ -663,21 +663,21 @@ namespace NMib
 		class TCHelper_NumBitsSetChooseBySize<sizeof(uint8), t_CType>
 		{
 		public:
-			typedef TCNumBitsSet<uint32> CGetter;
+			using CGetter = TCNumBitsSet<uint32>;
 		};
 
 		template <typename t_CType>
 		class TCHelper_NumBitsSetChooseBySize<sizeof(uint16), t_CType>
 		{
 		public:
-			typedef TCNumBitsSet<uint32> CGetter;
+			using CGetter = TCNumBitsSet<uint32>;
 		};
 
 		template <typename t_CType>
 		class TCHelper_NumBitsSetChooseBySize<sizeof(uint32), t_CType>
 		{
 		public:
-			typedef TCNumBitsSet<uint32> CGetter;
+			using CGetter = TCNumBitsSet<uint32>;
 		};
 	#endif
 
@@ -686,7 +686,7 @@ namespace NMib
 		class TCNumBitsSet<uint64>
 		{
 		public:
-			typedef uint64 CType;
+			using CType = uint64;
 			enum
 			{
 				EDefaultImplementation = 0
@@ -707,7 +707,7 @@ namespace NMib
 		class TCHelper_NumBitsSetChooseBySize<sizeof(uint64), t_CType>
 		{
 		public:
-			typedef TCNumBitsSet<uint64> CGetter;
+			using CGetter = TCNumBitsSet<uint64>;
 		};
 	#endif
 
@@ -723,7 +723,7 @@ namespace NMib
 			-> TCEnableIf<NPrivate::TCNumBitsSet<tf_CInt>::EDefaultImplementation && NMib::NTraits::cIsSame<NMib::NTraits::TCSmallerType<tf_CInt>, tf_CInt>, uint32>
 		{
 			// Static branch
-			typedef typename NPrivate::TCHelper_NumBitsSetChooseBySize<sizeof(tf_CInt), tf_CInt>::CGetter CGetter;
+			using CGetter = typename NPrivate::TCHelper_NumBitsSetChooseBySize<sizeof(tf_CInt), tf_CInt>::CGetter;
 			return CGetter::fs_NumBitsSet(_Number);
 		}
 
@@ -895,7 +895,7 @@ namespace NMib
 		template <typename t_CInt>
 		struct TCGetHighestBitSetGeneric
 		{
-			typedef t_CInt CType;
+			using CType = t_CInt;
 			enum
 			{
 				EDefaultImplementation = 1
@@ -933,14 +933,14 @@ namespace NMib
 		class TCHelper_GetHighestBitSetChooseBySize
 		{
 		public:
-			typedef TCGetHighestBitSet<t_CType, t_bSupportZero> CGetter;
+			using CGetter = TCGetHighestBitSet<t_CType, t_bSupportZero>;
 		};
 
 		template <mint t_nBytes, typename t_CType>
 		class TCHelper_GetHighestBitSetChooseBySize<t_nBytes, t_CType, 0>
 		{
 		public:
-			typedef TCGetHighestBitSet<t_CType, 1> CGetter;
+			using CGetter = TCGetHighestBitSet<t_CType, 1>;
 		};
 
 	#ifdef DMibPGetHighestBitSet32
@@ -948,7 +948,7 @@ namespace NMib
 		class TCGetHighestBitSet<uint32, true>
 		{
 		public:
-			typedef uint32 CType;
+			using CType = uint32;
 			enum
 			{
 				EDefaultImplementation = 0
@@ -977,21 +977,21 @@ namespace NMib
 		class TCHelper_GetHighestBitSetChooseBySize<sizeof(uint8), t_CType, true>
 		{
 		public:
-			typedef TCGetHighestBitSet<uint32, true> CGetter;
+			using CGetter = TCGetHighestBitSet<uint32, true>;
 		};
 
 		template <typename t_CType>
 		class TCHelper_GetHighestBitSetChooseBySize<sizeof(uint16), t_CType, true>
 		{
 		public:
-			typedef TCGetHighestBitSet<uint32, true> CGetter;
+			using CGetter = TCGetHighestBitSet<uint32, true>;
 		};
 
 		template <typename t_CType>
 		class TCHelper_GetHighestBitSetChooseBySize<sizeof(uint32), t_CType, true>
 		{
 		public:
-			typedef TCGetHighestBitSet<uint32, true> CGetter;
+			using CGetter = TCGetHighestBitSet<uint32, true>;
 		};
 	#else
 
@@ -999,7 +999,7 @@ namespace NMib
 		class TCGetHighestBitSet<uint8, 1>
 		{
 		public:
-			typedef uint8 CType;
+			using CType = uint8;
 			enum
 			{
 				EDefaultImplementation = 1
@@ -1014,7 +1014,7 @@ namespace NMib
 		class TCHelper_GetHighestBitSetChooseBySize<sizeof(uint8), t_CType, true>
 		{
 		public:
-			typedef TCGetHighestBitSet<uint8, true> CGetter;
+			using CGetter = TCGetHighestBitSet<uint8, true>;
 		};
 
 	#endif
@@ -1024,7 +1024,7 @@ namespace NMib
 		class TCGetHighestBitSet<uint32, false>
 		{
 		public:
-			typedef uint32 CType;
+			using CType = uint32;
 			enum
 			{
 				EDefaultImplementation = 0
@@ -1053,21 +1053,21 @@ namespace NMib
 		class TCHelper_GetHighestBitSetChooseBySize<sizeof(uint8), t_CType, false>
 		{
 		public:
-			typedef TCGetHighestBitSet<uint32, false> CGetter;
+			using CGetter = TCGetHighestBitSet<uint32, false>;
 		};
 
 		template <typename t_CType>
 		class TCHelper_GetHighestBitSetChooseBySize<sizeof(uint16), t_CType, false>
 		{
 		public:
-			typedef TCGetHighestBitSet<uint32, false> CGetter;
+			using CGetter = TCGetHighestBitSet<uint32, false>;
 		};
 
 		template <typename t_CType>
 		class TCHelper_GetHighestBitSetChooseBySize<sizeof(uint32), t_CType, false>
 		{
 		public:
-			typedef TCGetHighestBitSet<uint32, false> CGetter;
+			using CGetter = TCGetHighestBitSet<uint32, false>;
 		};
 
 	#endif
@@ -1078,7 +1078,7 @@ namespace NMib
 		class TCGetHighestBitSet<uint64, true>
 		{
 		public:
-			typedef uint64 CType;
+			using CType = uint64;
 			enum
 			{
 				EDefaultImplementation = 0
@@ -1107,7 +1107,7 @@ namespace NMib
 		class TCHelper_GetHighestBitSetChooseBySize<sizeof(uint64), t_CType, true>
 		{
 		public:
-			typedef TCGetHighestBitSet<uint64, true> CGetter;
+			using CGetter = TCGetHighestBitSet<uint64, true>;
 		};
 
 	#endif
@@ -1117,7 +1117,7 @@ namespace NMib
 		class TCGetHighestBitSet<uint64, false>
 		{
 		public:
-			typedef uint64 CType;
+			using CType = uint64;
 			enum
 			{
 				EDefaultImplementation = 0
@@ -1146,7 +1146,7 @@ namespace NMib
 		class TCHelper_GetHighestBitSetChooseBySize<sizeof(uint64), t_CType, false>
 		{
 		public:
-			typedef TCGetHighestBitSet<uint64, false> CGetter;
+			using CGetter = TCGetHighestBitSet<uint64, false>;
 		};
 
 	#endif
@@ -1162,7 +1162,7 @@ namespace NMib
 			-> TCEnableIf<TCGetHighestBitSet<tf_CInt, true>::EDefaultImplementation && NMib::NTraits::cIsSame<NMib::NTraits::TCSmallerType<tf_CInt>, tf_CInt>, int32>
 		{
 			// Static branch
-			typedef typename NPrivate::TCHelper_GetHighestBitSetChooseBySize<sizeof(tf_CInt), tf_CInt, true>::CGetter CGetter;
+			using CGetter = typename NPrivate::TCHelper_GetHighestBitSetChooseBySize<sizeof(tf_CInt), tf_CInt, true>::CGetter;
 			return CGetter::fs_GetHighestBitSet(_Number);
 		}
 
@@ -1207,7 +1207,7 @@ namespace NMib
 			-> TCEnableIf<TCGetHighestBitSet<tf_CInt, true>::EDefaultImplementation && NMib::NTraits::cIsSame<NMib::NTraits::TCSmallerType<tf_CInt>, tf_CInt>, int32>
 		{
 			// Static branch
-			typedef typename NPrivate::TCHelper_GetHighestBitSetChooseBySize<sizeof(tf_CInt), tf_CInt, false>::CGetter CGetter;
+			using CGetter = typename NPrivate::TCHelper_GetHighestBitSetChooseBySize<sizeof(tf_CInt), tf_CInt, false>::CGetter;
 			return CGetter::fs_GetHighestBitSet(_Number);
 		}
 
@@ -1269,7 +1269,7 @@ namespace NMib
 		class TCGetNextPowerOfTwoHelper
 		{
 		public:
-			typedef t_CInt CType;
+			using CType = t_CInt;
 			constexpr static inline_small t_CInt fs_Do(t_CInt _Number)
 			{
 				_Number = _Number | (_Number >> t_Number);
@@ -1282,7 +1282,7 @@ namespace NMib
 		class TCGetNextPowerOfTwoHelper<t_CInt, t_End, t_End>
 		{
 		public:
-			typedef t_CInt CType;
+			using CType = t_CInt;
 			constexpr static inline_small t_CInt fs_Do(t_CInt _Number)
 			{
 				return _Number;
