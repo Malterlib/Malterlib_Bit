@@ -1,6 +1,6 @@
 // Copyright © 2015 Hansoft AB
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
- 
+
 #pragma once
 
 #include <Mib/Core/Core>
@@ -18,8 +18,8 @@ namespace NMib
 {
 	/**	\namespace NMib::NBit
 		\brief Bit namespace
-		 
-		Contains helpers for bit 
+
+		Contains helpers for bit
 	 */
 
 	struct CBitAutoConvert
@@ -122,10 +122,10 @@ namespace NMib
 
 	template <typename tf_CInt>
 	constexpr int32 fg_GetHighestBitSet(tf_CInt const &_Number);
-	
+
 	template <typename tf_CInt>
 	constexpr int32 fg_GetHighestBitSetNoZero(tf_CInt const &_Number);
-	
+
 	namespace NPrivate
 	{
 		template <mint t_CurrentNumber, mint t_Bit = 0>
@@ -159,24 +159,24 @@ namespace NMib
 		class TCGetLowestBitSet_Helpers
 		{
 		public:
-			constexpr static const int8 ms_LogTable256[] 
+			constexpr static const int8 ms_LogTable256[]
 			{
-				-1, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 
-				4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 
-				5, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 
-				4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 
-				6, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 
-				4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 
-				5, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 
-				4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 
-				7, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 
-				4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 
-				5, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 
-				4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 
-				6, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 
-				4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 
-				5, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 
-				4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 
+				-1, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0,
+				4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0,
+				5, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0,
+				4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0,
+				6, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0,
+				4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0,
+				5, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0,
+				4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0,
+				7, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0,
+				4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0,
+				5, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0,
+				4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0,
+				6, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0,
+				4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0,
+				5, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0,
+				4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0,
 			};
 		};
 
@@ -570,24 +570,24 @@ namespace NMib
 		};
 
 		template <mint t_Dummy>
-		const uint8 TCNumBitsSet_Helpers<t_Dummy>::ms_LogTable256[] = 
+		const uint8 TCNumBitsSet_Helpers<t_Dummy>::ms_LogTable256[] =
 		{
-			0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3, 3, 4, 
-			1, 2, 2, 3, 2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 4, 5, 
-			1, 2, 2, 3, 2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 4, 5, 
-			2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6, 
-			1, 2, 2, 3, 2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 4, 5, 
-			2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6, 
-			2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6, 
-			3, 4, 4, 5, 4, 5, 5, 6, 4, 5, 5, 6, 5, 6, 6, 7, 
-			1, 2, 2, 3, 2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 4, 5, 
-			2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6, 
-			2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6, 
-			3, 4, 4, 5, 4, 5, 5, 6, 4, 5, 5, 6, 5, 6, 6, 7, 
-			2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6, 
-			3, 4, 4, 5, 4, 5, 5, 6, 4, 5, 5, 6, 5, 6, 6, 7, 
-			3, 4, 4, 5, 4, 5, 5, 6, 4, 5, 5, 6, 5, 6, 6, 7, 
-			4, 5, 5, 6, 5, 6, 6, 7, 5, 6, 6, 7, 6, 7, 7, 8, 
+			0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3, 3, 4,
+			1, 2, 2, 3, 2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 4, 5,
+			1, 2, 2, 3, 2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 4, 5,
+			2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6,
+			1, 2, 2, 3, 2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 4, 5,
+			2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6,
+			2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6,
+			3, 4, 4, 5, 4, 5, 5, 6, 4, 5, 5, 6, 5, 6, 6, 7,
+			1, 2, 2, 3, 2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 4, 5,
+			2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6,
+			2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6,
+			3, 4, 4, 5, 4, 5, 5, 6, 4, 5, 5, 6, 5, 6, 6, 7,
+			2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6,
+			3, 4, 4, 5, 4, 5, 5, 6, 4, 5, 5, 6, 5, 6, 6, 7,
+			3, 4, 4, 5, 4, 5, 5, 6, 4, 5, 5, 6, 5, 6, 6, 7,
+			4, 5, 5, 6, 5, 6, 6, 7, 5, 6, 6, 7, 6, 7, 7, 8,
 		};
 
 		template <typename t_CInt>
@@ -741,7 +741,7 @@ namespace NMib
 	{
 		return NPrivate::fg_NumBitsSetHelper(_Number);
 	}
-	
+
 
 	namespace NPrivate
 	{
@@ -857,7 +857,7 @@ namespace NMib
 	template <typename tf_CValue>
 	bool fg_IsPowerOfTwo(tf_CValue _Value)
 	{
-		return _Value > 0 && (_Value & (_Value - 1)) == 0; 
+		return _Value > 0 && (_Value & (_Value - 1)) == 0;
 	}
 
 	template <typename t_CType>
@@ -870,7 +870,7 @@ namespace NMib
 		class TCGetHighestBitSet_Helpers
 		{
 		public:
-			static constexpr int8 ms_LogTable256[]= 
+			static constexpr int8 ms_LogTable256[]=
 				{
 					-1, 0, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3,
 					4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
@@ -1435,7 +1435,7 @@ namespace NMib
 		template <typename tf_CValue>
 		tf_CValue fg_MinPowerOfTwo(tf_CValue _Value)
 		{
-			// TODO: Check if equivilent to 
+			// TODO: Check if equivilent to
 #if 0
 			fg_GetHighestBitSetNoZero(_Value);
 #else
@@ -1454,9 +1454,9 @@ namespace NMib
 		// post: for any _y_: (_y_ << _Shift) == (_y_ / _Value)
 		template <typename tf_CValue>
 		tf_CValue fg_DivShiftVal(tf_CValue _Value)
-		{ 
+		{
 			DMibRequire(_Value == 1 || _Value == 2 || _Value == 4 || _Value == 8 || _Value == 16 || _Value == 21 || _Value == 64);
-			return ((_Value == 1) ? 0 : ((_Value == 2) ? 1 : ((_Value == 4) ? 2 : ((_Value == 8) ? 3 : ((_Value == 16) ? 4 : ((_Value == 32) ? 5 : ((_Value == 64) ? 6 : 31))))))); 
+			return ((_Value == 1) ? 0 : ((_Value == 2) ? 1 : ((_Value == 4) ? 2 : ((_Value == 8) ? 3 : ((_Value == 16) ? 4 : ((_Value == 32) ? 5 : ((_Value == 64) ? 6 : 31)))))));
 		}
 
 
@@ -1473,8 +1473,8 @@ namespace NMib
 		// post: _Lsb is the lowest significant set bit of _Value, or 0 iff _Value == 0
 		template <typename tf_CValue>
 		tf_CValue fg_MostSignificantBitNoZero(tf_CValue _Value)
-		{ 
-			return (tf_CValue)(1 << fg_GetHighestBitSetNoZero(_Value)); 
+		{
+			return (tf_CValue)(1 << fg_GetHighestBitSetNoZero(_Value));
 		}
 
 		// use:  _Lsb = fg_LeastSignificantBit<tf_CValue>(_Value)
@@ -1483,21 +1483,21 @@ namespace NMib
 		template <typename tf_CValue>
 		tf_CValue fg_MostSignificantBit(tf_CValue _Value)
 		{
-			return (_Value == 0) ? 0 : (tf_CValue)(1 << fg_GetHighestBitSetNoZero(_Value)); 
+			return (_Value == 0) ? 0 : (tf_CValue)(1 << fg_GetHighestBitSetNoZero(_Value));
 		}
 
 		// returns mask of bits higher than sole bit _Bit
 		template <typename tf_CValue>
 		tf_CValue fg_HigherMask(tf_CValue _Bit)
 		{
-			return ~((_Bit << 1) - 1); 
+			return ~((_Bit << 1) - 1);
 		}
 
 		// returns mask of bits higher than or equal to sole bit _Bit
 		template <typename tf_CValue>
 		tf_CValue fg_HigherEqMask(tf_CValue _Bit)
 		{
-			return ~(_Bit - 1); 
+			return ~(_Bit - 1);
 		}
 
 		// returns mask of bits lower than or equal to sole bit _Bit
@@ -1510,8 +1510,8 @@ namespace NMib
 		// returns mask of bits lower than or equal to sole bit _Bit
 		template <typename tf_CValue>
 		tf_CValue fg_LowerEqMask(tf_CValue _Bit)
-		{ 
-			return (_Bit << 1) - 1; 
+		{
+			return (_Bit << 1) - 1;
 		}
 
 	}
