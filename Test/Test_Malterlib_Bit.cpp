@@ -66,7 +66,7 @@ namespace
 			MalterlibTime.f_Start();
 			for (mint i = 0; i < nLoops; ++i)
 			{
-				NMib::NAtomic::fg_MemoryFence(NMib::NAtomic::EMemoryOrder_Acquire);
+				NMib::NAtomic::fg_MemoryFence(NMib::NAtomic::gc_MemoryOrder_Acquire);
 				Temp += NMib::fg_GetHighestBitSet(Number);
 			}
 			MalterlibTime.f_Stop();
@@ -95,7 +95,7 @@ namespace
 			MalterlibTime.f_Start();
 			for (mint i = 0; i < nLoops; ++i)
 			{
-				NMib::NAtomic::fg_MemoryFence(NMib::NAtomic::EMemoryOrder_Acquire);
+				NMib::NAtomic::fg_MemoryFence(NMib::NAtomic::gc_MemoryOrder_Acquire);
 				Temp += NMib::fg_GetHighestBitSetNoZero(Number);
 			}
 			MalterlibTime.f_Stop();
@@ -128,7 +128,7 @@ namespace
 			MalterlibTime.f_Start();
 			for (mint i = 0; i < nLoops; ++i)
 			{
-				NMib::NAtomic::fg_MemoryFence(NMib::NAtomic::EMemoryOrder_Acquire);
+				NMib::NAtomic::fg_MemoryFence(NMib::NAtomic::gc_MemoryOrder_Acquire);
 				Temp += NMib::fg_GetLowestBitSet(Number);
 			}
 			MalterlibTime.f_Stop();
@@ -163,7 +163,7 @@ namespace
 			MalterlibTime.f_Start();
 			for (mint i = 0; i < nLoops; ++i)
 			{
-				NMib::NAtomic::fg_MemoryFence(NMib::NAtomic::EMemoryOrder_Acquire);
+				NMib::NAtomic::fg_MemoryFence(NMib::NAtomic::gc_MemoryOrder_Acquire);
 				Temp += NMib::fg_GetLowestBitSetNoZero(Number);
 			}
 			MalterlibTime.f_Stop();
@@ -200,7 +200,7 @@ namespace
 			MalterlibTime.f_Start();
 			for (mint i = 0; i < nLoops; ++i)
 			{
-				NMib::NAtomic::fg_MemoryFence(NMib::NAtomic::EMemoryOrder_Acquire);
+				NMib::NAtomic::fg_MemoryFence(NMib::NAtomic::gc_MemoryOrder_Acquire);
 				Temp += NMib::fg_NumBitsSet(Number);
 			}
 			MalterlibTime.f_Stop();
