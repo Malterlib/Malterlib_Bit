@@ -6,10 +6,111 @@
 #include <Mib/Container/BitArrayPowerTwo>
 #include <Mib/Test/Performance>
 
-static_assert(NMib::gc_HighestBitSetCorrect<int, 3> == 1);
-static_assert(NMib::gc_HighestBitSet<int, 3> == 2);
-static_assert(NMib::gc_HighestBitSet<int, 0x08000000> == 28);
-static_assert(NMib::gc_HighestBitSetCorrect<int, 0x08000000> == 27);
+// gc_HighestBitSet: 0-indexed highest bit position, returns -1 for zero
+static_assert(NMib::gc_HighestBitSet<0> == -1);
+static_assert(NMib::gc_HighestBitSet<1> == 0);
+static_assert(NMib::gc_HighestBitSet<2> == 1);
+static_assert(NMib::gc_HighestBitSet<3> == 1);
+static_assert(NMib::gc_HighestBitSet<4> == 2);
+static_assert(NMib::gc_HighestBitSet<7> == 2);
+static_assert(NMib::gc_HighestBitSet<8> == 3);
+static_assert(NMib::gc_HighestBitSet<16> == 4);
+static_assert(NMib::gc_HighestBitSet<255> == 7);
+static_assert(NMib::gc_HighestBitSet<256> == 8);
+static_assert(NMib::gc_HighestBitSet<0x08000000> == 27);
+
+// cIsPowerOfTwo concept
+static_assert(!NMib::cIsPowerOfTwo<0>);
+static_assert(NMib::cIsPowerOfTwo<1>);
+static_assert(NMib::cIsPowerOfTwo<2>);
+static_assert(!NMib::cIsPowerOfTwo<3>);
+static_assert(NMib::cIsPowerOfTwo<4>);
+static_assert(!NMib::cIsPowerOfTwo<5>);
+static_assert(!NMib::cIsPowerOfTwo<6>);
+static_assert(!NMib::cIsPowerOfTwo<7>);
+static_assert(NMib::cIsPowerOfTwo<8>);
+static_assert(!NMib::cIsPowerOfTwo<9>);
+static_assert(NMib::cIsPowerOfTwo<16>);
+static_assert(NMib::cIsPowerOfTwo<64>);
+static_assert(NMib::cIsPowerOfTwo<256>);
+static_assert(NMib::cIsPowerOfTwo<1024>);
+static_assert(!NMib::cIsPowerOfTwo<15>);
+static_assert(!NMib::cIsPowerOfTwo<17>);
+
+// fg_MinPowerOfTwo: smallest non-negative integer such that 2^result >= value (for powers of two)
+// For non-powers-of-two it returns floor(log2(value))
+static_assert(NMib::fg_MinPowerOfTwo(0) == 0);
+static_assert(NMib::fg_MinPowerOfTwo(1) == 0);
+static_assert(NMib::fg_MinPowerOfTwo(2) == 1);
+static_assert(NMib::fg_MinPowerOfTwo(3) == 1);
+static_assert(NMib::fg_MinPowerOfTwo(4) == 2);
+static_assert(NMib::fg_MinPowerOfTwo(5) == 2);
+static_assert(NMib::fg_MinPowerOfTwo(7) == 2);
+static_assert(NMib::fg_MinPowerOfTwo(8) == 3);
+static_assert(NMib::fg_MinPowerOfTwo(15) == 3);
+static_assert(NMib::fg_MinPowerOfTwo(16) == 4);
+static_assert(NMib::fg_MinPowerOfTwo(31) == 4);
+static_assert(NMib::fg_MinPowerOfTwo(32) == 5);
+static_assert(NMib::fg_MinPowerOfTwo(63) == 5);
+static_assert(NMib::fg_MinPowerOfTwo(64) == 6);
+static_assert(NMib::fg_MinPowerOfTwo(127) == 6);
+static_assert(NMib::fg_MinPowerOfTwo(128) == 7);
+static_assert(NMib::fg_MinPowerOfTwo(255) == 7);
+static_assert(NMib::fg_MinPowerOfTwo(256) == 8);
+static_assert(NMib::fg_MinPowerOfTwo(1024) == 10);
+static_assert(NMib::fg_MinPowerOfTwo(65536) == 16);
+
+// fg_IsPowerOfTwo
+static_assert(NMib::fg_IsPowerOfTwo(1));
+static_assert(NMib::fg_IsPowerOfTwo(2));
+static_assert(!NMib::fg_IsPowerOfTwo(3));
+static_assert(NMib::fg_IsPowerOfTwo(4));
+static_assert(!NMib::fg_IsPowerOfTwo(5));
+static_assert(NMib::fg_IsPowerOfTwo(8));
+static_assert(!NMib::fg_IsPowerOfTwo(0));
+static_assert(!NMib::fg_IsPowerOfTwo(-1));
+static_assert(NMib::fg_IsPowerOfTwo(1024));
+static_assert(!NMib::fg_IsPowerOfTwo(1023));
+
+// fg_RoundPowerOfTwoUp
+static_assert(NMib::fg_RoundPowerOfTwoUp(1) == 1);
+static_assert(NMib::fg_RoundPowerOfTwoUp(2) == 2);
+static_assert(NMib::fg_RoundPowerOfTwoUp(3) == 4);
+static_assert(NMib::fg_RoundPowerOfTwoUp(4) == 4);
+static_assert(NMib::fg_RoundPowerOfTwoUp(5) == 8);
+static_assert(NMib::fg_RoundPowerOfTwoUp(7) == 8);
+static_assert(NMib::fg_RoundPowerOfTwoUp(8) == 8);
+static_assert(NMib::fg_RoundPowerOfTwoUp(9) == 16);
+static_assert(NMib::fg_RoundPowerOfTwoUp(15) == 16);
+static_assert(NMib::fg_RoundPowerOfTwoUp(16) == 16);
+static_assert(NMib::fg_RoundPowerOfTwoUp(17) == 32);
+static_assert(NMib::fg_RoundPowerOfTwoUp(127) == 128);
+static_assert(NMib::fg_RoundPowerOfTwoUp(128) == 128);
+static_assert(NMib::fg_RoundPowerOfTwoUp(129) == 256);
+static_assert(NMib::fg_RoundPowerOfTwoUp(255) == 256);
+static_assert(NMib::fg_RoundPowerOfTwoUp(256) == 256);
+static_assert(NMib::fg_RoundPowerOfTwoUp(1000) == 1024);
+static_assert(NMib::fg_RoundPowerOfTwoUp(1024) == 1024);
+
+// fg_RoundPowerOfTwoDown
+static_assert(NMib::fg_RoundPowerOfTwoDown(1) == 1);
+static_assert(NMib::fg_RoundPowerOfTwoDown(2) == 2);
+static_assert(NMib::fg_RoundPowerOfTwoDown(3) == 2);
+static_assert(NMib::fg_RoundPowerOfTwoDown(4) == 4);
+static_assert(NMib::fg_RoundPowerOfTwoDown(5) == 4);
+static_assert(NMib::fg_RoundPowerOfTwoDown(7) == 4);
+static_assert(NMib::fg_RoundPowerOfTwoDown(8) == 8);
+static_assert(NMib::fg_RoundPowerOfTwoDown(9) == 8);
+static_assert(NMib::fg_RoundPowerOfTwoDown(15) == 8);
+static_assert(NMib::fg_RoundPowerOfTwoDown(16) == 16);
+static_assert(NMib::fg_RoundPowerOfTwoDown(17) == 16);
+static_assert(NMib::fg_RoundPowerOfTwoDown(127) == 64);
+static_assert(NMib::fg_RoundPowerOfTwoDown(128) == 128);
+static_assert(NMib::fg_RoundPowerOfTwoDown(129) == 128);
+static_assert(NMib::fg_RoundPowerOfTwoDown(255) == 128);
+static_assert(NMib::fg_RoundPowerOfTwoDown(256) == 256);
+static_assert(NMib::fg_RoundPowerOfTwoDown(1000) == 512);
+static_assert(NMib::fg_RoundPowerOfTwoDown(1024) == 1024);
 
 static_assert(NMib::gc_LowestBitSet<3> == 0);
 static_assert(NMib::gc_LowestBitSet<2> == 1);
@@ -44,6 +145,39 @@ namespace
 	static inline_never void fs_CallFunctor(t_CFunctor _Functor)
 	{
 		_Functor();
+	}
+
+	template <typename t_CInteger>
+	static void fs_TestMinPowerOfTwo(const ch8 *_pName)
+	{
+		DMibTestPath(_pName);
+
+		// fg_MinPowerOfTwo(0) == 0
+		DMibTest(DMibExpr(NMib::fg_MinPowerOfTwo(t_CInteger(0))) == DMibExpr(t_CInteger(0)));
+
+		// fg_MinPowerOfTwo(1) == 0 (2^0 = 1 >= 1)
+		DMibTest(DMibExpr(NMib::fg_MinPowerOfTwo(t_CInteger(1))) == DMibExpr(t_CInteger(0)));
+
+		// Test all powers of two within the type's range
+		for (t_CInteger i = 1; i < t_CInteger(sizeof(t_CInteger) * 8 - 1); ++i)
+		{
+			t_CInteger PowerOfTwo = t_CInteger(1) << i;
+			DMibTest(DMibExpr(NMib::fg_MinPowerOfTwo(PowerOfTwo)) == DMibExpr(i)) (ETestFlag_Aggregated);
+		}
+
+		// Test power-of-two + 1 (should return same as the power)
+		for (t_CInteger i = 2; i < t_CInteger(sizeof(t_CInteger) * 8 - 1); ++i)
+		{
+			t_CInteger PowerOfTwoPlusOne = (t_CInteger(1) << i) + t_CInteger(1);
+			DMibTest(DMibExpr(NMib::fg_MinPowerOfTwo(PowerOfTwoPlusOne)) == DMibExpr(i)) (ETestFlag_Aggregated);
+		}
+
+		// Test power-of-two - 1 (should return one less than the power)
+		for (t_CInteger i = 2; i < t_CInteger(sizeof(t_CInteger) * 8 - 1); ++i)
+		{
+			t_CInteger PowerOfTwoMinusOne = (t_CInteger(1) << i) - t_CInteger(1);
+			DMibTest(DMibExpr(NMib::fg_MinPowerOfTwo(PowerOfTwoMinusOne)) == DMibExpr(i - t_CInteger(1))) (ETestFlag_Aggregated);
+		}
 	}
 
 	template <typename t_CInteger>
@@ -933,6 +1067,13 @@ namespace
 				fs_TestLowestBitSetNoZero<uint256>("uint256");
 				fs_TestLowestBitSetNoZero<int512>("int512");
 				fs_TestLowestBitSetNoZero<uint512>("uint512");
+			};
+			DMibTestSuite("MinPowerOfTwo")
+			{
+				fs_TestMinPowerOfTwo<uint8>("uint8");
+				fs_TestMinPowerOfTwo<uint16>("uint16");
+				fs_TestMinPowerOfTwo<uint32>("uint32");
+				fs_TestMinPowerOfTwo<uint64>("uint64");
 			};
 			DMibTestSuite("NumBitsSet")
 			{
