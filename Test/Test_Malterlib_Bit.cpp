@@ -5,6 +5,7 @@
 #include <Mib/Container/BitArrayHierarchical>
 #include <Mib/Container/BitArrayPowerTwo>
 #include <Mib/Test/Performance>
+#include <Mib/Time/PerfTimeMeasure>
 
 // gc_HighestBitSet: 0-indexed highest bit position, returns -1 for zero
 static_assert(NMib::gc_HighestBitSet<0> == -1);
@@ -185,7 +186,7 @@ namespace
 	{
 		DMibTestPath(_pName);
 
-		NMib::NTime::CCyclesMin MalterlibTime;
+		NMib::NTime::CPrefCyclesTimeMeasureMin MalterlibTime;
 		const mint nLoops = 10000;
 
 #ifndef DMibClangAnalyzerWorkaround
@@ -219,7 +220,7 @@ namespace
 	static void fs_TestHighestBitSetNoZero(const ch8 *_pName)
 	{
 		DMibTestPath(_pName);
-		NMib::NTime::CCyclesMin MalterlibTime;
+		NMib::NTime::CPrefCyclesTimeMeasureMin MalterlibTime;
 		const mint nLoops = 10000;
 		t_CInteger Number = NMib::NStr::CStr(NMib::NStr::CStr::CFormat("{}") << 0x50).f_ToInt();
 		uint32 Result = 0;
@@ -248,7 +249,7 @@ namespace
 	static void fs_TestLowestBitSet(const ch8 *_pName)
 	{
 		DMibTestPath(_pName);
-		NMib::NTime::CCyclesMin MalterlibTime;
+		NMib::NTime::CPrefCyclesTimeMeasureMin MalterlibTime;
 		const mint nLoops = 10000;
 		enum
 		{
@@ -283,7 +284,7 @@ namespace
 	static void fs_TestLowestBitSetNoZero(const ch8 *_pName)
 	{
 		DMibTestPath(_pName);
-		NMib::NTime::CCyclesMin MalterlibTime;
+		NMib::NTime::CPrefCyclesTimeMeasureMin MalterlibTime;
 		const mint nLoops = 10000;
 		enum
 		{
@@ -319,7 +320,7 @@ namespace
 	static void fs_TestNumBitsSet(const ch8 *_pName)
 	{
 		DMibTestPath(_pName);
-		NMib::NTime::CCyclesMin MalterlibTime;
+		NMib::NTime::CPrefCyclesTimeMeasureMin MalterlibTime;
 		const mint nLoops = 10000;
 		t_CInteger Number = 0;
 		mint nBytes = sizeof(Number);
@@ -396,7 +397,7 @@ namespace
 				}
 				{
 					DMibTestPath("Unaligned");
-					NMib::NTime::CCyclesMin MalterlibTime;
+					NMib::NTime::CPrefCyclesTimeMeasureMin MalterlibTime;
 					const mint nBits = nBitsUnaligned;
 					CBitArrayUnaligned TestBits;
 					for (aint i = 0; i < 10; ++i)
@@ -460,7 +461,7 @@ namespace
 				}
 				{
 					DMibTestPath("Unaligned");
-					NMib::NTime::CCyclesMin MalterlibTime;
+					NMib::NTime::CPrefCyclesTimeMeasureMin MalterlibTime;
 					const mint nBits = nBitsUnaligned;
 					CBitArrayUnaligned TestBits;
 					for (aint i = 0; i < 10; ++i)
@@ -929,10 +930,8 @@ namespace
 	template <template <mint t_nBits> class t_TCBitArray>
 	struct TCTestBitArrayPowerOfTwo
 	{
-
 		static void fs_DoTests()
 		{
-
 			const aint nBitsAligned = sizeof(mint) * sizeof(mint) * 8 * 8;
 			const aint nBitsUnaligned = sizeof(mint) * sizeof(mint) * 8 * 8 - 1;
 			using CBitArrayAligned = typename t_TCBitArray<nBitsAligned>::CType;
@@ -951,7 +950,7 @@ namespace
 					}
 					{
 						DMibTestPath("Unaligned");
-						NMib::NTime::CCyclesMin MalterlibTime;
+						NMib::NTime::CPrefCyclesTimeMeasureMin MalterlibTime;
 						[[maybe_unused]] const aint nBits = nBitsUnaligned;
 						CBitArrayUnaligned TestBits;
 						mint Bit = TestBits.f_FindFreeBitAndSet(3);
@@ -960,7 +959,6 @@ namespace
 				}
 			};
 		}
-
 	};
 
 	class CBitOperations_Tests : public NMib::NTest::CTest
