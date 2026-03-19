@@ -5,10 +5,10 @@
 
 namespace NMib::NPrivate
 {
-	consteval auto fg_Power(auto _Number, mint _Power) noexcept
+	consteval auto fg_Power(auto _Number, umint _Power) noexcept
 	{
 		auto Result = decltype(_Number)(1);
-		for (mint i = 0; i < _Power; ++i)
+		for (umint i = 0; i < _Power; ++i)
 			Result *= _Number;
 		return Result;
 	}

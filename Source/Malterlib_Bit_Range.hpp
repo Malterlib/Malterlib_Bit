@@ -14,7 +14,7 @@ namespace NMib::NPrivate
 			return tf_CType(CIntType(1) << m_Bit);
 		}
 
-		mint m_Bit;
+		umint m_Bit;
 	};
 
 	struct CBitRangeAutoConvert
@@ -42,25 +42,25 @@ namespace NMib::NPrivate
 			;
 		}
 
-		mint m_BitStart;
-		mint m_BitEnd;
+		umint m_BitStart;
+		umint m_BitEnd;
 	};
 }
 
 namespace NMib
 {
-	constexpr NPrivate::CBitAutoConvert fg_Bit(mint _Bit) noexcept
+	constexpr NPrivate::CBitAutoConvert fg_Bit(umint _Bit) noexcept
 	{
 		return NPrivate::CBitAutoConvert{.m_Bit = _Bit};
 	}
 
 	template <typename tf_CType>
-	constexpr tf_CType fg_Bit(mint _Bit, tf_CType _One) noexcept
+	constexpr tf_CType fg_Bit(umint _Bit, tf_CType _One) noexcept
 	{
 		return _One << _Bit;
 	}
 
-	constexpr NPrivate::CBitRangeAutoConvert fg_BitRange(mint _BitStart, mint _BitEnd) noexcept
+	constexpr NPrivate::CBitRangeAutoConvert fg_BitRange(umint _BitStart, umint _BitEnd) noexcept
 	{
 		return NPrivate::CBitRangeAutoConvert{.m_BitStart = _BitStart, .m_BitEnd = _BitEnd};
 	}

@@ -36,7 +36,7 @@ namespace NMib::NPrivate
 		uint32 Ret = 0;
 
 		for (uint32 i = 0; i < uint32(sizeof(CUnsigned)); ++i, Number >>= c_Shift)
-			Ret += gc_NumBitsSetTable256[mint(Number & CUnsigned(0xff))];
+			Ret += gc_NumBitsSetTable256[umint(Number & CUnsigned(0xff))];
 
 		return Ret;
 	}

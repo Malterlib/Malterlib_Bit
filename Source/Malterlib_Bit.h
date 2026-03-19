@@ -9,11 +9,11 @@
 
 namespace NMib
 {
-	constexpr NPrivate::CBitAutoConvert fg_Bit(mint _Bit) noexcept;
+	constexpr NPrivate::CBitAutoConvert fg_Bit(umint _Bit) noexcept;
 	template <typename tf_CType>
-	constexpr tf_CType fg_Bit(mint _Bit, tf_CType _One) noexcept;
+	constexpr tf_CType fg_Bit(umint _Bit, tf_CType _One) noexcept;
 
-	constexpr NPrivate::CBitRangeAutoConvert fg_BitRange(mint _BitStart, mint _BitEnd) noexcept;
+	constexpr NPrivate::CBitRangeAutoConvert fg_BitRange(umint _BitStart, umint _BitEnd) noexcept;
 	template <typename tf_CType>
 	constexpr tf_CType fg_BitRange(uaint _BitStart, uaint _BitEnd) noexcept;
 
@@ -25,7 +25,7 @@ namespace NMib
 	constexpr int32 fg_GetLowestBitSetNoZero(tf_CInt const &_Number) noexcept;
 
 	template <auto t_CurrentNumber>
-	constexpr inline mint gc_LowestBitSet = NPrivate::fg_GetLowestBitSetStatic(t_CurrentNumber, 0);
+	constexpr inline umint gc_LowestBitSet = NPrivate::fg_GetLowestBitSetStatic(t_CurrentNumber, 0);
 
 
 	template <typename tf_CInt>
@@ -42,7 +42,7 @@ namespace NMib
 	constexpr inline_small uint32 fg_NumBitsSet(tf_CInt const &_Number) noexcept;
 
 	template <typename t_CType>
-	constexpr inline mint gc_BitSize = sizeof(t_CType) * 8;
+	constexpr inline umint gc_BitSize = sizeof(t_CType) * 8;
 
 
 	template <typename tf_CType>
@@ -54,7 +54,7 @@ namespace NMib
 	template <auto t_CurrentNumber>
 	concept cIsPowerOfTwo = t_CurrentNumber > 0 && (decltype(t_CurrentNumber)(1) << gc_HighestBitSet<t_CurrentNumber>) == t_CurrentNumber;
 
-	template <auto t_Number, mint t_Power>
+	template <auto t_Number, umint t_Power>
 	constexpr inline auto gc_Power = NPrivate::fg_Power(t_Number, t_Power);
 
 	template <typename tf_CValue>

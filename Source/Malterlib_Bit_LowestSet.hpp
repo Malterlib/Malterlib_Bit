@@ -5,7 +5,7 @@
 
 namespace NMib::NPrivate
 {
-	consteval mint fg_GetLowestBitSetStatic(auto _CurrentNumber, mint _Bit) noexcept
+	consteval umint fg_GetLowestBitSetStatic(auto _CurrentNumber, umint _Bit) noexcept
 	{
 		if (_CurrentNumber == 0)
 			return -1;
@@ -45,11 +45,11 @@ namespace NMib::NPrivate
 
 		CUnsigned Number = _Number;
 
-		for (mint i = 0; i < mint(sizeof(CUnsigned)); ++i, Number >>= c_Shift)
+		for (umint i = 0; i < umint(sizeof(CUnsigned)); ++i, Number >>= c_Shift)
 		{
 			CUnsigned Current = Number & CUnsigned(0xff);
 			if (Current != 0)
-				return i * 8 + gc_LowestBitSetTable256[mint(Current)];
+				return i * 8 + gc_LowestBitSetTable256[umint(Current)];
 		}
 
 		return -1;
@@ -140,7 +140,7 @@ namespace NMib::NPrivate
 			return fg_GetLowestBitSetGeneric(_Number);
 		else
 		{
-			constexpr mint c_ToShift = sizeof(_Number) * 4;
+			constexpr umint c_ToShift = sizeof(_Number) * 4;
 			decltype(auto) Lower = fg_GetLower(_Number);
 			using CLower = NMib::NTraits::TCRemoveReference<decltype(Lower)>;
 

@@ -124,13 +124,13 @@ static_assert(NMib::gc_LowestBitSet<1 << 30> == 30);
 static_assert(NMib::gc_LowestBitSet<1u << 31> == 31);
 
 #if DMibPBits_mint > 32
-static_assert(NMib::gc_LowestBitSet<mint(1) << 35> == 35);
-static_assert(NMib::gc_LowestBitSet<mint(1) << 40> == 40);
-static_assert(NMib::gc_LowestBitSet<mint(1) << 45> == 45);
-static_assert(NMib::gc_LowestBitSet<mint(1) << 50> == 50);
-static_assert(NMib::gc_LowestBitSet<mint(1) << 55> == 55);
-static_assert(NMib::gc_LowestBitSet<mint(1) << 60> == 60);
-static_assert(NMib::gc_LowestBitSet<mint(1) << 63> == 63);
+static_assert(NMib::gc_LowestBitSet<umint(1) << 35> == 35);
+static_assert(NMib::gc_LowestBitSet<umint(1) << 40> == 40);
+static_assert(NMib::gc_LowestBitSet<umint(1) << 45> == 45);
+static_assert(NMib::gc_LowestBitSet<umint(1) << 50> == 50);
+static_assert(NMib::gc_LowestBitSet<umint(1) << 55> == 55);
+static_assert(NMib::gc_LowestBitSet<umint(1) << 60> == 60);
+static_assert(NMib::gc_LowestBitSet<umint(1) << 63> == 63);
 #endif
 
 namespace NMib
@@ -187,7 +187,7 @@ namespace
 		DMibTestPath(_pName);
 
 		NMib::NTime::CPrefCyclesTimeMeasureMin MalterlibTime;
-		const mint nLoops = 10000;
+		const umint nLoops = 10000;
 
 #ifndef DMibClangAnalyzerWorkaround
 		t_CInteger Number = NMib::NStr::CStr(NMib::NStr::CStr::CFormat("{}") << 0x50).f_ToInt();
@@ -199,7 +199,7 @@ namespace
 		{
 			uint32 Temp = Result;
 			MalterlibTime.f_Start();
-			for (mint i = 0; i < nLoops; ++i)
+			for (umint i = 0; i < nLoops; ++i)
 			{
 				NMib::NAtomic::fg_MemoryFence(NMib::NAtomic::gc_MemoryOrder_Acquire);
 				Temp += NMib::fg_GetHighestBitSet(Number);
@@ -207,10 +207,10 @@ namespace
 			MalterlibTime.f_Stop();
 			Result = Temp;
 		};
-		for (mint i = 0; i < 100; ++i)
+		for (umint i = 0; i < 100; ++i)
 			fs_CallFunctor(Lambda);
 		MalterlibTime /= nLoops;
-		mint ExpectedCycles = 10*sizeof(t_CInteger);
+		umint ExpectedCycles = 10*sizeof(t_CInteger);
 		DMibTest(DMibExpr(Result) == DMibExpr(6*100*nLoops)) (ETestFlag_NoValues);
 		if (NMib::NTest::fg_GroupActive("Performance"))
 			DMibTest(DMibExpr(MalterlibTime.f_GetCycles()) < DMibExpr(ExpectedCycles));
@@ -221,14 +221,14 @@ namespace
 	{
 		DMibTestPath(_pName);
 		NMib::NTime::CPrefCyclesTimeMeasureMin MalterlibTime;
-		const mint nLoops = 10000;
+		const umint nLoops = 10000;
 		t_CInteger Number = NMib::NStr::CStr(NMib::NStr::CStr::CFormat("{}") << 0x50).f_ToInt();
 		uint32 Result = 0;
 		auto Lambda = [&] ()
 		{
 			uint32 Temp = Result;
 			MalterlibTime.f_Start();
-			for (mint i = 0; i < nLoops; ++i)
+			for (umint i = 0; i < nLoops; ++i)
 			{
 				NMib::NAtomic::fg_MemoryFence(NMib::NAtomic::gc_MemoryOrder_Acquire);
 				Temp += NMib::fg_GetHighestBitSetNoZero(Number);
@@ -236,10 +236,10 @@ namespace
 			MalterlibTime.f_Stop();
 			Result = Temp;
 		};
-		for (mint i = 0; i < 100; ++i)
+		for (umint i = 0; i < 100; ++i)
 			fs_CallFunctor(Lambda);
 		MalterlibTime /= nLoops;
-		mint ExpectedCycles = 10*sizeof(t_CInteger);
+		umint ExpectedCycles = 10*sizeof(t_CInteger);
 		DMibTest(DMibExpr(Result) == DMibExpr(6*100*nLoops)) (ETestFlag_NoValues);
 		if (NMib::NTest::fg_GroupActive("Performance"))
 			DMibTest(DMibExpr(MalterlibTime.f_GetCycles()) < DMibExpr(ExpectedCycles));
@@ -250,7 +250,7 @@ namespace
 	{
 		DMibTestPath(_pName);
 		NMib::NTime::CPrefCyclesTimeMeasureMin MalterlibTime;
-		const mint nLoops = 10000;
+		const umint nLoops = 10000;
 		enum
 		{
 			ENumBits = sizeof(t_CInteger) * 8
@@ -261,7 +261,7 @@ namespace
 		{
 			uint32 Temp = Result;
 			MalterlibTime.f_Start();
-			for (mint i = 0; i < nLoops; ++i)
+			for (umint i = 0; i < nLoops; ++i)
 			{
 				NMib::NAtomic::fg_MemoryFence(NMib::NAtomic::gc_MemoryOrder_Acquire);
 				Temp += NMib::fg_GetLowestBitSet(Number);
@@ -269,10 +269,10 @@ namespace
 			MalterlibTime.f_Stop();
 			Result = Temp;
 		};
-		for (mint i = 0; i < 100; ++i)
+		for (umint i = 0; i < 100; ++i)
 			fs_CallFunctor(Lambda);
 		MalterlibTime /= nLoops;
-		mint ExpectedCycles = 10*sizeof(t_CInteger);
+		umint ExpectedCycles = 10*sizeof(t_CInteger);
 		DMibTest(DMibExpr(Result) == DMibExpr((ENumBits-8)*100*nLoops)) (ETestFlag_NoValues);
 		if (NMib::NTest::fg_GroupActive("Performance"))
 			DMibTest(DMibExpr(MalterlibTime.f_GetCycles()) < DMibExpr(ExpectedCycles));
@@ -285,7 +285,7 @@ namespace
 	{
 		DMibTestPath(_pName);
 		NMib::NTime::CPrefCyclesTimeMeasureMin MalterlibTime;
-		const mint nLoops = 10000;
+		const umint nLoops = 10000;
 		enum
 		{
 			ENumBits = sizeof(t_CInteger) * 8
@@ -296,7 +296,7 @@ namespace
 		{
 			uint32 Temp = Result;
 			MalterlibTime.f_Start();
-			for (mint i = 0; i < nLoops; ++i)
+			for (umint i = 0; i < nLoops; ++i)
 			{
 				NMib::NAtomic::fg_MemoryFence(NMib::NAtomic::gc_MemoryOrder_Acquire);
 				Temp += NMib::fg_GetLowestBitSetNoZero(Number);
@@ -304,10 +304,10 @@ namespace
 			MalterlibTime.f_Stop();
 			Result = Temp;
 		};
-		for (mint i = 0; i < 100; ++i)
+		for (umint i = 0; i < 100; ++i)
 			fs_CallFunctor(Lambda);
 		MalterlibTime /= nLoops;
-		mint ExpectedCycles = 10*sizeof(t_CInteger);
+		umint ExpectedCycles = 10*sizeof(t_CInteger);
 		DMibTest(DMibExpr(Result) == DMibExpr((ENumBits-8)*100*nLoops)) (ETestFlag_NoValues);
 		if (NMib::NTest::fg_GroupActive("Performance"))
 			DMibTest(DMibExpr(MalterlibTime.f_GetCycles()) < DMibExpr(ExpectedCycles));
@@ -321,10 +321,10 @@ namespace
 	{
 		DMibTestPath(_pName);
 		NMib::NTime::CPrefCyclesTimeMeasureMin MalterlibTime;
-		const mint nLoops = 10000;
+		const umint nLoops = 10000;
 		t_CInteger Number = 0;
-		mint nBytes = sizeof(Number);
-		for (mint i = 0; i < nBytes; ++i)
+		umint nBytes = sizeof(Number);
+		for (umint i = 0; i < nBytes; ++i)
 		{
 			Number |= t_CInteger(NMib::NStr::CStr(NMib::NStr::CStr::CFormat("{}") << 0x55).f_ToInt()) << (i * 8);
 		}
@@ -333,7 +333,7 @@ namespace
 		{
 			uint32 Temp = Result;
 			MalterlibTime.f_Start();
-			for (mint i = 0; i < nLoops; ++i)
+			for (umint i = 0; i < nLoops; ++i)
 			{
 				NMib::NAtomic::fg_MemoryFence(NMib::NAtomic::gc_MemoryOrder_Acquire);
 				Temp += NMib::fg_NumBitsSet(Number);
@@ -341,22 +341,22 @@ namespace
 			MalterlibTime.f_Stop();
 			Result = Temp;
 		};
-		for (mint i = 0; i < 100; ++i)
+		for (umint i = 0; i < 100; ++i)
 			fs_CallFunctor(Lambda);
 		MalterlibTime /= nLoops;
-		mint ExpectedCycles = 10*sizeof(t_CInteger);
+		umint ExpectedCycles = 10*sizeof(t_CInteger);
 		DMibTest(DMibExpr(Result) == DMibExpr(4*nBytes*100*nLoops)) (ETestFlag_NoValues);
 		if (NMib::NTest::fg_GroupActive("Performance"))
 			DMibTest(DMibExpr(MalterlibTime.f_GetCycles()) < DMibExpr(ExpectedCycles));
 	}
 
-	template <template <mint t_nBits> class t_TCBitArray>
+	template <template <umint t_nBits> class t_TCBitArray>
 	struct TCTestBitArray
 	{
 		static void fs_DoTests()
 		{
-			const aint nBitsAligned = sizeof(mint) * sizeof(mint) * 8 * 8;
-			const aint nBitsUnaligned = sizeof(mint) * sizeof(mint) * 8 * 8 - 1;
+			const aint nBitsAligned = sizeof(umint) * sizeof(umint) * 8 * 8;
+			const aint nBitsUnaligned = sizeof(umint) * sizeof(umint) * 8 * 8 - 1;
 			using CBitArrayAligned = typename t_TCBitArray<nBitsAligned>::CType;
 			using CBitArrayUnaligned = typename t_TCBitArray<nBitsUnaligned>::CType;
 			{
@@ -369,13 +369,13 @@ namespace
 
 					{
 						NMib::NTest::CTestPerformanceMeasure MalterlibMeasure("Malterlib");
-						const mint nBits = nBitsAligned;
+						const umint nBits = nBitsAligned;
 						CBitArrayAligned TestBits;
 						for (aint i = 0; i < 10; ++i)
 						{
 							TestBits.f_Clear();
 							MalterlibMeasure.f_Start();
-							for (mint i = 0; i < nBits-1; ++i)
+							for (umint i = 0; i < nBits-1; ++i)
 								TestBits.f_FindFreeBitAndSet();
 							MalterlibMeasure.f_Stop(nBits-1);
 							DMibTest(DMibExpr(TestBits.f_FindFreeBitAndSet()) == DMibExpr(nBits - 1)) (ETestFlag_Aggregated);
@@ -398,13 +398,13 @@ namespace
 				{
 					DMibTestPath("Unaligned");
 					NMib::NTime::CPrefCyclesTimeMeasureMin MalterlibTime;
-					const mint nBits = nBitsUnaligned;
+					const umint nBits = nBitsUnaligned;
 					CBitArrayUnaligned TestBits;
 					for (aint i = 0; i < 10; ++i)
 					{
 						TestBits.f_Clear();
 						MalterlibTime.f_Start();
-						for (mint i = 0; i < nBits-1; ++i)
+						for (umint i = 0; i < nBits-1; ++i)
 							TestBits.f_FindFreeBitAndSet();
 						MalterlibTime.f_Stop();
 						DMibTest(DMibExpr(TestBits.f_FindFreeBitAndSet()) == DMibExpr(nBits - 1)) (ETestFlag_Aggregated);
@@ -418,7 +418,7 @@ namespace
 						DMibTest(DMibExpr(TestBits.f_FindFreeBitAndSet()) == DMibExpr(555) && DMibExpr("Static set")) (ETestFlag_Aggregated);
 					}
 					MalterlibTime /= nBits - 1;
-					mint ExpectedCycles = (nBits*10)/(sizeof(void *)*2);
+					umint ExpectedCycles = (nBits*10)/(sizeof(void *)*2);
 					if (NMib::NTest::fg_GroupActive("Performance"))
 						DMibTest(DMibExpr(MalterlibTime.f_GetCycles()) < DMibExpr(ExpectedCycles));
 				};
@@ -433,13 +433,13 @@ namespace
 
 					{
 						NMib::NTest::CTestPerformanceMeasure MalterlibMeasure("Malterlib");
-						const mint nBits = nBitsAligned;
+						const umint nBits = nBitsAligned;
 						CBitArrayAligned TestBits;
 						for (aint i = 0; i < 10; ++i)
 						{
 							TestBits.f_Clear();
 							MalterlibMeasure.f_Start();
-							for (mint i = 0; i < nBits-1; ++i)
+							for (umint i = 0; i < nBits-1; ++i)
 								TestBits.f_FindFreeBitReverseAndSet();
 							MalterlibMeasure.f_Stop(nBits-1);
 							DMibTest(DMibExpr(TestBits.f_FindFreeBitReverseAndSet()) == DMibExpr(0)) (ETestFlag_Aggregated);
@@ -462,13 +462,13 @@ namespace
 				{
 					DMibTestPath("Unaligned");
 					NMib::NTime::CPrefCyclesTimeMeasureMin MalterlibTime;
-					const mint nBits = nBitsUnaligned;
+					const umint nBits = nBitsUnaligned;
 					CBitArrayUnaligned TestBits;
 					for (aint i = 0; i < 10; ++i)
 					{
 						TestBits.f_Clear();
 						MalterlibTime.f_Start();
-						for (mint i = 0; i < nBits-1; ++i)
+						for (umint i = 0; i < nBits-1; ++i)
 							TestBits.f_FindFreeBitReverseAndSet();
 						MalterlibTime.f_Stop();
 						DMibTest(DMibExpr(TestBits.f_FindFreeBitReverseAndSet()) == DMibExpr(0)) (ETestFlag_Aggregated);
@@ -482,7 +482,7 @@ namespace
 						DMibTest(DMibExpr(TestBits.f_FindFreeBitReverseAndSet()) == DMibExpr(555) && DMibExpr("Static set")) (ETestFlag_Aggregated);
 					}
 					MalterlibTime /= nBits - 1;
-					mint ExpectedCycles = (nBits*10)/(sizeof(void *)*2);
+					umint ExpectedCycles = (nBits*10)/(sizeof(void *)*2);
 					if (NMib::NTest::fg_GroupActive("Performance"))
 						DMibTest(DMibExpr(MalterlibTime.f_GetCycles()) < DMibExpr(ExpectedCycles));
 				}
@@ -532,7 +532,7 @@ namespace
 					CBitArrayAligned TestBits;
 					for (aint i = 0; i < nBits; ++i)
 					{
-						mint Start = NMib::fg_Max(0, smint(i)-3);
+						umint Start = NMib::fg_Max(0, smint(i)-3);
 
 						TestBits.f_SetBit(i, true);
 						DMibTest(DMibExpr(TestBits.f_FindUpperBound(Start)) == DMibExpr(i)) (ETestFlag_Aggregated);
@@ -549,7 +549,7 @@ namespace
 					CBitArrayUnaligned TestBits;
 					for (aint i = 0; i < nBits; ++i)
 					{
-						mint Start = NMib::fg_Max(0, smint(i)-3);
+						umint Start = NMib::fg_Max(0, smint(i)-3);
 						TestBits.f_SetBit(i, true);
 						DMibTest(DMibExpr(TestBits.f_FindUpperBound(Start)) == DMibExpr(i)) (ETestFlag_Aggregated);
 						TestBits.f_SetBit(i, false);
@@ -842,7 +842,7 @@ namespace
 							aint nRanges = 0;
 							TestBits.f_EnumFreeBitRanges
 								(
-									[&](mint _Bit, mint _nBits) -> bool
+									[&](umint _Bit, umint _nBits) -> bool
 									{
 										nFound += _nBits;
 										++nRanges;
@@ -865,7 +865,7 @@ namespace
 							aint nRanges = 0;
 							TestBits.f_EnumFreeBitRanges
 								(
-									[&](mint _Bit, mint _nBits) -> bool
+									[&](umint _Bit, umint _nBits) -> bool
 									{
 										nFound += _nBits;
 										++nRanges;
@@ -927,13 +927,13 @@ namespace
 		}
 	};
 
-	template <template <mint t_nBits> class t_TCBitArray>
+	template <template <umint t_nBits> class t_TCBitArray>
 	struct TCTestBitArrayPowerOfTwo
 	{
 		static void fs_DoTests()
 		{
-			const aint nBitsAligned = sizeof(mint) * sizeof(mint) * 8 * 8;
-			const aint nBitsUnaligned = sizeof(mint) * sizeof(mint) * 8 * 8 - 1;
+			const aint nBitsAligned = sizeof(umint) * sizeof(umint) * 8 * 8;
+			const aint nBitsUnaligned = sizeof(umint) * sizeof(umint) * 8 * 8 - 1;
 			using CBitArrayAligned = typename t_TCBitArray<nBitsAligned>::CType;
 			using CBitArrayUnaligned = typename t_TCBitArray<nBitsUnaligned>::CType;
 			{
@@ -945,7 +945,7 @@ namespace
 						[[maybe_unused]] const aint nBits = nBitsAligned;
 						CBitArrayAligned TestBits;
 
-						mint Bit = TestBits.f_FindFreeBitAndSet(3);
+						umint Bit = TestBits.f_FindFreeBitAndSet(3);
 						DMibTest(DMibExpr(TestBits.f_GetBit(3, Bit)) == DMibExpr(true)) (ETestFlag_Aggregated);
 					}
 					{
@@ -953,7 +953,7 @@ namespace
 						NMib::NTime::CPrefCyclesTimeMeasureMin MalterlibTime;
 						[[maybe_unused]] const aint nBits = nBitsUnaligned;
 						CBitArrayUnaligned TestBits;
-						mint Bit = TestBits.f_FindFreeBitAndSet(3);
+						umint Bit = TestBits.f_FindFreeBitAndSet(3);
 						DMibTest(DMibExpr(TestBits.f_GetBit(3, Bit)) == DMibExpr(true)) (ETestFlag_Aggregated);
 					}
 				}
@@ -965,19 +965,19 @@ namespace
 	{
 	public:
 
-		template <mint t_nBits>
+		template <umint t_nBits>
 		struct TCNormalBitArray
 		{
 			using CType = NMib::NContainer::TCBitArray<t_nBits>;
 		};
 
-		template <mint t_nBits>
+		template <umint t_nBits>
 		struct TCHierarchicalBitArray
 		{
 			using CType = NMib::NContainer::TCBitArrayHierarchical<t_nBits>;
 		};
 
-		template <mint t_nBits>
+		template <umint t_nBits>
 		struct TCPowerOfTwoBitArray
 		{
 			using CType = NMib::NContainer::TCBitArrayPowerTwo<t_nBits>;

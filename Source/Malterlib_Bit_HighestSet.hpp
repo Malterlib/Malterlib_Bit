@@ -51,7 +51,7 @@ namespace NMib::NPrivate
 		{
 			CUnsigned Current = Number & CurrentCheck;
 			if (Current != 0)
-				return i * 8 + gc_HighestBitSetTable256[mint((Number & CurrentCheck) >> i * 8)];
+				return i * 8 + gc_HighestBitSetTable256[umint((Number & CurrentCheck) >> i * 8)];
 		}
 
 		return -1;
@@ -142,7 +142,7 @@ namespace NMib::NPrivate
 			return fg_GetHighestBitSetGeneric(_Number);
 		else
 		{
-			constexpr mint c_ToShift = sizeof(_Number) * 4;
+			constexpr umint c_ToShift = sizeof(_Number) * 4;
 			decltype(auto) Upper = fg_GetUpper(_Number);
 			using CUpper = NMib::NTraits::TCRemoveReference<decltype(Upper)>;
 

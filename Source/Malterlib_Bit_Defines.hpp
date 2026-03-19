@@ -14,10 +14,10 @@ namespace NMib::NPrivate
 	struct CBitAutoConvert;
 	struct CBitRangeAutoConvert;
 
-	consteval mint fg_GetLowestBitSetStatic(auto _CurrentNumber, mint _Bit) noexcept;
+	consteval umint fg_GetLowestBitSetStatic(auto _CurrentNumber, umint _Bit) noexcept;
 	consteval smint fg_GetHighestBitSetStatic(auto _CurrentNumber) noexcept;
 
-	consteval auto fg_Power(auto _Number, mint _Power) noexcept;
+	consteval auto fg_Power(auto _Number, umint _Power) noexcept;
 }
 
 namespace NMib
