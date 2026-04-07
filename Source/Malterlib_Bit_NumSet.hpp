@@ -45,6 +45,10 @@ namespace NMib::NPrivate
 	struct TCNumBitsSet
 	{
 		constexpr static bool mc_bHasIntrinsic = false;
+		constexpr static inline_small uint32 fs_NumBitsSet(t_CInt _Number) noexcept
+		{
+			return fg_NumBitsSetGeneric(_Number);
+		}
 	};
 
 #ifdef DMibPNumBitsSet32
