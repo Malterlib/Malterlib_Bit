@@ -45,8 +45,8 @@ namespace NMib::NPrivate
 	template <typename t_CInt>
 	struct TCNumBitsSet
 	{
-		constexpr static bool mc_bHasIntrinsic = false;
-		constexpr static inline_small uint32 fs_NumBitsSet(t_CInt _Number) noexcept
+		static constexpr bool mc_bHasIntrinsic = false;
+		static constexpr inline_small uint32 fs_NumBitsSet(t_CInt _Number) noexcept
 		{
 			return fg_NumBitsSetGeneric(_Number);
 		}
@@ -56,12 +56,12 @@ namespace NMib::NPrivate
 	template <>
 	struct TCNumBitsSet<uint32>
 	{
-		constexpr static inline_small uint32 fs_NumBitsSet(uint32 _Number) noexcept
+		static constexpr inline_small uint32 fs_NumBitsSet(uint32 _Number) noexcept
 		{
 			return DMibPNumBitsSet32(_Number);
 		}
 
-		constexpr static bool mc_bHasIntrinsic = true;
+		static constexpr bool mc_bHasIntrinsic = true;
 	};
 #endif
 
@@ -69,8 +69,8 @@ namespace NMib::NPrivate
 	template <>
 	struct TCNumBitsSet<uint64>
 	{
-		constexpr static bool mc_bHasIntrinsic = true;
-		constexpr static inline_small uint32 fs_NumBitsSet(uint64 _Number) noexcept
+		static constexpr bool mc_bHasIntrinsic = true;
+		static constexpr inline_small uint32 fs_NumBitsSet(uint64 _Number) noexcept
 		{
 			return DMibPNumBitsSet64(_Number);
 		}
