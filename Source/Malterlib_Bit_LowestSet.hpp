@@ -18,22 +18,23 @@ namespace NMib::NPrivate
 
 	inline constexpr int8 gc_LowestBitSetTable256[]
 		{
-			-1, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0,
-			4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0,
-			5, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0,
-			4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0,
-			6, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0,
-			4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0,
-			5, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0,
-			4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0,
-			7, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0,
-			4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0,
-			5, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0,
-			4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0,
-			6, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0,
-			4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0,
-			5, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0,
-			4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0,
+			// malterlib-format columns: 16
+			  -1, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0
+			,  4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0
+			,  5, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0
+			,  4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0
+			,  6, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0
+			,  4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0
+			,  5, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0
+			,  4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0
+			,  7, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0
+			,  4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0
+			,  5, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0
+			,  4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0
+			,  6, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0
+			,  4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0
+			,  5, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0
+			,  4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0
 		}
 	;
 
@@ -58,19 +59,19 @@ namespace NMib::NPrivate
 	template <typename t_CInt, bool t_bSupportZero>
 	struct TCGetLowestBitSet
 	{
-		constexpr static bool mc_bHasIntrinsic = false;
+		static constexpr bool mc_bHasIntrinsic = false;
 	};
 
 #ifdef DMibPGetLowestBitSet32
 	template <>
 	struct TCGetLowestBitSet<uint32, true>
 	{
-		constexpr static inline_small int32 fs_GetLowestBitSet(uint32 const &_Number) noexcept
+		static constexpr inline_small int32 fs_GetLowestBitSet(uint32 const &_Number) noexcept
 		{
 			return DMibPGetLowestBitSet32(_Number);
 		}
 
-		constexpr static bool mc_bHasIntrinsic = true;
+		static constexpr bool mc_bHasIntrinsic = true;
 	};
 #endif
 
@@ -78,12 +79,12 @@ namespace NMib::NPrivate
 	template <>
 	struct TCGetLowestBitSet<uint32, false>
 	{
-		constexpr static inline_small int32 fs_GetLowestBitSet(uint32 const &_Number) noexcept
+		static constexpr inline_small int32 fs_GetLowestBitSet(uint32 const &_Number) noexcept
 		{
 			return DMibPGetLowestBitSet32NoZero(_Number);
 		}
 
-		constexpr static bool mc_bHasIntrinsic = true;
+		static constexpr bool mc_bHasIntrinsic = true;
 	};
 #endif
 
@@ -91,12 +92,12 @@ namespace NMib::NPrivate
 	template <>
 	struct TCGetLowestBitSet<uint64, true>
 	{
-		constexpr static inline_small int32 fs_GetLowestBitSet(uint64 const &_Number) noexcept
+		static constexpr inline_small int32 fs_GetLowestBitSet(uint64 const &_Number) noexcept
 		{
 			return DMibPGetLowestBitSet64(_Number);
 		}
 
-		constexpr static bool mc_bHasIntrinsic = true;
+		static constexpr bool mc_bHasIntrinsic = true;
 	};
 #endif
 
@@ -104,12 +105,12 @@ namespace NMib::NPrivate
 	template <>
 	struct TCGetLowestBitSet<uint64, false>
 	{
-		constexpr static inline_small int32 fs_GetLowestBitSet(uint64 const &_Number) noexcept
+		static constexpr inline_small int32 fs_GetLowestBitSet(uint64 const &_Number) noexcept
 		{
 			return DMibPGetLowestBitSet64NoZero(_Number);
 		}
 
-		constexpr static bool mc_bHasIntrinsic = true;
+		static constexpr bool mc_bHasIntrinsic = true;
 	};
 #endif
 
