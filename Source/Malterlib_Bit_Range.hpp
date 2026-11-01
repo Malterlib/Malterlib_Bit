@@ -7,7 +7,7 @@ namespace NMib::NPrivate
 	struct CBitAutoConvert
 	{
 		template <typename tf_CType>
-		constexpr operator tf_CType() const noexcept
+		constexpr operator tf_CType () const noexcept
 		{
 			using CIntType = NTraits::TCUnsigned<NTraits::TCIntFromSize<sizeof(tf_CType)>>;
 
@@ -20,26 +20,11 @@ namespace NMib::NPrivate
 	struct CBitRangeAutoConvert
 	{
 		template <typename tf_CType>
-		constexpr operator tf_CType() const noexcept
+		constexpr operator tf_CType () const noexcept
 		{
 			using CIntType = NTraits::TCUnsigned<NTraits::TCIntFromSize<sizeof(tf_CType)>>;
 
-			return tf_CType
-				(
-					(
-						(
-							(CIntType(1) << m_BitEnd)
-							- CIntType(1)
-						)
-						| (CIntType(1) << m_BitEnd)
-					)
-					^
-					(
-						(CIntType(1) << m_BitStart)
-						- CIntType(1)
-					)
-				)
-			;
+			return tf_CType((((CIntType(1) << m_BitEnd) - CIntType(1)) | (CIntType(1) << m_BitEnd)) ^ ((CIntType(1) << m_BitStart) - CIntType(1)));
 		}
 
 		umint m_BitStart;
@@ -70,19 +55,6 @@ namespace NMib
 	{
 		using CUnsigned = NTraits::TCUnsigned<tf_CType>;
 
-		return
-			(
-				(
-					(CUnsigned(1) << _BitEnd)
-					- CUnsigned(1)
-				)
-				| (CUnsigned(1) << _BitEnd)
-			)
-			^
-			(
-				(CUnsigned(1) << _BitStart)
-				- CUnsigned(1)
-			)
-		;
+		return (((CUnsigned(1) << _BitEnd) - CUnsigned(1)) | (CUnsigned(1) << _BitEnd)) ^ ((CUnsigned(1) << _BitStart) - CUnsigned(1));
 	}
 }

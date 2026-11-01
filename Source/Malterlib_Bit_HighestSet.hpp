@@ -61,19 +61,19 @@ namespace NMib::NPrivate
 	template <typename t_CInt, bool t_bSupportZero>
 	struct TCGetHighestBitSet
 	{
-		constexpr static bool mc_bHasIntrinsic = false;
+		static constexpr bool mc_bHasIntrinsic = false;
 	};
 
 #ifdef DMibPGetHighestBitSet32
 	template <>
 	struct TCGetHighestBitSet<uint32, true>
 	{
-		constexpr static inline_small int32 fs_GetHighestBitSet(uint32 _Number) noexcept
+		static constexpr inline_small int32 fs_GetHighestBitSet(uint32 _Number) noexcept
 		{
 			return DMibPGetHighestBitSet32(_Number);
 		}
 
-		constexpr static bool mc_bHasIntrinsic = true;
+		static constexpr bool mc_bHasIntrinsic = true;
 	};
 #endif
 
@@ -81,12 +81,12 @@ namespace NMib::NPrivate
 	template <>
 	struct TCGetHighestBitSet<uint32, false>
 	{
-		constexpr static inline_small int32 fs_GetHighestBitSet(uint32 _Number) noexcept
+		static constexpr inline_small int32 fs_GetHighestBitSet(uint32 _Number) noexcept
 		{
 			return DMibPGetHighestBitSet32NoZero(_Number);
 		}
 
-		constexpr static bool mc_bHasIntrinsic = true;
+		static constexpr bool mc_bHasIntrinsic = true;
 	};
 #endif
 
@@ -94,12 +94,12 @@ namespace NMib::NPrivate
 	template <>
 	struct TCGetHighestBitSet<uint64, true>
 	{
-		constexpr static inline_small int32 fs_GetHighestBitSet(uint64 _Number) noexcept
+		static constexpr inline_small int32 fs_GetHighestBitSet(uint64 _Number) noexcept
 		{
 			return DMibPGetHighestBitSet64(_Number);
 		}
 
-		constexpr static bool mc_bHasIntrinsic = true;
+		static constexpr bool mc_bHasIntrinsic = true;
 	};
 #endif
 
@@ -107,12 +107,12 @@ namespace NMib::NPrivate
 	template <>
 	struct TCGetHighestBitSet<uint64, false>
 	{
-		constexpr static inline_small int32 fs_GetHighestBitSet(uint64 _Number) noexcept
+		static constexpr inline_small int32 fs_GetHighestBitSet(uint64 _Number) noexcept
 		{
 			return DMibPGetHighestBitSet64NoZero(_Number);
 		}
 
-		constexpr static bool mc_bHasIntrinsic = true;
+		static constexpr bool mc_bHasIntrinsic = true;
 	};
 #endif
 

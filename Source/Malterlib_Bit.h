@@ -17,7 +17,6 @@ namespace NMib
 	template <typename tf_CType>
 	constexpr tf_CType fg_BitRange(uaint _BitStart, uaint _BitEnd) noexcept;
 
-
 	template <typename tf_CInt>
 	constexpr int32 fg_GetLowestBitSet(tf_CInt const &_Number) noexcept;
 
@@ -26,7 +25,6 @@ namespace NMib
 
 	template <auto t_CurrentNumber>
 	constexpr inline umint gc_LowestBitSet = NPrivate::fg_GetLowestBitSetStatic(t_CurrentNumber, 0);
-
 
 	template <typename tf_CInt>
 	constexpr int32 fg_GetHighestBitSet(tf_CInt const &_Number) noexcept;
@@ -37,13 +35,11 @@ namespace NMib
 	template <auto t_CurrentNumber>
 	constexpr inline smint gc_HighestBitSet = NPrivate::fg_GetHighestBitSetStatic(t_CurrentNumber);
 
-
 	template <typename tf_CInt>
 	constexpr inline_small uint32 fg_NumBitsSet(tf_CInt const &_Number) noexcept;
 
 	template <typename t_CType>
 	constexpr inline umint gc_BitSize = sizeof(t_CType) * 8;
-
 
 	template <typename tf_CType>
 	constexpr inline_small tf_CType fg_RotateLeft(tf_CType _Data, aint _nBits) noexcept;
@@ -70,7 +66,6 @@ namespace NMib
 
 	template <typename tf_CInt>
 	constexpr inline_small tf_CInt fg_RoundPowerOfTwoDown(tf_CInt _Number) noexcept;
-
 
 	// use:  _Lsb = fg_LeastSignificantBit<tf_CValue>(_Value)
 	// post: _Lsb is the lowest significant set bit of _Value, or 0 iff _Value == 0
