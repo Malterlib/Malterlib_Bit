@@ -171,7 +171,11 @@ namespace NMib::NPrivate
 				return Ret + c_ToShift;
 			}
 			else
+			{
+				DMibFastCheck(Upper != 0);
+				DMibAnalyzerAssume(Upper != 0);
 				return fg_GetLowestBitSetNoZero(Upper) + c_ToShift;
+			}
 		}
 	}
 }

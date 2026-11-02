@@ -225,6 +225,8 @@ namespace
 		auto Lambda = [&]()
 			{
 				uint32 Temp = Result;
+				DMibFastCheck(Number != 0);
+				DMibAnalyzerAssume(Number != 0);
 				MalterlibTime.f_Start();
 				for (umint i = 0; i < nLoops; ++i)
 				{
@@ -295,6 +297,8 @@ namespace
 		auto Lambda = [&]()
 			{
 				uint32 Temp = Result;
+				DMibFastCheck(Number != 0);
+				DMibAnalyzerAssume(Number != 0);
 				MalterlibTime.f_Start();
 				for (umint i = 0; i < nLoops; ++i)
 				{

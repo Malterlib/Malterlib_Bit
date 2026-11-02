@@ -168,7 +168,11 @@ namespace NMib::NPrivate
 			if constexpr (tf_bSupportZero)
 				return fg_GetHighestBitSet(Lower);
 			else
+			{
+				DMibFastCheck(Lower != 0);
+				DMibAnalyzerAssume(Lower != 0);
 				return fg_GetHighestBitSetNoZero(Lower);
+			}
 		}
 	}
 }
