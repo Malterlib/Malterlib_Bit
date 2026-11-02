@@ -10,7 +10,7 @@
 #define DMibBitRangeOne(d_BitStart, d_BitEnd, d_One) ((((d_One << (d_BitEnd)) - d_One) | (d_One << (d_BitEnd))) ^ ((d_One << (d_BitStart)) - d_One))
 
 #ifndef DMibPNoShortCuts
-#	define DBit(_Bit) DMibBit(_Bit)
-#	define DBitTyped(_Bit, _Type) DMibBitTyped(_Bit, _Type)
-#	define DBitRange(_BitStart, _BitEnd) DMibBitRange(_BitStart, _BitEnd)
+#	define DBit(d_Bit) DMibBit(d_Bit)
+#	define DBitTyped(d_Bit, d_Type) DMibBitTyped(d_Bit, d_Type)
+#	define DBitRange(d_BitStart, d_BitEnd) DMibBitRange(d_BitStart, d_BitEnd)
 #endif

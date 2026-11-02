@@ -123,7 +123,7 @@ static_assert(NMib::gc_LowestBitSet<1 << 25> == 25);
 static_assert(NMib::gc_LowestBitSet<1 << 30> == 30);
 static_assert(NMib::gc_LowestBitSet<1u << 31> == 31);
 
-#if DMibPBits_mint > 32
+#if DMibPBits_umint > 32
 static_assert(NMib::gc_LowestBitSet<umint(1) << 35> == 35);
 static_assert(NMib::gc_LowestBitSet<umint(1) << 40> == 40);
 static_assert(NMib::gc_LowestBitSet<umint(1) << 45> == 45);
