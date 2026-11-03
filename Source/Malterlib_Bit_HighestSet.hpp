@@ -48,11 +48,11 @@ namespace NMib::NPrivate
 		CUnsigned Number = _Number;
 		CUnsigned CurrentCheck = CUnsigned(0xff) << ((sizeof(CUnsigned) - 1)) * 8;
 
-		for (aint i = aint(sizeof(CUnsigned)) - 1; i >= 0; --i, CurrentCheck >>= c_Shift)
+		for (aint iByte = aint(sizeof(CUnsigned)) - 1; iByte >= 0; --iByte, CurrentCheck >>= c_Shift)
 		{
 			CUnsigned Current = Number & CurrentCheck;
 			if (Current != 0)
-				return i * 8 + gc_HighestBitSetTable256[umint((Number & CurrentCheck) >> i * 8)];
+				return iByte * 8 + gc_HighestBitSetTable256[umint((Number & CurrentCheck) >> iByte * 8)];
 		}
 
 		return -1;

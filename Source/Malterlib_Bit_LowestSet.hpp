@@ -46,11 +46,11 @@ namespace NMib::NPrivate
 
 		CUnsigned Number = _Number;
 
-		for (umint i = 0; i < umint(sizeof(CUnsigned)); ++i, Number >>= c_Shift)
+		for (umint iByte = 0; iByte < umint(sizeof(CUnsigned)); ++iByte, Number >>= c_Shift)
 		{
 			CUnsigned Current = Number & CUnsigned(0xff);
 			if (Current != 0)
-				return i * 8 + gc_LowestBitSetTable256[umint(Current)];
+				return iByte * 8 + gc_LowestBitSetTable256[umint(Current)];
 		}
 
 		return -1;

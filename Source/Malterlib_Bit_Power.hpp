@@ -8,7 +8,7 @@ namespace NMib::NPrivate
 	consteval auto fg_Power(auto _Number, umint _Power) noexcept
 	{
 		auto Result = decltype(_Number)(1);
-		for (umint i = 0; i < _Power; ++i)
+		for (umint iMultiplication = 0; iMultiplication < _Power; ++iMultiplication)
 			Result *= _Number;
 		return Result;
 	}
