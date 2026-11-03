@@ -192,7 +192,7 @@ namespace
 		tf_CInteger Number = 0x50;
 #endif
 		uint32 Result = 0;
-		auto Lambda = [&]()
+		auto fLambda = [&]()
 			{
 				uint32 Temp = Result;
 				MalterlibTime.f_Start();
@@ -206,7 +206,7 @@ namespace
 			}
 		;
 		for (umint iRun = 0; iRun < 100; ++iRun)
-			fsg_CallFunctor(Lambda);
+			fsg_CallFunctor(fLambda);
 		MalterlibTime /= nLoops;
 		umint ExpectedCycles = 10 * sizeof(tf_CInteger);
 		DMibTest(DMibExpr(Result) == DMibExpr(6 * 100 * nLoops))(ETestFlag_NoValues);
@@ -222,7 +222,7 @@ namespace
 		umint const nLoops = 10000;
 		tf_CInteger Number = NMib::NStr::CStr(NMib::NStr::CStr::CFormat("{}") << 0x50).f_ToInt();
 		uint32 Result = 0;
-		auto Lambda = [&]()
+		auto fLambda = [&]()
 			{
 				uint32 Temp = Result;
 				DMibFastCheck(Number != 0);
@@ -238,7 +238,7 @@ namespace
 			}
 		;
 		for (umint iRun = 0; iRun < 100; ++iRun)
-			fsg_CallFunctor(Lambda);
+			fsg_CallFunctor(fLambda);
 		MalterlibTime /= nLoops;
 		umint ExpectedCycles = 10 * sizeof(tf_CInteger);
 		DMibTest(DMibExpr(Result) == DMibExpr(6 * 100 * nLoops))(ETestFlag_NoValues);
@@ -256,7 +256,7 @@ namespace
 
 		tf_CInteger Number = tf_CInteger(NMib::NStr::CStr(NMib::NStr::CStr::CFormat("{}") << 0x55).f_ToInt()) << (c_NumBits - 8);
 		uint32 Result = 0;
-		auto Lambda = [&]()
+		auto fLambda = [&]()
 			{
 				uint32 Temp = Result;
 				MalterlibTime.f_Start();
@@ -270,7 +270,7 @@ namespace
 			}
 		;
 		for (umint iRun = 0; iRun < 100; ++iRun)
-			fsg_CallFunctor(Lambda);
+			fsg_CallFunctor(fLambda);
 		MalterlibTime /= nLoops;
 		umint ExpectedCycles = 10 * sizeof(tf_CInteger);
 		DMibTest(DMibExpr(Result) == DMibExpr((c_NumBits - 8) * 100 * nLoops))(ETestFlag_NoValues);
@@ -288,7 +288,7 @@ namespace
 
 		tf_CInteger Number = tf_CInteger(NMib::NStr::CStr(NMib::NStr::CStr::CFormat("{}") << 0x55).f_ToInt()) << (c_NumBits - 8);
 		uint32 Result = 0;
-		auto Lambda = [&]()
+		auto fLambda = [&]()
 			{
 				uint32 Temp = Result;
 				DMibFastCheck(Number != 0);
@@ -304,7 +304,7 @@ namespace
 			}
 		;
 		for (umint iRun = 0; iRun < 100; ++iRun)
-			fsg_CallFunctor(Lambda);
+			fsg_CallFunctor(fLambda);
 		MalterlibTime /= nLoops;
 		umint ExpectedCycles = 10 * sizeof(tf_CInteger);
 		DMibTest(DMibExpr(Result) == DMibExpr((c_NumBits - 8) * 100 * nLoops))(ETestFlag_NoValues);
@@ -323,7 +323,7 @@ namespace
 		for (umint iByte = 0; iByte < nBytes; ++iByte)
 			Number |= tf_CInteger(NMib::NStr::CStr(NMib::NStr::CStr::CFormat("{}") << 0x55).f_ToInt()) << (iByte * 8);
 		uint32 Result = 0;
-		auto Lambda = [&]()
+		auto fLambda = [&]()
 			{
 				uint32 Temp = Result;
 				MalterlibTime.f_Start();
@@ -337,7 +337,7 @@ namespace
 			}
 		;
 		for (umint iRun = 0; iRun < 100; ++iRun)
-			fsg_CallFunctor(Lambda);
+			fsg_CallFunctor(fLambda);
 		MalterlibTime /= nLoops;
 		umint ExpectedCycles = 10 * sizeof(tf_CInteger);
 		DMibTest(DMibExpr(Result) == DMibExpr(4 * nBytes * 100 * nLoops))(ETestFlag_NoValues);
