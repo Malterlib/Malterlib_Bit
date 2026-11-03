@@ -252,12 +252,9 @@ namespace
 		DMibTestPath(_pName);
 		NMib::NTime::CPrefCyclesTimeMeasureMin MalterlibTime;
 		umint const nLoops = 10000;
-		enum
-		{
-			ENumBits = sizeof(t_CInteger) * 8
-		};
+		constexpr aint c_NumBits = sizeof(t_CInteger) * 8;
 
-		t_CInteger Number = t_CInteger(NMib::NStr::CStr(NMib::NStr::CStr::CFormat("{}") << 0x55).f_ToInt()) << (ENumBits - 8);
+		t_CInteger Number = t_CInteger(NMib::NStr::CStr(NMib::NStr::CStr::CFormat("{}") << 0x55).f_ToInt()) << (c_NumBits - 8);
 		uint32 Result = 0;
 		auto Lambda = [&]()
 			{
@@ -276,7 +273,7 @@ namespace
 			fs_CallFunctor(Lambda);
 		MalterlibTime /= nLoops;
 		umint ExpectedCycles = 10 * sizeof(t_CInteger);
-		DMibTest(DMibExpr(Result) == DMibExpr((ENumBits - 8) * 100 * nLoops))(ETestFlag_NoValues);
+		DMibTest(DMibExpr(Result) == DMibExpr((c_NumBits - 8) * 100 * nLoops))(ETestFlag_NoValues);
 		if (NMib::NTest::fg_GroupActive("Performance"))
 			DMibTest(DMibExpr(MalterlibTime.f_GetCycles()) < DMibExpr(ExpectedCycles));
 	}
@@ -287,12 +284,9 @@ namespace
 		DMibTestPath(_pName);
 		NMib::NTime::CPrefCyclesTimeMeasureMin MalterlibTime;
 		umint const nLoops = 10000;
-		enum
-		{
-			ENumBits = sizeof(t_CInteger) * 8
-		};
+		constexpr aint c_NumBits = sizeof(t_CInteger) * 8;
 
-		t_CInteger Number = t_CInteger(NMib::NStr::CStr(NMib::NStr::CStr::CFormat("{}") << 0x55).f_ToInt()) << (ENumBits - 8);
+		t_CInteger Number = t_CInteger(NMib::NStr::CStr(NMib::NStr::CStr::CFormat("{}") << 0x55).f_ToInt()) << (c_NumBits - 8);
 		uint32 Result = 0;
 		auto Lambda = [&]()
 			{
@@ -313,7 +307,7 @@ namespace
 			fs_CallFunctor(Lambda);
 		MalterlibTime /= nLoops;
 		umint ExpectedCycles = 10 * sizeof(t_CInteger);
-		DMibTest(DMibExpr(Result) == DMibExpr((ENumBits - 8) * 100 * nLoops))(ETestFlag_NoValues);
+		DMibTest(DMibExpr(Result) == DMibExpr((c_NumBits - 8) * 100 * nLoops))(ETestFlag_NoValues);
 		if (NMib::NTest::fg_GroupActive("Performance"))
 			DMibTest(DMibExpr(MalterlibTime.f_GetCycles()) < DMibExpr(ExpectedCycles));
 	}
