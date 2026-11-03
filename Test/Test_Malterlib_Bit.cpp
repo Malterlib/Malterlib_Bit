@@ -962,9 +962,8 @@ namespace
 		}
 	};
 
-	class CBitOperations_Tests : public NMib::NTest::CTest
+	struct CBitOperations_Tests : public NMib::NTest::CTest
 	{
-	public:
 		template <umint t_nBits>
 		struct TCNormalBitArray
 		{
