@@ -140,13 +140,13 @@ namespace NMib
 namespace
 {
 	template <typename t_CFunctor>
-	static inline_never void fs_CallFunctor(t_CFunctor _Functor)
+	static inline_never void fsg_CallFunctor(t_CFunctor _Functor)
 	{
 		_Functor();
 	}
 
 	template <typename t_CInteger>
-	static void fs_TestMinPowerOfTwo(ch8 const *_pName)
+	static void fsg_TestMinPowerOfTwo(ch8 const *_pName)
 	{
 		DMibTestPath(_pName);
 
@@ -179,7 +179,7 @@ namespace
 	}
 
 	template <typename t_CInteger>
-	static void fs_TestHighestBitSet(ch8 const *_pName)
+	static void fsg_TestHighestBitSet(ch8 const *_pName)
 	{
 		DMibTestPath(_pName);
 
@@ -206,7 +206,7 @@ namespace
 			}
 		;
 		for (umint i = 0; i < 100; ++i)
-			fs_CallFunctor(Lambda);
+			fsg_CallFunctor(Lambda);
 		MalterlibTime /= nLoops;
 		umint ExpectedCycles = 10 * sizeof(t_CInteger);
 		DMibTest(DMibExpr(Result) == DMibExpr(6 * 100 * nLoops))(ETestFlag_NoValues);
@@ -215,7 +215,7 @@ namespace
 	}
 
 	template <typename t_CInteger>
-	static void fs_TestHighestBitSetNoZero(ch8 const *_pName)
+	static void fsg_TestHighestBitSetNoZero(ch8 const *_pName)
 	{
 		DMibTestPath(_pName);
 		NMib::NTime::CPrefCyclesTimeMeasureMin MalterlibTime;
@@ -238,7 +238,7 @@ namespace
 			}
 		;
 		for (umint i = 0; i < 100; ++i)
-			fs_CallFunctor(Lambda);
+			fsg_CallFunctor(Lambda);
 		MalterlibTime /= nLoops;
 		umint ExpectedCycles = 10 * sizeof(t_CInteger);
 		DMibTest(DMibExpr(Result) == DMibExpr(6 * 100 * nLoops))(ETestFlag_NoValues);
@@ -247,7 +247,7 @@ namespace
 	}
 
 	template <typename t_CInteger>
-	static void fs_TestLowestBitSet(ch8 const *_pName)
+	static void fsg_TestLowestBitSet(ch8 const *_pName)
 	{
 		DMibTestPath(_pName);
 		NMib::NTime::CPrefCyclesTimeMeasureMin MalterlibTime;
@@ -270,7 +270,7 @@ namespace
 			}
 		;
 		for (umint i = 0; i < 100; ++i)
-			fs_CallFunctor(Lambda);
+			fsg_CallFunctor(Lambda);
 		MalterlibTime /= nLoops;
 		umint ExpectedCycles = 10 * sizeof(t_CInteger);
 		DMibTest(DMibExpr(Result) == DMibExpr((c_NumBits - 8) * 100 * nLoops))(ETestFlag_NoValues);
@@ -279,7 +279,7 @@ namespace
 	}
 
 	template <typename t_CInteger>
-	static void fs_TestLowestBitSetNoZero(ch8 const *_pName)
+	static void fsg_TestLowestBitSetNoZero(ch8 const *_pName)
 	{
 		DMibTestPath(_pName);
 		NMib::NTime::CPrefCyclesTimeMeasureMin MalterlibTime;
@@ -304,7 +304,7 @@ namespace
 			}
 		;
 		for (umint i = 0; i < 100; ++i)
-			fs_CallFunctor(Lambda);
+			fsg_CallFunctor(Lambda);
 		MalterlibTime /= nLoops;
 		umint ExpectedCycles = 10 * sizeof(t_CInteger);
 		DMibTest(DMibExpr(Result) == DMibExpr((c_NumBits - 8) * 100 * nLoops))(ETestFlag_NoValues);
@@ -313,7 +313,7 @@ namespace
 	}
 
 	template <typename t_CInteger>
-	static void fs_TestNumBitsSet(ch8 const *_pName)
+	static void fsg_TestNumBitsSet(ch8 const *_pName)
 	{
 		DMibTestPath(_pName);
 		NMib::NTime::CPrefCyclesTimeMeasureMin MalterlibTime;
@@ -337,7 +337,7 @@ namespace
 			}
 		;
 		for (umint i = 0; i < 100; ++i)
-			fs_CallFunctor(Lambda);
+			fsg_CallFunctor(Lambda);
 		MalterlibTime /= nLoops;
 		umint ExpectedCycles = 10 * sizeof(t_CInteger);
 		DMibTest(DMibExpr(Result) == DMibExpr(4 * nBytes * 100 * nLoops))(ETestFlag_NoValues);
@@ -993,95 +993,95 @@ namespace
 			};
 			DMibTestSuite("HighestBitSet")
 			{
-				fs_TestHighestBitSet<int8>("int8");
-				fs_TestHighestBitSet<uint8>("uint8");
-				fs_TestHighestBitSet<int16>("int16");
-				fs_TestHighestBitSet<uint16>("uint16");
-				fs_TestHighestBitSet<int32>("int32");
-				fs_TestHighestBitSet<uint32>("uint32");
-				fs_TestHighestBitSet<int64>("int64");
-				fs_TestHighestBitSet<uint64>("uint64");
-				fs_TestHighestBitSet<int128>("int128");
-				fs_TestHighestBitSet<uint128>("uint128");
-				fs_TestHighestBitSet<int256>("int256");
-				fs_TestHighestBitSet<uint256>("uint256");
-				fs_TestHighestBitSet<int512>("int512");
-				fs_TestHighestBitSet<uint512>("uint512");
+				fsg_TestHighestBitSet<int8>("int8");
+				fsg_TestHighestBitSet<uint8>("uint8");
+				fsg_TestHighestBitSet<int16>("int16");
+				fsg_TestHighestBitSet<uint16>("uint16");
+				fsg_TestHighestBitSet<int32>("int32");
+				fsg_TestHighestBitSet<uint32>("uint32");
+				fsg_TestHighestBitSet<int64>("int64");
+				fsg_TestHighestBitSet<uint64>("uint64");
+				fsg_TestHighestBitSet<int128>("int128");
+				fsg_TestHighestBitSet<uint128>("uint128");
+				fsg_TestHighestBitSet<int256>("int256");
+				fsg_TestHighestBitSet<uint256>("uint256");
+				fsg_TestHighestBitSet<int512>("int512");
+				fsg_TestHighestBitSet<uint512>("uint512");
 			};
 			DMibTestSuite("HighestBitSetNoZero")
 			{
-				fs_TestHighestBitSetNoZero<int8>("int8");
-				fs_TestHighestBitSetNoZero<uint8>("uint8");
-				fs_TestHighestBitSetNoZero<int16>("int16");
-				fs_TestHighestBitSetNoZero<uint16>("uint16");
-				fs_TestHighestBitSetNoZero<int32>("int32");
-				fs_TestHighestBitSetNoZero<uint32>("uint32");
-				fs_TestHighestBitSetNoZero<int64>("int64");
-				fs_TestHighestBitSetNoZero<uint64>("uint64");
-				fs_TestHighestBitSetNoZero<int128>("int128");
-				fs_TestHighestBitSetNoZero<uint128>("uint128");
-				fs_TestHighestBitSetNoZero<int256>("int256");
-				fs_TestHighestBitSetNoZero<uint256>("uint256");
-				fs_TestHighestBitSetNoZero<int512>("int512");
-				fs_TestHighestBitSetNoZero<uint512>("uint512");
+				fsg_TestHighestBitSetNoZero<int8>("int8");
+				fsg_TestHighestBitSetNoZero<uint8>("uint8");
+				fsg_TestHighestBitSetNoZero<int16>("int16");
+				fsg_TestHighestBitSetNoZero<uint16>("uint16");
+				fsg_TestHighestBitSetNoZero<int32>("int32");
+				fsg_TestHighestBitSetNoZero<uint32>("uint32");
+				fsg_TestHighestBitSetNoZero<int64>("int64");
+				fsg_TestHighestBitSetNoZero<uint64>("uint64");
+				fsg_TestHighestBitSetNoZero<int128>("int128");
+				fsg_TestHighestBitSetNoZero<uint128>("uint128");
+				fsg_TestHighestBitSetNoZero<int256>("int256");
+				fsg_TestHighestBitSetNoZero<uint256>("uint256");
+				fsg_TestHighestBitSetNoZero<int512>("int512");
+				fsg_TestHighestBitSetNoZero<uint512>("uint512");
 			};
 			DMibTestSuite("LowestBitSet")
 			{
-				fs_TestLowestBitSet<int8>("int8");
-				fs_TestLowestBitSet<uint8>("uint8");
-				fs_TestLowestBitSet<int16>("int16");
-				fs_TestLowestBitSet<uint16>("uint16");
-				fs_TestLowestBitSet<int32>("int32");
-				fs_TestLowestBitSet<uint32>("uint32");
-				fs_TestLowestBitSet<int64>("int64");
-				fs_TestLowestBitSet<uint64>("uint64");
-				fs_TestLowestBitSet<int128>("int128");
-				fs_TestLowestBitSet<uint128>("uint128");
-				fs_TestLowestBitSet<int256>("int256");
-				fs_TestLowestBitSet<uint256>("uint256");
-				fs_TestLowestBitSet<int512>("int512");
-				fs_TestLowestBitSet<uint512>("uint512");
+				fsg_TestLowestBitSet<int8>("int8");
+				fsg_TestLowestBitSet<uint8>("uint8");
+				fsg_TestLowestBitSet<int16>("int16");
+				fsg_TestLowestBitSet<uint16>("uint16");
+				fsg_TestLowestBitSet<int32>("int32");
+				fsg_TestLowestBitSet<uint32>("uint32");
+				fsg_TestLowestBitSet<int64>("int64");
+				fsg_TestLowestBitSet<uint64>("uint64");
+				fsg_TestLowestBitSet<int128>("int128");
+				fsg_TestLowestBitSet<uint128>("uint128");
+				fsg_TestLowestBitSet<int256>("int256");
+				fsg_TestLowestBitSet<uint256>("uint256");
+				fsg_TestLowestBitSet<int512>("int512");
+				fsg_TestLowestBitSet<uint512>("uint512");
 			};
 			DMibTestSuite("LowestBitSetNoZero")
 			{
-				fs_TestLowestBitSetNoZero<int8>("int8");
-				fs_TestLowestBitSetNoZero<uint8>("uint8");
-				fs_TestLowestBitSetNoZero<int16>("int16");
-				fs_TestLowestBitSetNoZero<uint16>("uint16");
-				fs_TestLowestBitSetNoZero<int32>("int32");
-				fs_TestLowestBitSetNoZero<uint32>("uint32");
-				fs_TestLowestBitSetNoZero<int64>("int64");
-				fs_TestLowestBitSetNoZero<uint64>("uint64");
-				fs_TestLowestBitSetNoZero<int128>("int128");
-				fs_TestLowestBitSetNoZero<uint128>("uint128");
-				fs_TestLowestBitSetNoZero<int256>("int256");
-				fs_TestLowestBitSetNoZero<uint256>("uint256");
-				fs_TestLowestBitSetNoZero<int512>("int512");
-				fs_TestLowestBitSetNoZero<uint512>("uint512");
+				fsg_TestLowestBitSetNoZero<int8>("int8");
+				fsg_TestLowestBitSetNoZero<uint8>("uint8");
+				fsg_TestLowestBitSetNoZero<int16>("int16");
+				fsg_TestLowestBitSetNoZero<uint16>("uint16");
+				fsg_TestLowestBitSetNoZero<int32>("int32");
+				fsg_TestLowestBitSetNoZero<uint32>("uint32");
+				fsg_TestLowestBitSetNoZero<int64>("int64");
+				fsg_TestLowestBitSetNoZero<uint64>("uint64");
+				fsg_TestLowestBitSetNoZero<int128>("int128");
+				fsg_TestLowestBitSetNoZero<uint128>("uint128");
+				fsg_TestLowestBitSetNoZero<int256>("int256");
+				fsg_TestLowestBitSetNoZero<uint256>("uint256");
+				fsg_TestLowestBitSetNoZero<int512>("int512");
+				fsg_TestLowestBitSetNoZero<uint512>("uint512");
 			};
 			DMibTestSuite("MinPowerOfTwo")
 			{
-				fs_TestMinPowerOfTwo<uint8>("uint8");
-				fs_TestMinPowerOfTwo<uint16>("uint16");
-				fs_TestMinPowerOfTwo<uint32>("uint32");
-				fs_TestMinPowerOfTwo<uint64>("uint64");
+				fsg_TestMinPowerOfTwo<uint8>("uint8");
+				fsg_TestMinPowerOfTwo<uint16>("uint16");
+				fsg_TestMinPowerOfTwo<uint32>("uint32");
+				fsg_TestMinPowerOfTwo<uint64>("uint64");
 			};
 			DMibTestSuite("NumBitsSet")
 			{
-				fs_TestNumBitsSet<int8>("int8");
-				fs_TestNumBitsSet<uint8>("uint8");
-				fs_TestNumBitsSet<int16>("int16");
-				fs_TestNumBitsSet<uint16>("uint16");
-				fs_TestNumBitsSet<int32>("int32");
-				fs_TestNumBitsSet<uint32>("uint32");
-				fs_TestNumBitsSet<int64>("int64");
-				fs_TestNumBitsSet<uint64>("uint64");
-				fs_TestNumBitsSet<int128>("int128");
-				fs_TestNumBitsSet<uint128>("uint128");
-				fs_TestNumBitsSet<int256>("int256");
-				fs_TestNumBitsSet<uint256>("uint256");
-				fs_TestNumBitsSet<int512>("int512");
-				fs_TestNumBitsSet<uint512>("uint512");
+				fsg_TestNumBitsSet<int8>("int8");
+				fsg_TestNumBitsSet<uint8>("uint8");
+				fsg_TestNumBitsSet<int16>("int16");
+				fsg_TestNumBitsSet<uint16>("uint16");
+				fsg_TestNumBitsSet<int32>("int32");
+				fsg_TestNumBitsSet<uint32>("uint32");
+				fsg_TestNumBitsSet<int64>("int64");
+				fsg_TestNumBitsSet<uint64>("uint64");
+				fsg_TestNumBitsSet<int128>("int128");
+				fsg_TestNumBitsSet<uint128>("uint128");
+				fsg_TestNumBitsSet<int256>("int256");
+				fsg_TestNumBitsSet<uint256>("uint256");
+				fsg_TestNumBitsSet<int512>("int512");
+				fsg_TestNumBitsSet<uint512>("uint512");
 			};
 		}
 	};
