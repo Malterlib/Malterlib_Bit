@@ -139,46 +139,46 @@ namespace NMib
 
 namespace
 {
-	template <typename t_CFunctor>
-	static inline_never void fsg_CallFunctor(t_CFunctor _Functor)
+	template <typename tf_CFunctor>
+	static inline_never void fsg_CallFunctor(tf_CFunctor _Functor)
 	{
 		_Functor();
 	}
 
-	template <typename t_CInteger>
+	template <typename tf_CInteger>
 	static void fsg_TestMinPowerOfTwo(ch8 const *_pName)
 	{
 		DMibTestPath(_pName);
 
 		// fg_MinPowerOfTwo(0) == 0
-		DMibTest(DMibExpr(NMib::fg_MinPowerOfTwo(t_CInteger(0))) == DMibExpr(t_CInteger(0)));
+		DMibTest(DMibExpr(NMib::fg_MinPowerOfTwo(tf_CInteger(0))) == DMibExpr(tf_CInteger(0)));
 
 		// fg_MinPowerOfTwo(1) == 0 (2^0 = 1 >= 1)
-		DMibTest(DMibExpr(NMib::fg_MinPowerOfTwo(t_CInteger(1))) == DMibExpr(t_CInteger(0)));
+		DMibTest(DMibExpr(NMib::fg_MinPowerOfTwo(tf_CInteger(1))) == DMibExpr(tf_CInteger(0)));
 
 		// Test all powers of two within the type's range
-		for (t_CInteger i = 1; i < t_CInteger(sizeof(t_CInteger) * 8 - 1); ++i)
+		for (tf_CInteger i = 1; i < tf_CInteger(sizeof(tf_CInteger) * 8 - 1); ++i)
 		{
-			t_CInteger PowerOfTwo = t_CInteger(1) << i;
+			tf_CInteger PowerOfTwo = tf_CInteger(1) << i;
 			DMibTest(DMibExpr(NMib::fg_MinPowerOfTwo(PowerOfTwo)) == DMibExpr(i))(ETestFlag_Aggregated);
 		}
 
 		// Test power-of-two + 1 (should return same as the power)
-		for (t_CInteger i = 2; i < t_CInteger(sizeof(t_CInteger) * 8 - 1); ++i)
+		for (tf_CInteger i = 2; i < tf_CInteger(sizeof(tf_CInteger) * 8 - 1); ++i)
 		{
-			t_CInteger PowerOfTwoPlusOne = (t_CInteger(1) << i) + t_CInteger(1);
+			tf_CInteger PowerOfTwoPlusOne = (tf_CInteger(1) << i) + tf_CInteger(1);
 			DMibTest(DMibExpr(NMib::fg_MinPowerOfTwo(PowerOfTwoPlusOne)) == DMibExpr(i))(ETestFlag_Aggregated);
 		}
 
 		// Test power-of-two - 1 (should return one less than the power)
-		for (t_CInteger i = 2; i < t_CInteger(sizeof(t_CInteger) * 8 - 1); ++i)
+		for (tf_CInteger i = 2; i < tf_CInteger(sizeof(tf_CInteger) * 8 - 1); ++i)
 		{
-			t_CInteger PowerOfTwoMinusOne = (t_CInteger(1) << i) - t_CInteger(1);
-			DMibTest(DMibExpr(NMib::fg_MinPowerOfTwo(PowerOfTwoMinusOne)) == DMibExpr(i - t_CInteger(1)))(ETestFlag_Aggregated);
+			tf_CInteger PowerOfTwoMinusOne = (tf_CInteger(1) << i) - tf_CInteger(1);
+			DMibTest(DMibExpr(NMib::fg_MinPowerOfTwo(PowerOfTwoMinusOne)) == DMibExpr(i - tf_CInteger(1)))(ETestFlag_Aggregated);
 		}
 	}
 
-	template <typename t_CInteger>
+	template <typename tf_CInteger>
 	static void fsg_TestHighestBitSet(ch8 const *_pName)
 	{
 		DMibTestPath(_pName);
@@ -187,9 +187,9 @@ namespace
 		umint const nLoops = 10000;
 
 #ifndef DMibClangAnalyzerWorkaround
-		t_CInteger Number = NMib::NStr::CStr(NMib::NStr::CStr::CFormat("{}") << 0x50).f_ToInt();
+		tf_CInteger Number = NMib::NStr::CStr(NMib::NStr::CStr::CFormat("{}") << 0x50).f_ToInt();
 #else
-		t_CInteger Number = 0x50;
+		tf_CInteger Number = 0x50;
 #endif
 		uint32 Result = 0;
 		auto Lambda = [&]()
@@ -208,19 +208,19 @@ namespace
 		for (umint i = 0; i < 100; ++i)
 			fsg_CallFunctor(Lambda);
 		MalterlibTime /= nLoops;
-		umint ExpectedCycles = 10 * sizeof(t_CInteger);
+		umint ExpectedCycles = 10 * sizeof(tf_CInteger);
 		DMibTest(DMibExpr(Result) == DMibExpr(6 * 100 * nLoops))(ETestFlag_NoValues);
 		if (NMib::NTest::fg_GroupActive("Performance"))
 			DMibTest(DMibExpr(MalterlibTime.f_GetCycles()) < DMibExpr(ExpectedCycles));
 	}
 
-	template <typename t_CInteger>
+	template <typename tf_CInteger>
 	static void fsg_TestHighestBitSetNoZero(ch8 const *_pName)
 	{
 		DMibTestPath(_pName);
 		NMib::NTime::CPrefCyclesTimeMeasureMin MalterlibTime;
 		umint const nLoops = 10000;
-		t_CInteger Number = NMib::NStr::CStr(NMib::NStr::CStr::CFormat("{}") << 0x50).f_ToInt();
+		tf_CInteger Number = NMib::NStr::CStr(NMib::NStr::CStr::CFormat("{}") << 0x50).f_ToInt();
 		uint32 Result = 0;
 		auto Lambda = [&]()
 			{
@@ -240,21 +240,21 @@ namespace
 		for (umint i = 0; i < 100; ++i)
 			fsg_CallFunctor(Lambda);
 		MalterlibTime /= nLoops;
-		umint ExpectedCycles = 10 * sizeof(t_CInteger);
+		umint ExpectedCycles = 10 * sizeof(tf_CInteger);
 		DMibTest(DMibExpr(Result) == DMibExpr(6 * 100 * nLoops))(ETestFlag_NoValues);
 		if (NMib::NTest::fg_GroupActive("Performance"))
 			DMibTest(DMibExpr(MalterlibTime.f_GetCycles()) < DMibExpr(ExpectedCycles));
 	}
 
-	template <typename t_CInteger>
+	template <typename tf_CInteger>
 	static void fsg_TestLowestBitSet(ch8 const *_pName)
 	{
 		DMibTestPath(_pName);
 		NMib::NTime::CPrefCyclesTimeMeasureMin MalterlibTime;
 		umint const nLoops = 10000;
-		constexpr aint c_NumBits = sizeof(t_CInteger) * 8;
+		constexpr aint c_NumBits = sizeof(tf_CInteger) * 8;
 
-		t_CInteger Number = t_CInteger(NMib::NStr::CStr(NMib::NStr::CStr::CFormat("{}") << 0x55).f_ToInt()) << (c_NumBits - 8);
+		tf_CInteger Number = tf_CInteger(NMib::NStr::CStr(NMib::NStr::CStr::CFormat("{}") << 0x55).f_ToInt()) << (c_NumBits - 8);
 		uint32 Result = 0;
 		auto Lambda = [&]()
 			{
@@ -272,21 +272,21 @@ namespace
 		for (umint i = 0; i < 100; ++i)
 			fsg_CallFunctor(Lambda);
 		MalterlibTime /= nLoops;
-		umint ExpectedCycles = 10 * sizeof(t_CInteger);
+		umint ExpectedCycles = 10 * sizeof(tf_CInteger);
 		DMibTest(DMibExpr(Result) == DMibExpr((c_NumBits - 8) * 100 * nLoops))(ETestFlag_NoValues);
 		if (NMib::NTest::fg_GroupActive("Performance"))
 			DMibTest(DMibExpr(MalterlibTime.f_GetCycles()) < DMibExpr(ExpectedCycles));
 	}
 
-	template <typename t_CInteger>
+	template <typename tf_CInteger>
 	static void fsg_TestLowestBitSetNoZero(ch8 const *_pName)
 	{
 		DMibTestPath(_pName);
 		NMib::NTime::CPrefCyclesTimeMeasureMin MalterlibTime;
 		umint const nLoops = 10000;
-		constexpr aint c_NumBits = sizeof(t_CInteger) * 8;
+		constexpr aint c_NumBits = sizeof(tf_CInteger) * 8;
 
-		t_CInteger Number = t_CInteger(NMib::NStr::CStr(NMib::NStr::CStr::CFormat("{}") << 0x55).f_ToInt()) << (c_NumBits - 8);
+		tf_CInteger Number = tf_CInteger(NMib::NStr::CStr(NMib::NStr::CStr::CFormat("{}") << 0x55).f_ToInt()) << (c_NumBits - 8);
 		uint32 Result = 0;
 		auto Lambda = [&]()
 			{
@@ -306,22 +306,22 @@ namespace
 		for (umint i = 0; i < 100; ++i)
 			fsg_CallFunctor(Lambda);
 		MalterlibTime /= nLoops;
-		umint ExpectedCycles = 10 * sizeof(t_CInteger);
+		umint ExpectedCycles = 10 * sizeof(tf_CInteger);
 		DMibTest(DMibExpr(Result) == DMibExpr((c_NumBits - 8) * 100 * nLoops))(ETestFlag_NoValues);
 		if (NMib::NTest::fg_GroupActive("Performance"))
 			DMibTest(DMibExpr(MalterlibTime.f_GetCycles()) < DMibExpr(ExpectedCycles));
 	}
 
-	template <typename t_CInteger>
+	template <typename tf_CInteger>
 	static void fsg_TestNumBitsSet(ch8 const *_pName)
 	{
 		DMibTestPath(_pName);
 		NMib::NTime::CPrefCyclesTimeMeasureMin MalterlibTime;
 		umint const nLoops = 10000;
-		t_CInteger Number = 0;
+		tf_CInteger Number = 0;
 		umint nBytes = sizeof(Number);
 		for (umint i = 0; i < nBytes; ++i)
-			Number |= t_CInteger(NMib::NStr::CStr(NMib::NStr::CStr::CFormat("{}") << 0x55).f_ToInt()) << (i * 8);
+			Number |= tf_CInteger(NMib::NStr::CStr(NMib::NStr::CStr::CFormat("{}") << 0x55).f_ToInt()) << (i * 8);
 		uint32 Result = 0;
 		auto Lambda = [&]()
 			{
@@ -339,7 +339,7 @@ namespace
 		for (umint i = 0; i < 100; ++i)
 			fsg_CallFunctor(Lambda);
 		MalterlibTime /= nLoops;
-		umint ExpectedCycles = 10 * sizeof(t_CInteger);
+		umint ExpectedCycles = 10 * sizeof(tf_CInteger);
 		DMibTest(DMibExpr(Result) == DMibExpr(4 * nBytes * 100 * nLoops))(ETestFlag_NoValues);
 		if (NMib::NTest::fg_GroupActive("Performance"))
 			DMibTest(DMibExpr(MalterlibTime.f_GetCycles()) < DMibExpr(ExpectedCycles));

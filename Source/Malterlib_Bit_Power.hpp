@@ -13,10 +13,10 @@ namespace NMib::NPrivate
 		return Result;
 	}
 
-	template <typename t_CInt>
-	constexpr inline_small t_CInt fg_FillBitsBelow(t_CInt _Number) noexcept
+	template <typename tf_CInt>
+	constexpr inline_small tf_CInt fg_FillBitsBelow(tf_CInt _Number) noexcept
 	{
-		for (int Shift = 1; Shift < int(sizeof(t_CInt) * 8); Shift *= 2)
+		for (int Shift = 1; Shift < int(sizeof(tf_CInt) * 8); Shift *= 2)
 			_Number = _Number | (_Number >> Shift);
 		return _Number;
 	}

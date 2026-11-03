@@ -22,15 +22,15 @@ namespace NMib::NPrivate
 
 namespace NMib
 {
-	template <typename t_CInt>
-	constexpr NTraits::TCSmallerType<t_CInt> fg_GetLower(t_CInt const &_Integer) noexcept;
+	template <typename tf_CInt>
+	constexpr NTraits::TCSmallerType<tf_CInt> fg_GetLower(tf_CInt const &_Integer) noexcept;
 
-	template <typename t_CInt>
-	constexpr NTraits::TCSmallerType<t_CInt> fg_GetUpper(t_CInt const &_Integer) noexcept;
+	template <typename tf_CInt>
+	constexpr NTraits::TCSmallerType<tf_CInt> fg_GetUpper(tf_CInt const &_Integer) noexcept;
 
-	template <typename t_CUpper, typename t_CLower>
-	constexpr typename NNumeric::TCInt<t_CUpper, t_CLower>::CLower const &fg_GetLower(NNumeric::TCInt<t_CUpper, t_CLower> const &_Integer) noexcept;
+	template <typename tf_CUpper, typename tf_CLower>
+	constexpr typename NNumeric::TCInt<tf_CUpper, tf_CLower>::CLower const &fg_GetLower(NNumeric::TCInt<tf_CUpper, tf_CLower> const &_Integer) noexcept;
 
-	template <typename t_CUpper, typename t_CLower>
-	constexpr typename NNumeric::TCInt<t_CUpper, t_CLower>::CUpper const &fg_GetUpper(NNumeric::TCInt<t_CUpper, t_CLower> const &_Integer) noexcept;
+	template <typename tf_CUpper, typename tf_CLower>
+	constexpr typename NNumeric::TCInt<tf_CUpper, tf_CLower>::CUpper const &fg_GetUpper(NNumeric::TCInt<tf_CUpper, tf_CLower> const &_Integer) noexcept;
 }
