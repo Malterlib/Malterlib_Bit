@@ -348,60 +348,35 @@ namespace
 	template <template <umint t_nBits> class t_TCBitArray>
 	struct TCTestBitArray
 	{
-		static void fs_DoTests()
+		static void fs_DoTests();
+	};
+
+	template <template <umint t_nBits> class t_TCBitArray>
+	void TCTestBitArray<t_TCBitArray>::fs_DoTests()
+	{
+		aint const nBitsAligned = sizeof(umint) * sizeof(umint) * 8 * 8;
+		aint const nBitsUnaligned = sizeof(umint) * sizeof(umint) * 8 * 8 - 1;
+		using CBitArrayAligned = typename t_TCBitArray<nBitsAligned>::CType;
+		using CBitArrayUnaligned = typename t_TCBitArray<nBitsUnaligned>::CType;
 		{
-			aint const nBitsAligned = sizeof(umint) * sizeof(umint) * 8 * 8;
-			aint const nBitsUnaligned = sizeof(umint) * sizeof(umint) * 8 * 8 - 1;
-			using CBitArrayAligned = typename t_TCBitArray<nBitsAligned>::CType;
-			using CBitArrayUnaligned = typename t_TCBitArray<nBitsUnaligned>::CType;
+			DMibTestPath("FindFreeBitAndSet");
+			using CBitArrayAligned = CBitArrayAligned;
+			using CBitArrayUnaligned = CBitArrayUnaligned;
 			{
-				DMibTestPath("FindFreeBitAndSet");
-				using CBitArrayAligned = CBitArrayAligned;
-				using CBitArrayUnaligned = CBitArrayUnaligned;
+				DMibTestPath("Aligned");
+				NMib::NTest::CTestPerformance Pref(1.0);
+
 				{
-					DMibTestPath("Aligned");
-					NMib::NTest::CTestPerformance Pref(1.0);
-
-					{
-						NMib::NTest::CTestPerformanceMeasure MalterlibMeasure("Malterlib");
-						umint const nBits = nBitsAligned;
-						CBitArrayAligned TestBits;
-						for (aint iRun = 0; iRun < 10; ++iRun)
-						{
-							TestBits.f_Clear();
-							MalterlibMeasure.f_Start();
-							for (umint iBit = 0; iBit < nBits - 1; ++iBit)
-								TestBits.f_FindFreeBitAndSet();
-							MalterlibMeasure.f_Stop(nBits - 1);
-							DMibTest(DMibExpr(TestBits.f_FindFreeBitAndSet()) == DMibExpr(nBits - 1))(ETestFlag_Aggregated);
-							DMibTest(DMibExpr(TestBits.f_FindFreeBitAndSet()) < DMibExpr(0))(ETestFlag_Aggregated);
-							TestBits.f_SetBit(333, false);
-							TestBits.f_SetBit(555, false);
-							DMibTest(DMibExpr(TestBits.f_FindFreeBitAndSet()) == DMibExpr(333))(ETestFlag_Aggregated);
-							TestBits.f_SetBit(555, true);
-							DMibTest(DMibExpr(TestBits.f_FindFreeBitAndSet()) < DMibExpr(0) && DMibExpr("Static set"))(ETestFlag_Aggregated);
-							TestBits.template f_SetBit<false>(555);
-							DMibTest(DMibExpr(TestBits.f_FindFreeBitAndSet()) == DMibExpr(555) && DMibExpr("Static set"))(ETestFlag_Aggregated);
-
-							MalterlibMeasure.f_NewRepetition();
-						}
-						Pref.f_Add(MalterlibMeasure);
-					}
-
-					DMibTest(DMibExpr(Pref));
-				}
-				{
-					DMibTestPath("Unaligned");
-					NMib::NTime::CPrefCyclesTimeMeasureMin MalterlibTime;
-					umint const nBits = nBitsUnaligned;
-					CBitArrayUnaligned TestBits;
+					NMib::NTest::CTestPerformanceMeasure MalterlibMeasure("Malterlib");
+					umint const nBits = nBitsAligned;
+					CBitArrayAligned TestBits;
 					for (aint iRun = 0; iRun < 10; ++iRun)
 					{
 						TestBits.f_Clear();
-						MalterlibTime.f_Start();
+						MalterlibMeasure.f_Start();
 						for (umint iBit = 0; iBit < nBits - 1; ++iBit)
 							TestBits.f_FindFreeBitAndSet();
-						MalterlibTime.f_Stop();
+						MalterlibMeasure.f_Stop(nBits - 1);
 						DMibTest(DMibExpr(TestBits.f_FindFreeBitAndSet()) == DMibExpr(nBits - 1))(ETestFlag_Aggregated);
 						DMibTest(DMibExpr(TestBits.f_FindFreeBitAndSet()) < DMibExpr(0))(ETestFlag_Aggregated);
 						TestBits.f_SetBit(333, false);
@@ -411,550 +386,581 @@ namespace
 						DMibTest(DMibExpr(TestBits.f_FindFreeBitAndSet()) < DMibExpr(0) && DMibExpr("Static set"))(ETestFlag_Aggregated);
 						TestBits.template f_SetBit<false>(555);
 						DMibTest(DMibExpr(TestBits.f_FindFreeBitAndSet()) == DMibExpr(555) && DMibExpr("Static set"))(ETestFlag_Aggregated);
+
+						MalterlibMeasure.f_NewRepetition();
 					}
-					MalterlibTime /= nBits - 1;
-					umint ExpectedCycles = (nBits * 10) / (sizeof(void *) * 2);
-					if (NMib::NTest::fg_GroupActive("Performance"))
-						DMibTest(DMibExpr(MalterlibTime.f_GetCycles()) < DMibExpr(ExpectedCycles));
-				};
+					Pref.f_Add(MalterlibMeasure);
+				}
+
+				DMibTest(DMibExpr(Pref));
 			}
 			{
-				DMibTestPath("FindFreeBitReverseAndSet");
-				using CBitArrayAligned = CBitArrayAligned;
-				using CBitArrayUnaligned = CBitArrayUnaligned;
+				DMibTestPath("Unaligned");
+				NMib::NTime::CPrefCyclesTimeMeasureMin MalterlibTime;
+				umint const nBits = nBitsUnaligned;
+				CBitArrayUnaligned TestBits;
+				for (aint iRun = 0; iRun < 10; ++iRun)
 				{
-					DMibTestPath("Aligned");
-					NMib::NTest::CTestPerformance Pref(1.0);
-
-					{
-						NMib::NTest::CTestPerformanceMeasure MalterlibMeasure("Malterlib");
-						umint const nBits = nBitsAligned;
-						CBitArrayAligned TestBits;
-						for (aint iRun = 0; iRun < 10; ++iRun)
-						{
-							TestBits.f_Clear();
-							MalterlibMeasure.f_Start();
-							for (umint iBit = 0; iBit < nBits - 1; ++iBit)
-								TestBits.f_FindFreeBitReverseAndSet();
-							MalterlibMeasure.f_Stop(nBits - 1);
-							DMibTest(DMibExpr(TestBits.f_FindFreeBitReverseAndSet()) == DMibExpr(0))(ETestFlag_Aggregated);
-							DMibTest(DMibExpr(TestBits.f_FindFreeBitReverseAndSet()) < DMibExpr(0))(ETestFlag_Aggregated);
-							TestBits.f_SetBit(555, false);
-							TestBits.f_SetBit(333, false);
-							DMibTest(DMibExpr(TestBits.f_FindFreeBitReverseAndSet()) == DMibExpr(555))(ETestFlag_Aggregated);
-							TestBits.f_SetBit(333, true);
-							DMibTest(DMibExpr(TestBits.f_FindFreeBitReverseAndSet()) < DMibExpr(0) && DMibExpr("Static set"))(ETestFlag_Aggregated);
-							TestBits.template f_SetBit<false>(555);
-							DMibTest(DMibExpr(TestBits.f_FindFreeBitReverseAndSet()) == DMibExpr(555) && DMibExpr("Static set"))(ETestFlag_Aggregated);
-
-							MalterlibMeasure.f_NewRepetition();
-						}
-						Pref.f_Add(MalterlibMeasure);
-					}
-
-					DMibTest(DMibExpr(Pref));
+					TestBits.f_Clear();
+					MalterlibTime.f_Start();
+					for (umint iBit = 0; iBit < nBits - 1; ++iBit)
+						TestBits.f_FindFreeBitAndSet();
+					MalterlibTime.f_Stop();
+					DMibTest(DMibExpr(TestBits.f_FindFreeBitAndSet()) == DMibExpr(nBits - 1))(ETestFlag_Aggregated);
+					DMibTest(DMibExpr(TestBits.f_FindFreeBitAndSet()) < DMibExpr(0))(ETestFlag_Aggregated);
+					TestBits.f_SetBit(333, false);
+					TestBits.f_SetBit(555, false);
+					DMibTest(DMibExpr(TestBits.f_FindFreeBitAndSet()) == DMibExpr(333))(ETestFlag_Aggregated);
+					TestBits.f_SetBit(555, true);
+					DMibTest(DMibExpr(TestBits.f_FindFreeBitAndSet()) < DMibExpr(0) && DMibExpr("Static set"))(ETestFlag_Aggregated);
+					TestBits.template f_SetBit<false>(555);
+					DMibTest(DMibExpr(TestBits.f_FindFreeBitAndSet()) == DMibExpr(555) && DMibExpr("Static set"))(ETestFlag_Aggregated);
 				}
+				MalterlibTime /= nBits - 1;
+				umint ExpectedCycles = (nBits * 10) / (sizeof(void *) * 2);
+				if (NMib::NTest::fg_GroupActive("Performance"))
+					DMibTest(DMibExpr(MalterlibTime.f_GetCycles()) < DMibExpr(ExpectedCycles));
+			};
+		}
+		{
+			DMibTestPath("FindFreeBitReverseAndSet");
+			using CBitArrayAligned = CBitArrayAligned;
+			using CBitArrayUnaligned = CBitArrayUnaligned;
+			{
+				DMibTestPath("Aligned");
+				NMib::NTest::CTestPerformance Pref(1.0);
+
 				{
-					DMibTestPath("Unaligned");
-					NMib::NTime::CPrefCyclesTimeMeasureMin MalterlibTime;
-					umint const nBits = nBitsUnaligned;
-					CBitArrayUnaligned TestBits;
+					NMib::NTest::CTestPerformanceMeasure MalterlibMeasure("Malterlib");
+					umint const nBits = nBitsAligned;
+					CBitArrayAligned TestBits;
 					for (aint iRun = 0; iRun < 10; ++iRun)
 					{
 						TestBits.f_Clear();
-						MalterlibTime.f_Start();
+						MalterlibMeasure.f_Start();
 						for (umint iBit = 0; iBit < nBits - 1; ++iBit)
 							TestBits.f_FindFreeBitReverseAndSet();
-						MalterlibTime.f_Stop();
+						MalterlibMeasure.f_Stop(nBits - 1);
 						DMibTest(DMibExpr(TestBits.f_FindFreeBitReverseAndSet()) == DMibExpr(0))(ETestFlag_Aggregated);
 						DMibTest(DMibExpr(TestBits.f_FindFreeBitReverseAndSet()) < DMibExpr(0))(ETestFlag_Aggregated);
-						TestBits.f_SetBit(333, false);
 						TestBits.f_SetBit(555, false);
+						TestBits.f_SetBit(333, false);
 						DMibTest(DMibExpr(TestBits.f_FindFreeBitReverseAndSet()) == DMibExpr(555))(ETestFlag_Aggregated);
 						TestBits.f_SetBit(333, true);
 						DMibTest(DMibExpr(TestBits.f_FindFreeBitReverseAndSet()) < DMibExpr(0) && DMibExpr("Static set"))(ETestFlag_Aggregated);
 						TestBits.template f_SetBit<false>(555);
 						DMibTest(DMibExpr(TestBits.f_FindFreeBitReverseAndSet()) == DMibExpr(555) && DMibExpr("Static set"))(ETestFlag_Aggregated);
+
+						MalterlibMeasure.f_NewRepetition();
 					}
-					MalterlibTime /= nBits - 1;
-					umint ExpectedCycles = (nBits * 10) / (sizeof(void *) * 2);
-					if (NMib::NTest::fg_GroupActive("Performance"))
-						DMibTest(DMibExpr(MalterlibTime.f_GetCycles()) < DMibExpr(ExpectedCycles));
+					Pref.f_Add(MalterlibMeasure);
+				}
+
+				DMibTest(DMibExpr(Pref));
+			}
+			{
+				DMibTestPath("Unaligned");
+				NMib::NTime::CPrefCyclesTimeMeasureMin MalterlibTime;
+				umint const nBits = nBitsUnaligned;
+				CBitArrayUnaligned TestBits;
+				for (aint iRun = 0; iRun < 10; ++iRun)
+				{
+					TestBits.f_Clear();
+					MalterlibTime.f_Start();
+					for (umint iBit = 0; iBit < nBits - 1; ++iBit)
+						TestBits.f_FindFreeBitReverseAndSet();
+					MalterlibTime.f_Stop();
+					DMibTest(DMibExpr(TestBits.f_FindFreeBitReverseAndSet()) == DMibExpr(0))(ETestFlag_Aggregated);
+					DMibTest(DMibExpr(TestBits.f_FindFreeBitReverseAndSet()) < DMibExpr(0))(ETestFlag_Aggregated);
+					TestBits.f_SetBit(333, false);
+					TestBits.f_SetBit(555, false);
+					DMibTest(DMibExpr(TestBits.f_FindFreeBitReverseAndSet()) == DMibExpr(555))(ETestFlag_Aggregated);
+					TestBits.f_SetBit(333, true);
+					DMibTest(DMibExpr(TestBits.f_FindFreeBitReverseAndSet()) < DMibExpr(0) && DMibExpr("Static set"))(ETestFlag_Aggregated);
+					TestBits.template f_SetBit<false>(555);
+					DMibTest(DMibExpr(TestBits.f_FindFreeBitReverseAndSet()) == DMibExpr(555) && DMibExpr("Static set"))(ETestFlag_Aggregated);
+				}
+				MalterlibTime /= nBits - 1;
+				umint ExpectedCycles = (nBits * 10) / (sizeof(void *) * 2);
+				if (NMib::NTest::fg_GroupActive("Performance"))
+					DMibTest(DMibExpr(MalterlibTime.f_GetCycles()) < DMibExpr(ExpectedCycles));
+			}
+		}
+		{
+			DMibTestPath("FindUpperBound");
+			using CBitArrayAligned = CBitArrayAligned;
+			using CBitArrayUnaligned = CBitArrayUnaligned;
+			{
+				DMibTestPath("Aligned");
+				aint const nBits = nBitsAligned;
+				CBitArrayAligned TestBits;
+				for (aint iBit = 0; iBit < nBits; ++iBit)
+				{
+					TestBits.f_SetBit(iBit, true);
+					DMibTest(DMibExpr(TestBits.f_FindUpperBound(0)) == DMibExpr(iBit))(ETestFlag_Aggregated);
+					TestBits.f_SetBit(iBit, false);
+
+					TestBits.template f_SetBit<true>(iBit);
+					DMibTest(DMibExpr(TestBits.f_FindUpperBound(0)) == DMibExpr(iBit) && DMibExpr("Static set"))(ETestFlag_Aggregated);
+					TestBits.template f_SetBit<false>(iBit);
 				}
 			}
 			{
-				DMibTestPath("FindUpperBound");
-				using CBitArrayAligned = CBitArrayAligned;
-				using CBitArrayUnaligned = CBitArrayUnaligned;
+				DMibTestPath("Unaligned");
+				aint const nBits = nBitsUnaligned;
+				CBitArrayUnaligned TestBits;
+				for (aint iBit = 0; iBit < nBits; ++iBit)
 				{
-					DMibTestPath("Aligned");
-					aint const nBits = nBitsAligned;
-					CBitArrayAligned TestBits;
-					for (aint iBit = 0; iBit < nBits; ++iBit)
+					TestBits.f_SetBit(iBit, true);
+					DMibTest(DMibExpr(TestBits.f_FindUpperBound(0)) == DMibExpr(iBit))(ETestFlag_Aggregated);
+					TestBits.f_SetBit(iBit, false);
+
+					TestBits.template f_SetBit<true>(iBit);
+					DMibTest(DMibExpr(TestBits.f_FindUpperBound(0)) == DMibExpr(iBit) && DMibExpr("Static set"))(ETestFlag_Aggregated);
+					TestBits.template f_SetBit<false>(iBit);
+				}
+			}
+		}
+		{
+			DMibTestPath("FindUpperBoundStart");
+			using CBitArrayAligned = CBitArrayAligned;
+			using CBitArrayUnaligned = CBitArrayUnaligned;
+			{
+				DMibTestPath("Aligned");
+				aint const nBits = nBitsAligned;
+				CBitArrayAligned TestBits;
+				for (aint iBit = 0; iBit < nBits; ++iBit)
+				{
+					umint Start = NMib::fg_Max(0, smint(iBit) - 3);
+
+					TestBits.f_SetBit(iBit, true);
+					DMibTest(DMibExpr(TestBits.f_FindUpperBound(Start)) == DMibExpr(iBit))(ETestFlag_Aggregated);
+					TestBits.f_SetBit(iBit, false);
+
+					TestBits.template f_SetBit<true>(iBit);
+					DMibTest(DMibExpr(TestBits.f_FindUpperBound(Start)) == DMibExpr(iBit) && DMibExpr("Static set"))(ETestFlag_Aggregated);
+					TestBits.template f_SetBit<false>(iBit);
+				}
+			}
+			{
+				DMibTestPath("Unaligned");
+				aint const nBits = nBitsUnaligned;
+				CBitArrayUnaligned TestBits;
+				for (aint iBit = 0; iBit < nBits; ++iBit)
+				{
+					umint Start = NMib::fg_Max(0, smint(iBit) - 3);
+					TestBits.f_SetBit(iBit, true);
+					DMibTest(DMibExpr(TestBits.f_FindUpperBound(Start)) == DMibExpr(iBit))(ETestFlag_Aggregated);
+					TestBits.f_SetBit(iBit, false);
+
+					TestBits.template f_SetBit<true>(iBit);
+					DMibTest(DMibExpr(TestBits.f_FindUpperBound(Start)) == DMibExpr(iBit) && DMibExpr("Static set"))(ETestFlag_Aggregated);
+					TestBits.template f_SetBit<false>(iBit);
+				}
+			}
+		}
+		{
+			DMibTestPath("EnumFreeBits");
+			using CBitArrayAligned = CBitArrayAligned;
+			using CBitArrayUnaligned = CBitArrayUnaligned;
+			{
+				DMibTestPath("Aligned");
+				aint const nBits = nBitsAligned;
+				CBitArrayAligned TestBits;
+				for (aint iBit = 0; iBit < nBits; ++iBit)
+				{
 					{
 						TestBits.f_SetBit(iBit, true);
-						DMibTest(DMibExpr(TestBits.f_FindUpperBound(0)) == DMibExpr(iBit))(ETestFlag_Aggregated);
-						TestBits.f_SetBit(iBit, false);
 
+						aint nFound = 0;
+						TestBits.f_EnumFreeBits
+							(
+								[&](aint _Bit) -> bool
+								{
+									++nFound;
+									return true;
+								}
+								, 0
+							)
+						;
+						DMibTest(DMibExpr(nFound) == DMibExpr(nBits - 1))(ETestFlag_Aggregated);
+						TestBits.f_SetBit(iBit, false);
+					}
+					{
 						TestBits.template f_SetBit<true>(iBit);
-						DMibTest(DMibExpr(TestBits.f_FindUpperBound(0)) == DMibExpr(iBit) && DMibExpr("Static set"))(ETestFlag_Aggregated);
+
+						aint nFound = 0;
+						TestBits.f_EnumFreeBits
+							(
+								[&](aint _Bit) -> bool
+								{
+									++nFound;
+									return true;
+								}
+								, 0
+							)
+						;
+						DMibTest(DMibExpr(nFound) == DMibExpr(nBits - 1) && DMibExpr("Static set"))(ETestFlag_Aggregated);
 						TestBits.template f_SetBit<false>(iBit);
 					}
 				}
+			}
+			{
+				DMibTestPath("Unaligned");
+				aint const nBits = nBitsUnaligned;
+				CBitArrayUnaligned TestBits;
+				for (aint iBit = 0; iBit < nBits; ++iBit)
 				{
-					DMibTestPath("Unaligned");
-					aint const nBits = nBitsUnaligned;
-					CBitArrayUnaligned TestBits;
-					for (aint iBit = 0; iBit < nBits; ++iBit)
 					{
 						TestBits.f_SetBit(iBit, true);
-						DMibTest(DMibExpr(TestBits.f_FindUpperBound(0)) == DMibExpr(iBit))(ETestFlag_Aggregated);
+						aint nFound = 0;
+						TestBits.f_EnumFreeBits
+							(
+								[&](aint _Bit) -> bool
+								{
+									++nFound;
+									return true;
+								}
+								, 0
+							)
+						;
+						DMibTest(DMibExpr(nFound) == DMibExpr(nBits - 1))(ETestFlag_Aggregated);
 						TestBits.f_SetBit(iBit, false);
-
+					}
+					{
 						TestBits.template f_SetBit<true>(iBit);
-						DMibTest(DMibExpr(TestBits.f_FindUpperBound(0)) == DMibExpr(iBit) && DMibExpr("Static set"))(ETestFlag_Aggregated);
+						aint nFound = 0;
+						TestBits.f_EnumFreeBits
+							(
+								[&](aint _Bit) -> bool
+								{
+									++nFound;
+									return true;
+								}
+								, 0
+							)
+						;
+						DMibTest(DMibExpr(nFound) == DMibExpr(nBits - 1) && DMibExpr("Static set"))(ETestFlag_Aggregated);
 						TestBits.template f_SetBit<false>(iBit);
-					}
-				}
-			}
-			{
-				DMibTestPath("FindUpperBoundStart");
-				using CBitArrayAligned = CBitArrayAligned;
-				using CBitArrayUnaligned = CBitArrayUnaligned;
-				{
-					DMibTestPath("Aligned");
-					aint const nBits = nBitsAligned;
-					CBitArrayAligned TestBits;
-					for (aint iBit = 0; iBit < nBits; ++iBit)
-					{
-						umint Start = NMib::fg_Max(0, smint(iBit) - 3);
-
-						TestBits.f_SetBit(iBit, true);
-						DMibTest(DMibExpr(TestBits.f_FindUpperBound(Start)) == DMibExpr(iBit))(ETestFlag_Aggregated);
-						TestBits.f_SetBit(iBit, false);
-
-						TestBits.template f_SetBit<true>(iBit);
-						DMibTest(DMibExpr(TestBits.f_FindUpperBound(Start)) == DMibExpr(iBit) && DMibExpr("Static set"))(ETestFlag_Aggregated);
-						TestBits.template f_SetBit<false>(iBit);
-					}
-				}
-				{
-					DMibTestPath("Unaligned");
-					aint const nBits = nBitsUnaligned;
-					CBitArrayUnaligned TestBits;
-					for (aint iBit = 0; iBit < nBits; ++iBit)
-					{
-						umint Start = NMib::fg_Max(0, smint(iBit) - 3);
-						TestBits.f_SetBit(iBit, true);
-						DMibTest(DMibExpr(TestBits.f_FindUpperBound(Start)) == DMibExpr(iBit))(ETestFlag_Aggregated);
-						TestBits.f_SetBit(iBit, false);
-
-						TestBits.template f_SetBit<true>(iBit);
-						DMibTest(DMibExpr(TestBits.f_FindUpperBound(Start)) == DMibExpr(iBit) && DMibExpr("Static set"))(ETestFlag_Aggregated);
-						TestBits.template f_SetBit<false>(iBit);
-					}
-				}
-			}
-			{
-				DMibTestPath("EnumFreeBits");
-				using CBitArrayAligned = CBitArrayAligned;
-				using CBitArrayUnaligned = CBitArrayUnaligned;
-				{
-					DMibTestPath("Aligned");
-					aint const nBits = nBitsAligned;
-					CBitArrayAligned TestBits;
-					for (aint iBit = 0; iBit < nBits; ++iBit)
-					{
-						{
-							TestBits.f_SetBit(iBit, true);
-
-							aint nFound = 0;
-							TestBits.f_EnumFreeBits
-								(
-									[&](aint _Bit) -> bool
-									{
-										++nFound;
-										return true;
-									}
-									, 0
-								)
-							;
-							DMibTest(DMibExpr(nFound) == DMibExpr(nBits - 1))(ETestFlag_Aggregated);
-							TestBits.f_SetBit(iBit, false);
-						}
-						{
-							TestBits.template f_SetBit<true>(iBit);
-
-							aint nFound = 0;
-							TestBits.f_EnumFreeBits
-								(
-									[&](aint _Bit) -> bool
-									{
-										++nFound;
-										return true;
-									}
-									, 0
-								)
-							;
-							DMibTest(DMibExpr(nFound) == DMibExpr(nBits - 1) && DMibExpr("Static set"))(ETestFlag_Aggregated);
-							TestBits.template f_SetBit<false>(iBit);
-						}
-					}
-				}
-				{
-					DMibTestPath("Unaligned");
-					aint const nBits = nBitsUnaligned;
-					CBitArrayUnaligned TestBits;
-					for (aint iBit = 0; iBit < nBits; ++iBit)
-					{
-						{
-							TestBits.f_SetBit(iBit, true);
-							aint nFound = 0;
-							TestBits.f_EnumFreeBits
-								(
-									[&](aint _Bit) -> bool
-									{
-										++nFound;
-										return true;
-									}
-									, 0
-								)
-							;
-							DMibTest(DMibExpr(nFound) == DMibExpr(nBits - 1))(ETestFlag_Aggregated);
-							TestBits.f_SetBit(iBit, false);
-						}
-						{
-							TestBits.template f_SetBit<true>(iBit);
-							aint nFound = 0;
-							TestBits.f_EnumFreeBits
-								(
-									[&](aint _Bit) -> bool
-									{
-										++nFound;
-										return true;
-									}
-									, 0
-								)
-							;
-							DMibTest(DMibExpr(nFound) == DMibExpr(nBits - 1) && DMibExpr("Static set"))(ETestFlag_Aggregated);
-							TestBits.template f_SetBit<false>(iBit);
-						}
-					}
-				}
-			}
-			{
-				DMibTestPath("EnumFreeBitsMiddle");
-				using CBitArrayAligned = CBitArrayAligned;
-				using CBitArrayUnaligned = CBitArrayUnaligned;
-				{
-					DMibTestPath("Aligned");
-					aint const nBits = nBitsAligned;
-					CBitArrayAligned TestBits;
-					for (aint iBit = nBits / 2; iBit < nBits; ++iBit)
-					{
-						{
-							TestBits.f_SetBit(iBit, true);
-
-							aint nFound = 0;
-							TestBits.f_EnumFreeBits
-								(
-									[&](aint _Bit) -> bool
-									{
-										++nFound;
-										return true;
-									}
-									, nBits / 2
-								)
-							;
-							DMibTest(DMibExpr(nFound) == DMibExpr((nBits - nBits / 2) - 1))(ETestFlag_Aggregated);
-							TestBits.f_SetBit(iBit, false);
-						}
-						{
-							TestBits.template f_SetBit<true>(iBit);
-
-							aint nFound = 0;
-							TestBits.f_EnumFreeBits
-								(
-									[&](aint _Bit) -> bool
-									{
-										++nFound;
-										return true;
-									}
-									, nBits / 2
-								)
-							;
-							DMibTest(DMibExpr(nFound) == DMibExpr((nBits - nBits / 2) - 1) && DMibExpr("Static set"))(ETestFlag_Aggregated);
-							TestBits.template f_SetBit<false>(iBit);
-						}
-					}
-				}
-				{
-					DMibTestPath("Unaligned");
-					aint const nBits = nBitsUnaligned;
-					CBitArrayUnaligned TestBits;
-					for (aint iBit = nBits / 2; iBit < nBits; ++iBit)
-					{
-						{
-							TestBits.f_SetBit(iBit, true);
-							aint nFound = 0;
-							TestBits.f_EnumFreeBits
-								(
-									[&](aint _Bit) -> bool
-									{
-										++nFound;
-										return true;
-									}
-									, nBits / 2
-								)
-							;
-							DMibTest(DMibExpr(nFound) == DMibExpr((nBits - nBits / 2) - 1))(ETestFlag_Aggregated);
-							TestBits.f_SetBit(iBit, false);
-						}
-						{
-							TestBits.template f_SetBit<true>(iBit);
-							aint nFound = 0;
-							TestBits.f_EnumFreeBits
-								(
-									[&](aint _Bit) -> bool
-									{
-										++nFound;
-										return true;
-									}
-									, nBits / 2
-								)
-							;
-							DMibTest(DMibExpr(nFound) == DMibExpr((nBits - nBits / 2) - 1) && DMibExpr("Static set"))(ETestFlag_Aggregated);
-							TestBits.template f_SetBit<false>(iBit);
-						}
-					}
-				}
-			}
-			{
-				DMibTestPath("EnumFreeBitsMiddleEnd");
-				using CBitArrayAligned = CBitArrayAligned;
-				using CBitArrayUnaligned = CBitArrayUnaligned;
-				{
-					DMibTestPath("Aligned");
-					aint const nBits = nBitsAligned;
-					CBitArrayAligned TestBits;
-					for (aint iBit = nBits / 3; iBit < nBits / 2; ++iBit)
-					{
-						{
-							TestBits.f_SetBit(iBit, true);
-
-							aint nFound = 0;
-							TestBits.f_EnumFreeBits
-								(
-									[&](aint _Bit) -> bool
-									{
-										++nFound;
-										return true;
-									}
-									, nBits / 3
-									, nBits / 2
-								)
-							;
-							DMibTest(DMibExpr(nFound) == DMibExpr((nBits / 2 - nBits / 3) - 1))(ETestFlag_Aggregated);
-							TestBits.f_SetBit(iBit, false);
-						}
-						{
-							TestBits.template f_SetBit<true>(iBit);
-
-							aint nFound = 0;
-							TestBits.f_EnumFreeBits
-								(
-									[&](aint _Bit) -> bool
-									{
-										++nFound;
-										return true;
-									}
-									, nBits / 3
-									, nBits / 2
-								)
-							;
-							DMibTest(DMibExpr(nFound) == DMibExpr((nBits / 2 - nBits / 3) - 1) && DMibExpr("Static set"))(ETestFlag_Aggregated);
-							TestBits.template f_SetBit<false>(iBit);
-						}
-					}
-				}
-				{
-					DMibTestPath("Unaligned");
-					aint const nBits = nBitsUnaligned;
-					CBitArrayUnaligned TestBits;
-					for (aint iBit = nBits / 3; iBit < nBits / 2; ++iBit)
-					{
-						{
-							TestBits.f_SetBit(iBit, true);
-							aint nFound = 0;
-							TestBits.f_EnumFreeBits
-								(
-									[&](aint _Bit) -> bool
-									{
-										++nFound;
-										return true;
-									}
-									, nBits / 3
-									, nBits / 2
-								)
-							;
-							DMibTest(DMibExpr(nFound) == DMibExpr((nBits / 2 - nBits / 3) - 1))(ETestFlag_Aggregated);
-							TestBits.f_SetBit(iBit, false);
-						}
-						{
-							TestBits.template f_SetBit<true>(iBit);
-							aint nFound = 0;
-							TestBits.f_EnumFreeBits
-								(
-									[&](aint _Bit) -> bool
-									{
-										++nFound;
-										return true;
-									}
-									, nBits / 3
-									, nBits / 2
-								)
-							;
-							DMibTest(DMibExpr(nFound) == DMibExpr((nBits / 2 - nBits / 3) - 1) && DMibExpr("Static set"))(ETestFlag_Aggregated);
-							TestBits.template f_SetBit<false>(iBit);
-						}
-					}
-				}
-			}
-			{
-				DMibTestPath("EnumFreeBitRanges");
-				using CBitArrayAligned = CBitArrayAligned;
-				using CBitArrayUnaligned = CBitArrayUnaligned;
-				{
-					DMibTestPath("Aligned");
-					aint const nBits = nBitsAligned;
-					CBitArrayAligned TestBits;
-					for (aint iBit = 0; iBit < nBits; ++iBit)
-					{
-						{
-							TestBits.f_SetBit(iBit, true);
-
-							aint nFound = 0;
-							aint nRanges = 0;
-							TestBits.f_EnumFreeBitRanges
-								(
-									[&](umint _Bit, umint _nBits) -> bool
-									{
-										nFound += _nBits;
-										++nRanges;
-										return true;
-									}
-									, 0
-								)
-							;
-							DMibTest(DMibExpr(nFound) == DMibExpr(nBits - 1))(ETestFlag_Aggregated);
-							if (iBit == 0 || iBit == nBits - 1)
-								DMibTest(DMibExpr(nRanges) == DMibExpr(1))(ETestFlag_Aggregated);
-							else
-								DMibTest(DMibExpr(nRanges) == DMibExpr(2))(ETestFlag_Aggregated);
-							TestBits.f_SetBit(iBit, false);
-						}
-						{
-							TestBits.template f_SetBit<true>(iBit);
-
-							aint nFound = 0;
-							aint nRanges = 0;
-							TestBits.f_EnumFreeBitRanges
-								(
-									[&](umint _Bit, umint _nBits) -> bool
-									{
-										nFound += _nBits;
-										++nRanges;
-										return true;
-									}
-									, 0
-								)
-							;
-							DMibTest(DMibExpr(nFound) == DMibExpr(nBits - 1) && DMibExpr("Static set"))(ETestFlag_Aggregated);
-							if (iBit == 0 || iBit == nBits - 1)
-								DMibTest(DMibExpr(nRanges) == DMibExpr(1) && DMibExpr("Static set"))(ETestFlag_Aggregated);
-							else
-								DMibTest(DMibExpr(nRanges) == DMibExpr(2) && DMibExpr("Static set"))(ETestFlag_Aggregated);
-							TestBits.template f_SetBit<false>(iBit);
-						}
-					}
-				}
-				{
-					DMibTestPath("Unaligned");
-					aint const nBits = nBitsUnaligned;
-					CBitArrayUnaligned TestBits;
-					for (aint iBit = 0; iBit < nBits; ++iBit)
-					{
-						{
-							TestBits.f_SetBit(iBit, true);
-							aint nFound = 0;
-							TestBits.f_EnumFreeBits
-								(
-									[&](aint _Bit) -> bool
-									{
-										++nFound;
-										return true;
-									}
-									, 0
-								)
-							;
-							DMibTest(DMibExpr(nFound) == DMibExpr(nBits - 1))(ETestFlag_Aggregated);
-							TestBits.f_SetBit(iBit, false);
-						}
-						{
-							TestBits.template f_SetBit<true>(iBit);
-							aint nFound = 0;
-							TestBits.f_EnumFreeBits
-								(
-									[&](aint _Bit) -> bool
-									{
-										++nFound;
-										return true;
-									}
-									, 0
-								)
-							;
-							DMibTest(DMibExpr(nFound) == DMibExpr(nBits - 1) && DMibExpr("Static set"))(ETestFlag_Aggregated);
-							TestBits.template f_SetBit<false>(iBit);
-						}
 					}
 				}
 			}
 		}
-	};
+		{
+			DMibTestPath("EnumFreeBitsMiddle");
+			using CBitArrayAligned = CBitArrayAligned;
+			using CBitArrayUnaligned = CBitArrayUnaligned;
+			{
+				DMibTestPath("Aligned");
+				aint const nBits = nBitsAligned;
+				CBitArrayAligned TestBits;
+				for (aint iBit = nBits / 2; iBit < nBits; ++iBit)
+				{
+					{
+						TestBits.f_SetBit(iBit, true);
+
+						aint nFound = 0;
+						TestBits.f_EnumFreeBits
+							(
+								[&](aint _Bit) -> bool
+								{
+									++nFound;
+									return true;
+								}
+								, nBits / 2
+							)
+						;
+						DMibTest(DMibExpr(nFound) == DMibExpr((nBits - nBits / 2) - 1))(ETestFlag_Aggregated);
+						TestBits.f_SetBit(iBit, false);
+					}
+					{
+						TestBits.template f_SetBit<true>(iBit);
+
+						aint nFound = 0;
+						TestBits.f_EnumFreeBits
+							(
+								[&](aint _Bit) -> bool
+								{
+									++nFound;
+									return true;
+								}
+								, nBits / 2
+							)
+						;
+						DMibTest(DMibExpr(nFound) == DMibExpr((nBits - nBits / 2) - 1) && DMibExpr("Static set"))(ETestFlag_Aggregated);
+						TestBits.template f_SetBit<false>(iBit);
+					}
+				}
+			}
+			{
+				DMibTestPath("Unaligned");
+				aint const nBits = nBitsUnaligned;
+				CBitArrayUnaligned TestBits;
+				for (aint iBit = nBits / 2; iBit < nBits; ++iBit)
+				{
+					{
+						TestBits.f_SetBit(iBit, true);
+						aint nFound = 0;
+						TestBits.f_EnumFreeBits
+							(
+								[&](aint _Bit) -> bool
+								{
+									++nFound;
+									return true;
+								}
+								, nBits / 2
+							)
+						;
+						DMibTest(DMibExpr(nFound) == DMibExpr((nBits - nBits / 2) - 1))(ETestFlag_Aggregated);
+						TestBits.f_SetBit(iBit, false);
+					}
+					{
+						TestBits.template f_SetBit<true>(iBit);
+						aint nFound = 0;
+						TestBits.f_EnumFreeBits
+							(
+								[&](aint _Bit) -> bool
+								{
+									++nFound;
+									return true;
+								}
+								, nBits / 2
+							)
+						;
+						DMibTest(DMibExpr(nFound) == DMibExpr((nBits - nBits / 2) - 1) && DMibExpr("Static set"))(ETestFlag_Aggregated);
+						TestBits.template f_SetBit<false>(iBit);
+					}
+				}
+			}
+		}
+		{
+			DMibTestPath("EnumFreeBitsMiddleEnd");
+			using CBitArrayAligned = CBitArrayAligned;
+			using CBitArrayUnaligned = CBitArrayUnaligned;
+			{
+				DMibTestPath("Aligned");
+				aint const nBits = nBitsAligned;
+				CBitArrayAligned TestBits;
+				for (aint iBit = nBits / 3; iBit < nBits / 2; ++iBit)
+				{
+					{
+						TestBits.f_SetBit(iBit, true);
+
+						aint nFound = 0;
+						TestBits.f_EnumFreeBits
+							(
+								[&](aint _Bit) -> bool
+								{
+									++nFound;
+									return true;
+								}
+								, nBits / 3
+								, nBits / 2
+							)
+						;
+						DMibTest(DMibExpr(nFound) == DMibExpr((nBits / 2 - nBits / 3) - 1))(ETestFlag_Aggregated);
+						TestBits.f_SetBit(iBit, false);
+					}
+					{
+						TestBits.template f_SetBit<true>(iBit);
+
+						aint nFound = 0;
+						TestBits.f_EnumFreeBits
+							(
+								[&](aint _Bit) -> bool
+								{
+									++nFound;
+									return true;
+								}
+								, nBits / 3
+								, nBits / 2
+							)
+						;
+						DMibTest(DMibExpr(nFound) == DMibExpr((nBits / 2 - nBits / 3) - 1) && DMibExpr("Static set"))(ETestFlag_Aggregated);
+						TestBits.template f_SetBit<false>(iBit);
+					}
+				}
+			}
+			{
+				DMibTestPath("Unaligned");
+				aint const nBits = nBitsUnaligned;
+				CBitArrayUnaligned TestBits;
+				for (aint iBit = nBits / 3; iBit < nBits / 2; ++iBit)
+				{
+					{
+						TestBits.f_SetBit(iBit, true);
+						aint nFound = 0;
+						TestBits.f_EnumFreeBits
+							(
+								[&](aint _Bit) -> bool
+								{
+									++nFound;
+									return true;
+								}
+								, nBits / 3
+								, nBits / 2
+							)
+						;
+						DMibTest(DMibExpr(nFound) == DMibExpr((nBits / 2 - nBits / 3) - 1))(ETestFlag_Aggregated);
+						TestBits.f_SetBit(iBit, false);
+					}
+					{
+						TestBits.template f_SetBit<true>(iBit);
+						aint nFound = 0;
+						TestBits.f_EnumFreeBits
+							(
+								[&](aint _Bit) -> bool
+								{
+									++nFound;
+									return true;
+								}
+								, nBits / 3
+								, nBits / 2
+							)
+						;
+						DMibTest(DMibExpr(nFound) == DMibExpr((nBits / 2 - nBits / 3) - 1) && DMibExpr("Static set"))(ETestFlag_Aggregated);
+						TestBits.template f_SetBit<false>(iBit);
+					}
+				}
+			}
+		}
+		{
+			DMibTestPath("EnumFreeBitRanges");
+			using CBitArrayAligned = CBitArrayAligned;
+			using CBitArrayUnaligned = CBitArrayUnaligned;
+			{
+				DMibTestPath("Aligned");
+				aint const nBits = nBitsAligned;
+				CBitArrayAligned TestBits;
+				for (aint iBit = 0; iBit < nBits; ++iBit)
+				{
+					{
+						TestBits.f_SetBit(iBit, true);
+
+						aint nFound = 0;
+						aint nRanges = 0;
+						TestBits.f_EnumFreeBitRanges
+							(
+								[&](umint _Bit, umint _nBits) -> bool
+								{
+									nFound += _nBits;
+									++nRanges;
+									return true;
+								}
+								, 0
+							)
+						;
+						DMibTest(DMibExpr(nFound) == DMibExpr(nBits - 1))(ETestFlag_Aggregated);
+						if (iBit == 0 || iBit == nBits - 1)
+							DMibTest(DMibExpr(nRanges) == DMibExpr(1))(ETestFlag_Aggregated);
+						else
+							DMibTest(DMibExpr(nRanges) == DMibExpr(2))(ETestFlag_Aggregated);
+						TestBits.f_SetBit(iBit, false);
+					}
+					{
+						TestBits.template f_SetBit<true>(iBit);
+
+						aint nFound = 0;
+						aint nRanges = 0;
+						TestBits.f_EnumFreeBitRanges
+							(
+								[&](umint _Bit, umint _nBits) -> bool
+								{
+									nFound += _nBits;
+									++nRanges;
+									return true;
+								}
+								, 0
+							)
+						;
+						DMibTest(DMibExpr(nFound) == DMibExpr(nBits - 1) && DMibExpr("Static set"))(ETestFlag_Aggregated);
+						if (iBit == 0 || iBit == nBits - 1)
+							DMibTest(DMibExpr(nRanges) == DMibExpr(1) && DMibExpr("Static set"))(ETestFlag_Aggregated);
+						else
+							DMibTest(DMibExpr(nRanges) == DMibExpr(2) && DMibExpr("Static set"))(ETestFlag_Aggregated);
+						TestBits.template f_SetBit<false>(iBit);
+					}
+				}
+			}
+			{
+				DMibTestPath("Unaligned");
+				aint const nBits = nBitsUnaligned;
+				CBitArrayUnaligned TestBits;
+				for (aint iBit = 0; iBit < nBits; ++iBit)
+				{
+					{
+						TestBits.f_SetBit(iBit, true);
+						aint nFound = 0;
+						TestBits.f_EnumFreeBits
+							(
+								[&](aint _Bit) -> bool
+								{
+									++nFound;
+									return true;
+								}
+								, 0
+							)
+						;
+						DMibTest(DMibExpr(nFound) == DMibExpr(nBits - 1))(ETestFlag_Aggregated);
+						TestBits.f_SetBit(iBit, false);
+					}
+					{
+						TestBits.template f_SetBit<true>(iBit);
+						aint nFound = 0;
+						TestBits.f_EnumFreeBits
+							(
+								[&](aint _Bit) -> bool
+								{
+									++nFound;
+									return true;
+								}
+								, 0
+							)
+						;
+						DMibTest(DMibExpr(nFound) == DMibExpr(nBits - 1) && DMibExpr("Static set"))(ETestFlag_Aggregated);
+						TestBits.template f_SetBit<false>(iBit);
+					}
+				}
+			}
+		}
+	}
 
 	template <template <umint t_nBits> class t_TCBitArray>
 	struct TCTestBitArrayPowerOfTwo
 	{
-		static void fs_DoTests()
-		{
-			aint const nBitsAligned = sizeof(umint) * sizeof(umint) * 8 * 8;
-			aint const nBitsUnaligned = sizeof(umint) * sizeof(umint) * 8 * 8 - 1;
-			using CBitArrayAligned = typename t_TCBitArray<nBitsAligned>::CType;
-			using CBitArrayUnaligned = typename t_TCBitArray<nBitsUnaligned>::CType;
-			{
-				DMibTestPath("PowerTwo");
-				{
-					DMibTestPath("FindAndSetFreeBit");
-					{
-						DMibTestPath("Aligned");
-						[[maybe_unused]] aint const nBits = nBitsAligned;
-						CBitArrayAligned TestBits;
-
-						umint Bit = TestBits.f_FindFreeBitAndSet(3);
-						DMibTest(DMibExpr(TestBits.f_GetBit(3, Bit)) == DMibExpr(true))(ETestFlag_Aggregated);
-					}
-					{
-						DMibTestPath("Unaligned");
-						NMib::NTime::CPrefCyclesTimeMeasureMin MalterlibTime;
-						[[maybe_unused]] aint const nBits = nBitsUnaligned;
-						CBitArrayUnaligned TestBits;
-						umint Bit = TestBits.f_FindFreeBitAndSet(3);
-						DMibTest(DMibExpr(TestBits.f_GetBit(3, Bit)) == DMibExpr(true))(ETestFlag_Aggregated);
-					}
-				}
-			};
-		}
+		static void fs_DoTests();
 	};
+
+	template <template <umint t_nBits> class t_TCBitArray>
+	void TCTestBitArrayPowerOfTwo<t_TCBitArray>::fs_DoTests()
+	{
+		aint const nBitsAligned = sizeof(umint) * sizeof(umint) * 8 * 8;
+		aint const nBitsUnaligned = sizeof(umint) * sizeof(umint) * 8 * 8 - 1;
+		using CBitArrayAligned = typename t_TCBitArray<nBitsAligned>::CType;
+		using CBitArrayUnaligned = typename t_TCBitArray<nBitsUnaligned>::CType;
+		{
+			DMibTestPath("PowerTwo");
+			{
+				DMibTestPath("FindAndSetFreeBit");
+				{
+					DMibTestPath("Aligned");
+					[[maybe_unused]] aint const nBits = nBitsAligned;
+					CBitArrayAligned TestBits;
+
+					umint Bit = TestBits.f_FindFreeBitAndSet(3);
+					DMibTest(DMibExpr(TestBits.f_GetBit(3, Bit)) == DMibExpr(true))(ETestFlag_Aggregated);
+				}
+				{
+					DMibTestPath("Unaligned");
+					NMib::NTime::CPrefCyclesTimeMeasureMin MalterlibTime;
+					[[maybe_unused]] aint const nBits = nBitsUnaligned;
+					CBitArrayUnaligned TestBits;
+					umint Bit = TestBits.f_FindFreeBitAndSet(3);
+					DMibTest(DMibExpr(TestBits.f_GetBit(3, Bit)) == DMibExpr(true))(ETestFlag_Aggregated);
+				}
+			}
+		};
+	}
 
 	struct CBitOperations_Tests : public NMib::NTest::CTest
 	{
@@ -976,115 +982,117 @@ namespace
 			using CType = NMib::NContainer::TCBitArrayPowerTwo<t_nBits>;
 		};
 
-		void f_DoTests()
-		{
-			DMibTestSuite("Bit vector power of two")
-			{
-				TCTestBitArrayPowerOfTwo<TCPowerOfTwoBitArray>::fs_DoTests();
-				TCTestBitArray<TCPowerOfTwoBitArray>::fs_DoTests();
-			};
-			DMibTestSuite("Bit vector")
-			{
-				TCTestBitArray<TCNormalBitArray>::fs_DoTests();
-			};
-			DMibTestSuite("Bit vector hierarchical")
-			{
-				TCTestBitArray<TCHierarchicalBitArray>::fs_DoTests();
-			};
-			DMibTestSuite("HighestBitSet")
-			{
-				fsg_TestHighestBitSet<int8>("int8");
-				fsg_TestHighestBitSet<uint8>("uint8");
-				fsg_TestHighestBitSet<int16>("int16");
-				fsg_TestHighestBitSet<uint16>("uint16");
-				fsg_TestHighestBitSet<int32>("int32");
-				fsg_TestHighestBitSet<uint32>("uint32");
-				fsg_TestHighestBitSet<int64>("int64");
-				fsg_TestHighestBitSet<uint64>("uint64");
-				fsg_TestHighestBitSet<int128>("int128");
-				fsg_TestHighestBitSet<uint128>("uint128");
-				fsg_TestHighestBitSet<int256>("int256");
-				fsg_TestHighestBitSet<uint256>("uint256");
-				fsg_TestHighestBitSet<int512>("int512");
-				fsg_TestHighestBitSet<uint512>("uint512");
-			};
-			DMibTestSuite("HighestBitSetNoZero")
-			{
-				fsg_TestHighestBitSetNoZero<int8>("int8");
-				fsg_TestHighestBitSetNoZero<uint8>("uint8");
-				fsg_TestHighestBitSetNoZero<int16>("int16");
-				fsg_TestHighestBitSetNoZero<uint16>("uint16");
-				fsg_TestHighestBitSetNoZero<int32>("int32");
-				fsg_TestHighestBitSetNoZero<uint32>("uint32");
-				fsg_TestHighestBitSetNoZero<int64>("int64");
-				fsg_TestHighestBitSetNoZero<uint64>("uint64");
-				fsg_TestHighestBitSetNoZero<int128>("int128");
-				fsg_TestHighestBitSetNoZero<uint128>("uint128");
-				fsg_TestHighestBitSetNoZero<int256>("int256");
-				fsg_TestHighestBitSetNoZero<uint256>("uint256");
-				fsg_TestHighestBitSetNoZero<int512>("int512");
-				fsg_TestHighestBitSetNoZero<uint512>("uint512");
-			};
-			DMibTestSuite("LowestBitSet")
-			{
-				fsg_TestLowestBitSet<int8>("int8");
-				fsg_TestLowestBitSet<uint8>("uint8");
-				fsg_TestLowestBitSet<int16>("int16");
-				fsg_TestLowestBitSet<uint16>("uint16");
-				fsg_TestLowestBitSet<int32>("int32");
-				fsg_TestLowestBitSet<uint32>("uint32");
-				fsg_TestLowestBitSet<int64>("int64");
-				fsg_TestLowestBitSet<uint64>("uint64");
-				fsg_TestLowestBitSet<int128>("int128");
-				fsg_TestLowestBitSet<uint128>("uint128");
-				fsg_TestLowestBitSet<int256>("int256");
-				fsg_TestLowestBitSet<uint256>("uint256");
-				fsg_TestLowestBitSet<int512>("int512");
-				fsg_TestLowestBitSet<uint512>("uint512");
-			};
-			DMibTestSuite("LowestBitSetNoZero")
-			{
-				fsg_TestLowestBitSetNoZero<int8>("int8");
-				fsg_TestLowestBitSetNoZero<uint8>("uint8");
-				fsg_TestLowestBitSetNoZero<int16>("int16");
-				fsg_TestLowestBitSetNoZero<uint16>("uint16");
-				fsg_TestLowestBitSetNoZero<int32>("int32");
-				fsg_TestLowestBitSetNoZero<uint32>("uint32");
-				fsg_TestLowestBitSetNoZero<int64>("int64");
-				fsg_TestLowestBitSetNoZero<uint64>("uint64");
-				fsg_TestLowestBitSetNoZero<int128>("int128");
-				fsg_TestLowestBitSetNoZero<uint128>("uint128");
-				fsg_TestLowestBitSetNoZero<int256>("int256");
-				fsg_TestLowestBitSetNoZero<uint256>("uint256");
-				fsg_TestLowestBitSetNoZero<int512>("int512");
-				fsg_TestLowestBitSetNoZero<uint512>("uint512");
-			};
-			DMibTestSuite("MinPowerOfTwo")
-			{
-				fsg_TestMinPowerOfTwo<uint8>("uint8");
-				fsg_TestMinPowerOfTwo<uint16>("uint16");
-				fsg_TestMinPowerOfTwo<uint32>("uint32");
-				fsg_TestMinPowerOfTwo<uint64>("uint64");
-			};
-			DMibTestSuite("NumBitsSet")
-			{
-				fsg_TestNumBitsSet<int8>("int8");
-				fsg_TestNumBitsSet<uint8>("uint8");
-				fsg_TestNumBitsSet<int16>("int16");
-				fsg_TestNumBitsSet<uint16>("uint16");
-				fsg_TestNumBitsSet<int32>("int32");
-				fsg_TestNumBitsSet<uint32>("uint32");
-				fsg_TestNumBitsSet<int64>("int64");
-				fsg_TestNumBitsSet<uint64>("uint64");
-				fsg_TestNumBitsSet<int128>("int128");
-				fsg_TestNumBitsSet<uint128>("uint128");
-				fsg_TestNumBitsSet<int256>("int256");
-				fsg_TestNumBitsSet<uint256>("uint256");
-				fsg_TestNumBitsSet<int512>("int512");
-				fsg_TestNumBitsSet<uint512>("uint512");
-			};
-		}
+		void f_DoTests();
 	};
+
+	void CBitOperations_Tests::f_DoTests()
+	{
+		DMibTestSuite("Bit vector power of two")
+		{
+			TCTestBitArrayPowerOfTwo<TCPowerOfTwoBitArray>::fs_DoTests();
+			TCTestBitArray<TCPowerOfTwoBitArray>::fs_DoTests();
+		};
+		DMibTestSuite("Bit vector")
+		{
+			TCTestBitArray<TCNormalBitArray>::fs_DoTests();
+		};
+		DMibTestSuite("Bit vector hierarchical")
+		{
+			TCTestBitArray<TCHierarchicalBitArray>::fs_DoTests();
+		};
+		DMibTestSuite("HighestBitSet")
+		{
+			fsg_TestHighestBitSet<int8>("int8");
+			fsg_TestHighestBitSet<uint8>("uint8");
+			fsg_TestHighestBitSet<int16>("int16");
+			fsg_TestHighestBitSet<uint16>("uint16");
+			fsg_TestHighestBitSet<int32>("int32");
+			fsg_TestHighestBitSet<uint32>("uint32");
+			fsg_TestHighestBitSet<int64>("int64");
+			fsg_TestHighestBitSet<uint64>("uint64");
+			fsg_TestHighestBitSet<int128>("int128");
+			fsg_TestHighestBitSet<uint128>("uint128");
+			fsg_TestHighestBitSet<int256>("int256");
+			fsg_TestHighestBitSet<uint256>("uint256");
+			fsg_TestHighestBitSet<int512>("int512");
+			fsg_TestHighestBitSet<uint512>("uint512");
+		};
+		DMibTestSuite("HighestBitSetNoZero")
+		{
+			fsg_TestHighestBitSetNoZero<int8>("int8");
+			fsg_TestHighestBitSetNoZero<uint8>("uint8");
+			fsg_TestHighestBitSetNoZero<int16>("int16");
+			fsg_TestHighestBitSetNoZero<uint16>("uint16");
+			fsg_TestHighestBitSetNoZero<int32>("int32");
+			fsg_TestHighestBitSetNoZero<uint32>("uint32");
+			fsg_TestHighestBitSetNoZero<int64>("int64");
+			fsg_TestHighestBitSetNoZero<uint64>("uint64");
+			fsg_TestHighestBitSetNoZero<int128>("int128");
+			fsg_TestHighestBitSetNoZero<uint128>("uint128");
+			fsg_TestHighestBitSetNoZero<int256>("int256");
+			fsg_TestHighestBitSetNoZero<uint256>("uint256");
+			fsg_TestHighestBitSetNoZero<int512>("int512");
+			fsg_TestHighestBitSetNoZero<uint512>("uint512");
+		};
+		DMibTestSuite("LowestBitSet")
+		{
+			fsg_TestLowestBitSet<int8>("int8");
+			fsg_TestLowestBitSet<uint8>("uint8");
+			fsg_TestLowestBitSet<int16>("int16");
+			fsg_TestLowestBitSet<uint16>("uint16");
+			fsg_TestLowestBitSet<int32>("int32");
+			fsg_TestLowestBitSet<uint32>("uint32");
+			fsg_TestLowestBitSet<int64>("int64");
+			fsg_TestLowestBitSet<uint64>("uint64");
+			fsg_TestLowestBitSet<int128>("int128");
+			fsg_TestLowestBitSet<uint128>("uint128");
+			fsg_TestLowestBitSet<int256>("int256");
+			fsg_TestLowestBitSet<uint256>("uint256");
+			fsg_TestLowestBitSet<int512>("int512");
+			fsg_TestLowestBitSet<uint512>("uint512");
+		};
+		DMibTestSuite("LowestBitSetNoZero")
+		{
+			fsg_TestLowestBitSetNoZero<int8>("int8");
+			fsg_TestLowestBitSetNoZero<uint8>("uint8");
+			fsg_TestLowestBitSetNoZero<int16>("int16");
+			fsg_TestLowestBitSetNoZero<uint16>("uint16");
+			fsg_TestLowestBitSetNoZero<int32>("int32");
+			fsg_TestLowestBitSetNoZero<uint32>("uint32");
+			fsg_TestLowestBitSetNoZero<int64>("int64");
+			fsg_TestLowestBitSetNoZero<uint64>("uint64");
+			fsg_TestLowestBitSetNoZero<int128>("int128");
+			fsg_TestLowestBitSetNoZero<uint128>("uint128");
+			fsg_TestLowestBitSetNoZero<int256>("int256");
+			fsg_TestLowestBitSetNoZero<uint256>("uint256");
+			fsg_TestLowestBitSetNoZero<int512>("int512");
+			fsg_TestLowestBitSetNoZero<uint512>("uint512");
+		};
+		DMibTestSuite("MinPowerOfTwo")
+		{
+			fsg_TestMinPowerOfTwo<uint8>("uint8");
+			fsg_TestMinPowerOfTwo<uint16>("uint16");
+			fsg_TestMinPowerOfTwo<uint32>("uint32");
+			fsg_TestMinPowerOfTwo<uint64>("uint64");
+		};
+		DMibTestSuite("NumBitsSet")
+		{
+			fsg_TestNumBitsSet<int8>("int8");
+			fsg_TestNumBitsSet<uint8>("uint8");
+			fsg_TestNumBitsSet<int16>("int16");
+			fsg_TestNumBitsSet<uint16>("uint16");
+			fsg_TestNumBitsSet<int32>("int32");
+			fsg_TestNumBitsSet<uint32>("uint32");
+			fsg_TestNumBitsSet<int64>("int64");
+			fsg_TestNumBitsSet<uint64>("uint64");
+			fsg_TestNumBitsSet<int128>("int128");
+			fsg_TestNumBitsSet<uint128>("uint128");
+			fsg_TestNumBitsSet<int256>("int256");
+			fsg_TestNumBitsSet<uint256>("uint256");
+			fsg_TestNumBitsSet<int512>("int512");
+			fsg_TestNumBitsSet<uint512>("uint512");
+		};
+	}
 
 	DMibTestRegister(CBitOperations_Tests, Malterlib::Bit);
 }
