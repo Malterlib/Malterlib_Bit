@@ -186,11 +186,7 @@ namespace
 		NMib::NTime::CPrefCyclesTimeMeasureMin MalterlibTime;
 		umint const nLoops = 10000;
 
-#ifndef DMibClangAnalyzerWorkaround
 		tf_CInteger Number = NMib::NStr::CStr(NMib::NStr::CStr::CFormat("{}") << 0x50).f_ToInt();
-#else
-		tf_CInteger Number = 0x50;
-#endif
 		uint32 Result = 0;
 		auto fLambda = [&]()
 			{
